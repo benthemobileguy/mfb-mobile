@@ -1,0 +1,60 @@
+name: tampay_mobile
+description: "Fintech app for TamPay"
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.6
+  shared_preferences: ^2.2.3
+  flutter_svg: ^2.0.10+1
+  flutter_staggered_animations: ^1.1.1
+  url_launcher: ^6.3.0
+  pinput: ^5.0.0
+  flutter_card_swiper: ^7.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+
+  fonts:
+    - family: Sora
+      fonts:
+        - asset: assets/fonts/sora/Sora-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/sora/Sora-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/sora/Sora-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/sora/Sora-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/sora/Sora-Light.ttf
+          weight: 500
+

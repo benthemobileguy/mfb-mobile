@@ -1,0 +1,66 @@
+abstract class Routes {
+  static const homeRoute = Paths.homePath;
+  static const splashRoute = Paths.splashPath;
+  static const introRoute = Paths.introPath;
+  static const loginRoute = Paths.loginPath;
+  static const forgotPassRoute = Paths.forgotPath;
+  static const createPassRoute = Paths.createPassPath;
+  static const verifyEmailRoute = Paths.verifyEmailPath;
+  static const signupRoute = Paths.signUpPath;
+  static const homeScreenRoute = Paths.homeScreenPath;
+  static const sendMoneyRoute = Paths.sendMoneyPath;
+  static const cardsRoute = Paths.cardsPath;
+  static const profileRoute = Paths.profilePath;
+  static const airtimeRoute = Paths.airtimePath;
+  static const electricityRoute = Paths.electricityPath;
+  static const tvRoute = Paths.tvPath;
+  static const insuranceRoute = Paths.insurancePath;
+  static const internetRoute = Paths.internetPath;
+  static const travelRoute = Paths.travelPath;
+  static const sendWithTampayRoute = Paths.sendWithTampayPath;
+  static const offlineTransfersRoute = Paths.offlineTransfersPath;
+  static const bankTransferRoute = Paths.bankTransferPath;
+  static const accountSetUpRoute = Paths.accountSetUpPath;
+  static const payBillsRoute = Paths.payBillsPath;
+  static const sendMoneyConfirmationRoute = Paths.sendMoneyConfirmationPath;
+  static const transactionDetailsRoute = Paths.transactionDetailsPath;
+  static const transactionSuccessfulRoute = Paths.transactionSuccessfulPath;
+  static const addMoneyRoute = Paths.addMoneyPath;
+  static const convertRoute = Paths.convertPath;
+  static const fundingSuccessRoute = Paths.fundingSuccessPath;
+  static const conversionSuccessRoute = Paths.conversionSuccessPath;
+}
+
+abstract class Paths {
+  static const homePath = "/";
+  static const homeScreenPath = "/HomeScreen";
+  static const splashPath = "/SplashScreen";
+  static const introPath = "/IntroScreen";
+  static const loginPath = "/LoginScreen";
+  static const forgotPath = "/ForgotPassword";
+  static const verifyEmailPath = "/VerifyEmailPassword";
+  static const createPassPath = "/CreatePassPassword";
+  static const changePasswordPath = "/ChangePassword";
+  static const signUpPath = "/SignUpScreen";
+  static const sendMoneyPath = "/SendMoneyScreen";
+  static const cardsPath = "/CardsScreen";
+  static const profilePath = "/ProfileScreen";
+  static const airtimePath = "/AirtimeScreen";
+  static const electricityPath = "/ElectricityScreen";
+  static const internetPath = "/InternetScreen";
+  static const travelPath = "/TravelScreen";
+  static const tvPath = "/TvScreen";
+  static const sendWithTampayPath = "/SendWithTampayTag";
+  static const offlineTransfersPath = "/OfflineTransfersScreen";
+  static const bankTransferPath = "/BankTransferScreen";
+  static const accountSetUpPath = "/AccountSetUpScreen";
+  static const sendMoneyConfirmationPath = "/SendMoneyConfirmationScreen";
+  static const insurancePath = "/InsuranceScreen";
+  static const transactionDetailsPath = "/TransactionDetailsScreen";
+  static const transactionSuccessfulPath = "/TransactionSuccessfulScreen";
+  static const payBillsPath = "/PayBillsScreen";
+  static const addMoneyPath = "/AddMoneyScreen";
+  static const convertPath = "/ConvertScreen";
+  static const fundingSuccessPath = "/FundingSuccessScreen";
+  static const conversionSuccessPath = "/ConversionSuccessScreen";
+}
