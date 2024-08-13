@@ -22,6 +22,7 @@ abstract class Routes {
   static const bankTransferRoute = Paths.bankTransferPath;
   static const accountSetUpRoute = Paths.accountSetUpPath;
   static const payBillsRoute = Paths.payBillsPath;
+  static const welcomeRoute = Paths.welcomePath;
   static const sendMoneyConfirmationRoute = Paths.sendMoneyConfirmationPath;
   static const transactionDetailsRoute = Paths.transactionDetailsPath;
   static const transactionSuccessfulRoute = Paths.transactionSuccessfulPath;
@@ -36,6 +37,7 @@ abstract class Paths {
   static const homeScreenPath = "/HomeScreen";
   static const splashPath = "/SplashScreen";
   static const introPath = "/IntroScreen";
+  static const welcomePath = "/WelcomeScreen";
   static const loginPath = "/LoginScreen";
   static const forgotPath = "/ForgotPassword";
   static const verifyEmailPath = "/VerifyEmailPassword";

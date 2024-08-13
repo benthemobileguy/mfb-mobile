@@ -3,6 +3,7 @@ import 'package:tampay_mobile/app/login/login_screen.dart';
 import 'package:tampay_mobile/app/signup/account_setup_screen.dart';
 import 'package:tampay_mobile/app/signup/create_pass_screen.dart';
 import 'package:tampay_mobile/app/signup/forgot_password.dart';
+import 'package:tampay_mobile/app/signup/welcome_screen.dart';
 import 'package:tampay_mobile/app/view/home/add_money/add_money_screen.dart';
 import 'package:tampay_mobile/app/view/home/add_money/funding_success_screen.dart';
 import 'package:tampay_mobile/app/view/home/base.dart';
@@ -31,7 +32,7 @@ import '../view/intro/intro_screen.dart';
 import 'app_routes.dart';
 
 class AppPages {
-  static const initialRoute = Routes.homeRoute;
+  static const initialRoute = Routes.introRoute;
   static Map<String, WidgetBuilder> routes = {
     Routes.homeRoute: (context) => const SplashScreen(),
     Routes.homeScreenRoute: (context) => const Base(),
@@ -60,6 +61,7 @@ class AppPages {
     Routes.transactionSuccessfulRoute: (context) =>
         const TransactionSuccessfulScreen(),
     Routes.payBillsRoute: (context) => const PayBillsScreen(),
+    Routes.welcomeRoute: (context) => const WelcomeScreen(),
     Routes.insuranceRoute: (context) => const InsuranceScreen(),
     Routes.addMoneyRoute: (context) => const AddMoneyScreen(),
     Routes.convertRoute: (context) => const ConvertScreen(),

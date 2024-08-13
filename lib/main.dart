@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tampay_mobile/app/routes/app_routes.dart';
 import 'app/routes/app_pages.dart';
 
 void main() {
@@ -17,7 +18,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: "/",
+      initialRoute: Routes.introRoute,
       routes: AppPages.routes,
     );
   }

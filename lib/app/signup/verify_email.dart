@@ -130,9 +130,10 @@ class _VerifyScreenState extends State<VerifyScreen> {
                                 description:
                                     "Your account has been successfully created!",
                                 onOk: () {
-                                  // Constant.sendToNext(
-                                  //     context, Routes.homeScreenRoute);
-                                }, okText: "Ok",
+                                  Constant.sendToNext(
+                                      context, Routes.welcomeRoute);
+                                },
+                                okText: "Ok",
                               );
                             },
                             context: context);
@@ -148,7 +149,8 @@ class _VerifyScreenState extends State<VerifyScreen> {
                             builder: (context) {
                               return VerifyDialog(
                                   title: "Check Inbox",
-                                  description: "Code has been resent successfully!",
+                                  description:
+                                      "Code has been resent successfully!",
                                   okText: "Ok",
                                   onOk: () {
                                     Navigator.pop(context);
@@ -156,7 +158,8 @@ class _VerifyScreenState extends State<VerifyScreen> {
                             },
                             context: context);
                       },
-                      child: getCustomFont("Resend code", 12, primaryColor, 1))
+                      child: getCustomFont(
+                          "Resend code in 50 secs", 12, grey700, 1))
                 ],
               ),
             ),

@@ -43,62 +43,74 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
               getCustomFont("40% COMPLETE", 15, h6, 1,
                   fontWeight: FontWeight.w600, letterSpacing: 1.5),
               getVerSpace(FetchPixels.getPixelHeight(20)),
-              customListTile("BVN Verification", 14, grey700,1, trailingImagePath: "chevron_right.svg", onTap: () {
+              customListTile("BVN Verification", 14, grey700, 1,
+                  trailingImagePath: "chevron_right.svg", onTap: () {
                 showDialog(
                     barrierDismissible: true,
                     builder: (context) {
                       return VerifyDialog(
-                        title: "Complete Account Setup",
+                        title: "Set Transaction Pin",
+                        imagePath: "lock.svg",
                         description:
-                        "To access this feature, please complete your account setup.",
+                            "This PIN will help us verify your identity to authorize transactions from your Tampay account.",
                         onOk: () {
                           Navigator.pop(context);
-                        }, okText: "Complete Account Setup",
+                        },
+                        okText: "Create Pin",
                       );
                     },
                     context: context);
               }),
-              customListTile("Email Verification", 14, grey700,1, trailingImagePath: "chevron_right.svg", onTap: () {
+              customListTile("Email Verification", 14, grey700, 1,
+                  trailingImagePath: "chevron_right.svg", onTap: () {
                 showDialog(
                     barrierDismissible: true,
                     builder: (context) {
                       return VerifyDialog(
-                        title: "Complete Account Setup",
+                        title: "Set Transaction Pin",
+                        imagePath: "lock.svg",
                         description:
-                        "To access this feature, please complete your account setup.",
+                            "This PIN will help us verify your identity to authorize transactions from your Tampay account.",
                         onOk: () {
                           Navigator.pop(context);
-                        }, okText: "Complete Account Setup",
+                        },
+                        okText: "Create Pin",
                       );
                     },
                     context: context);
               }),
-              customListTile("Phone Number", 14, grey700,1, trailingImagePath: "chevron_right.svg", onTap: () {
+              customListTile("Phone Number", 14, grey700, 1,
+                  trailingImagePath: "chevron_right.svg", onTap: () {
                 showDialog(
                     barrierDismissible: true,
                     builder: (context) {
                       return VerifyDialog(
-                        title: "Complete Account Setup",
+                        title: "Set Transaction Pin",
+                        imagePath: "lock.svg",
                         description:
-                        "To access this feature, please complete your account setup.",
+                            "This PIN will help us verify your identity to authorize transactions from your Tampay account.",
                         onOk: () {
                           Navigator.pop(context);
-                        }, okText: "Complete Account Setup",
+                        },
+                        okText: "Create Pin",
                       );
                     },
                     context: context);
               }),
-              customListTile("Set Pin", 14, grey700,1, trailingImagePath: "chevron_right.svg", onTap: () {
+              customListTile("Set Pin", 14, grey700, 1,
+                  trailingImagePath: "chevron_right.svg", onTap: () {
                 showDialog(
                     barrierDismissible: true,
                     builder: (context) {
                       return VerifyDialog(
-                        title: "Complete Account Setup",
+                        title: "Set Transaction Pin",
+                        imagePath: "lock.svg",
                         description:
-                        "To access this feature, please complete your account setup.",
+                            "This PIN will help us verify your identity to authorize transactions from your Tampay account.",
                         onOk: () {
                           Navigator.pop(context);
-                        }, okText: "Complete Account Setup",
+                        },
+                        okText: "Create Pin",
                       );
                     },
                     context: context);
