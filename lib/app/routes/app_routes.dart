@@ -30,6 +30,7 @@ abstract class Routes {
   static const convertRoute = Paths.convertPath;
   static const fundingSuccessRoute = Paths.fundingSuccessPath;
   static const conversionSuccessRoute = Paths.conversionSuccessPath;
+  static const setTransactionPinRoute = Paths.setTransactionPinRoutePath;
 }
 
 abstract class Paths {
@@ -65,4 +66,5 @@ abstract class Paths {
   static const convertPath = "/ConvertScreen";
   static const fundingSuccessPath = "/FundingSuccessScreen";
   static const conversionSuccessPath = "/ConversionSuccessScreen";
+  static const setTransactionPinRoutePath = "/SetTransactionPinScreen";
 }

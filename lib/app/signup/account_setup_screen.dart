@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tampay_mobile/app/routes/app_routes.dart';
 import '../../base/constant.dart';
 import '../../base/resizer/fetch_pixels.dart';
 import '../../base/widget_utils.dart';
@@ -55,6 +56,7 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
                             "This PIN will help us verify your identity to authorize transactions from your Tampay account.",
                         onOk: () {
                           Navigator.pop(context);
+                          Constant.sendToNext(context, Routes.setTransactionPinRoute);
                         },
                         okText: "Create Pin",
                       );
@@ -73,6 +75,7 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
                             "This PIN will help us verify your identity to authorize transactions from your Tampay account.",
                         onOk: () {
                           Navigator.pop(context);
+                          Constant.sendToNext(context, Routes.setTransactionPinRoute);
                         },
                         okText: "Create Pin",
                       );
@@ -91,6 +94,7 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
                             "This PIN will help us verify your identity to authorize transactions from your Tampay account.",
                         onOk: () {
                           Navigator.pop(context);
+                          Constant.sendToNext(context, Routes.setTransactionPinRoute);
                         },
                         okText: "Create Pin",
                       );
@@ -109,6 +113,7 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
                             "This PIN will help us verify your identity to authorize transactions from your Tampay account.",
                         onOk: () {
                           Navigator.pop(context);
+                          Constant.sendToNext(context, Routes.setTransactionPinRoute);
                         },
                         okText: "Create Pin",
                       );

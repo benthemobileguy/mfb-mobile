@@ -3,6 +3,7 @@ import 'package:tampay_mobile/app/login/login_screen.dart';
 import 'package:tampay_mobile/app/signup/account_setup_screen.dart';
 import 'package:tampay_mobile/app/signup/create_pass_screen.dart';
 import 'package:tampay_mobile/app/signup/forgot_password.dart';
+import 'package:tampay_mobile/app/signup/set_transaction_pin_screen.dart';
 import 'package:tampay_mobile/app/signup/welcome_screen.dart';
 import 'package:tampay_mobile/app/view/home/add_money/add_money_screen.dart';
 import 'package:tampay_mobile/app/view/home/add_money/funding_success_screen.dart';
@@ -66,6 +67,7 @@ class AppPages {
     Routes.addMoneyRoute: (context) => const AddMoneyScreen(),
     Routes.convertRoute: (context) => const ConvertScreen(),
     Routes.conversionSuccessRoute: (context) => const ConversionSuccessScreen(),
-    Routes.fundingSuccessRoute: (context) => const FundingSuccessScreen()
+    Routes.fundingSuccessRoute: (context) => const FundingSuccessScreen(),
+    Routes.setTransactionPinRoute: (context) => const SetTransactionPinScreen(),
   };
 }

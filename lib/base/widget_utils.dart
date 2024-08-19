@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tampay_mobile/base/resizer/fetch_pixels.dart';
@@ -159,6 +160,45 @@ DecorationImage getDecorationAssetImage(BuildContext buildContext, String image,
       image: AssetImage((Constant.assetImagePath) + image),
       fit: fit,
       scale: FetchPixels.getScale());
+}
+
+ToastFuture showToast(BuildContext context) {
+  return //Interactive toast, set [isIgnoring] false.
+      showToastWidget(
+    animation: StyledToastAnimation.slideFromLeftFade,
+    reverseAnimation: StyledToastAnimation.slideToBottom,
+    position: StyledToastPosition.top,
+    startOffset: const Offset(-1.0, 0.0),
+    reverseEndOffset: const Offset(0.0, -1.0),
+    duration: const Duration(seconds: 4),
+    //Animation duration   animDuration * 2 <= duration
+    animDuration: const Duration(seconds: 1),
+    curve: Curves.easeInOut,
+    reverseCurve: Curves.fastOutSlowIn,
+    Container(
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(horizontal: 16.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+        border: Border.all(color: successGreen),
+        color: successLightColor,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: getSvgImage("checkmark.svg", width: 35, height: 35),
+          ),
+          getHorSpace(5),
+          getCustomFont("Passcode set successfully", 14, h6, 1),
+        ],
+      ),
+    ),
+    context: context,
+    isIgnoring: true,
+  );
 }
 
 Widget getCustomFont(String text, double fontSize, Color fontColor, int maxLine,
