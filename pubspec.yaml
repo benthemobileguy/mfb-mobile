@@ -25,6 +25,8 @@ dependencies:
   flutter_card_swiper: ^7.0.1
   onscreen_num_keyboard: ^1.0.4
   flutter_styled_toast: ^2.2.1
+  get: ^4.6.6
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -60,3 +62,8 @@ flutter:
         - asset: assets/fonts/sora/Sora-Light.ttf
           weight: 500
 
+flutter_launcher_icons:
+    android: "launcher_icon"
+    ios: true
+    image_path: "assets/images/tampay_logo.png"
+    min_sdk_android: 21

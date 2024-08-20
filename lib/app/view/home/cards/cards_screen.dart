@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tampay_mobile/app/view/home/cards/bank_card.dart';
 import 'package:tampay_mobile/app/view/home/send/recent_transations.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
@@ -17,22 +16,15 @@ class CardsScreen extends StatefulWidget {
 }
 
 class _CardsScreenState extends State<CardsScreen> {
+  TextEditingController amountController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     const cardDetails = [
       CardDetail(
         cardBgAsset: 'assets/images/card1bg.jpg',
-        balance: '200,000.60',
+        balance: '0',
         cardNumber: '4657',
       ),
-      CardDetail(
-          cardBgAsset: 'assets/images/card3bg.jpg',
-          balance: '848,900.30',
-          cardNumber: '3486'),
-      CardDetail(
-          cardBgAsset: 'assets/images/card2bg.jpg',
-          balance: '350,800.90',
-          cardNumber: '6343'),
     ];
 
     return Scaffold(
@@ -108,7 +100,7 @@ class _CardsScreenState extends State<CardsScreen> {
                         },
                         cardsCount: cardDetails.length,
                         isLoop: true,
-                        numberOfCardsDisplayed: 3,
+                        numberOfCardsDisplayed: 1,
                         scale: 0.95,
                         backCardOffset: const Offset(18, -15),
                       ),
@@ -124,10 +116,176 @@ class _CardsScreenState extends State<CardsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildIconWithText('card_add.svg', 'Add money'),
-                      _buildIconWithText('freeze_card.svg', 'Freeze'),
-                      _buildIconWithText('details_card.svg', 'Details'),
-                      _buildIconWithText('more_details.svg', 'More'),
+                      _buildIconWithText('card_add.svg', 'Add money', () {
+                        showCustomBottomSheet(
+                            context,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                getVerSpace(FetchPixels.getPixelHeight(20)),
+                                getCustomFont("Add Money", 16.5, grey700, 1,
+                                    fontWeight: FontWeight.w700),
+                                getVerSpace(FetchPixels.getPixelHeight(20)),
+                                getDefaultTextFiledWithLabel(
+                                  context,
+                                  "₦0.00",
+                                  onTap: () {},
+                                  title: "Enter Amount",
+                                  amountController,
+                                  height: FetchPixels.getPixelHeight(60),
+                                  withSuffix: true,
+                                  withPrefix: true,
+                                  suffixImage: "chevron_down_grey.svg",
+                                  image: "britain_logo.svg",
+                                  suffixImageHeight: 12,
+                                  suffixImageWidth: 12,
+                                  isEnable: false,
+                                ),
+                                getVerSpace(FetchPixels.getPixelHeight(10)),
+                                getCustomFont("Balance :£16.30", 14, grey650, 1,
+                                    fontWeight: FontWeight.w500),
+                                const Spacer(),
+                                getButton(context, primaryColor, "Fund card",
+                                    Colors.white, () {
+                                  showToast(context, "Card Funded Successfully");
+                                  Navigator.pop(context);
+                                }, 16,
+                                    weight: FontWeight.w600,
+                                    borderRadius: BorderRadius.circular(
+                                        FetchPixels.getPixelHeight(15)),
+                                    buttonHeight:
+                                        FetchPixels.getPixelHeight(60)),
+                                getVerSpace(20)
+                              ],
+                            ),
+                            MediaQuery.of(context).size.height * 0.8);
+                      }),
+                      _buildIconWithText('freeze_card.svg', 'Freeze', () {
+                        showCustomBottomSheet(
+                            context,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                getVerSpace(FetchPixels.getPixelHeight(10)),
+                                getCustomFont("Freeze Card", 16.5, grey700, 1,
+                                    fontWeight: FontWeight.w700),
+                                getVerSpace(FetchPixels.getPixelHeight(12)),
+                                getCustomFont(
+                                    "Are you sure you want to freeze this card?",
+                                    12.5,
+                                    blue,
+                                    1,
+                                    fontWeight: FontWeight.w500),
+                                getVerSpace(FetchPixels.getPixelHeight(30)),
+                                Center(
+                                  child: getSvgImage("freeze_card.svg",
+                                      width: 70, height: 70),
+                                ),
+                                getVerSpace(FetchPixels.getPixelHeight(30)),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: getButton(context, primaryColor,
+                                          "Cancel", Colors.white, () {
+                                        Navigator.pop(context);
+                                      }, 16,
+                                          weight: FontWeight.w600,
+                                          borderRadius: BorderRadius.circular(
+                                              FetchPixels.getPixelHeight(15)),
+                                          buttonHeight:
+                                              FetchPixels.getPixelHeight(60)),
+                                    ),
+                                    const SizedBox(
+                                      width: 16,
+                                    ),
+                                    Expanded(
+                                      child: getButton(context, greyColor300,
+                                          "Freeze", Colors.white, () {
+                                        showCustomBottomSheet(
+                                            context,
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                getVerSpace(
+                                                    FetchPixels.getPixelHeight(
+                                                        70)),
+                                                Center(
+                                                  child: getSvgImage(
+                                                      "freeze_card.svg",
+                                                      width: 70,
+                                                      height: 70),
+                                                ),
+                                                getVerSpace(
+                                                    FetchPixels.getPixelHeight(
+                                                        20)),
+                                                getCustomFont("Card frozen",
+                                                    14.5, blue, 1,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                                const Spacer(),
+                                                getPngImage("inverted_card.png",
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.8,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.5),
+                                              ],
+                                            ),
+                                            MediaQuery.of(context).size.height *
+                                                0.8);
+                                      }, 16,
+                                          weight: FontWeight.w600,
+                                          borderRadius: BorderRadius.circular(
+                                              FetchPixels.getPixelHeight(15)),
+                                          buttonHeight:
+                                              FetchPixels.getPixelHeight(60)),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            MediaQuery.of(context).size.height * 0.35);
+                      }),
+                      _buildIconWithText('details_card.svg', 'Details', () {
+                        showCustomBottomSheet(
+                            context,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                getVerSpace(FetchPixels.getPixelHeight(10)),
+                                getCustomFont("Card Details", 16.5, grey700, 1,
+                                    fontWeight: FontWeight.w700),
+                                getVerSpace(FetchPixels.getPixelHeight(16)),
+                                copyItem(
+                                    context, "CARD NAME", "Mamudu Jeffrey"),
+                                getVerSpace(10),
+                                copyItem(context, "CARD NUMBER",
+                                    "5496 1985 8458 4769"),
+                                getVerSpace(10),
+                                copyItem(context, "CVV", "549"),
+                                getVerSpace(10),
+                                copyItem(context, "EXPIRY DATE", "08/28"),
+                                getVerSpace(10),
+                                copyItem(context, "BILLING ADDRESS",
+                                    "383 Madison Avenue in Midtown"),
+                                getVerSpace(10),
+                                copyItem(context, "ZIP CODE", "1234"),
+                              ],
+                            ),
+                            MediaQuery.of(context).size.height * 0.75);
+                      }),
+                      _buildIconWithText('more_details.svg', 'More', () {
+                        showToast(context, "Coming soon");
+                      }),
                     ],
                   ),
                 ),
@@ -141,13 +299,13 @@ class _CardsScreenState extends State<CardsScreen> {
     );
   }
 
-  Widget _buildIconWithText(String svgAsset, String label) {
+  Widget _buildIconWithText(String svgAsset, String label, Function() onTap) {
     return TextButton(
       style: ButtonStyle(
         minimumSize: WidgetStateProperty.all(const Size(0, 0)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
-      onPressed: () {},
+      onPressed: onTap,
       child: Column(
         children: [
           getSvgImage(svgAsset, width: 40, height: 40),

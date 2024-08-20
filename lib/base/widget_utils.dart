@@ -162,7 +162,7 @@ DecorationImage getDecorationAssetImage(BuildContext buildContext, String image,
       scale: FetchPixels.getScale());
 }
 
-ToastFuture showToast(BuildContext context) {
+ToastFuture showToast(BuildContext context, String message) {
   return //Interactive toast, set [isIgnoring] false.
       showToastWidget(
     animation: StyledToastAnimation.slideFromLeftFade,
@@ -192,7 +192,7 @@ ToastFuture showToast(BuildContext context) {
             child: getSvgImage("checkmark.svg", width: 35, height: 35),
           ),
           getHorSpace(5),
-          getCustomFont("Passcode set successfully", 14, h6, 1),
+          getCustomFont(message, 14, h6, 1),
         ],
       ),
     ),
@@ -225,6 +225,60 @@ Widget getCustomFont(String text, double fontSize, Color fontColor, int maxLine,
     softWrap: true,
     textAlign: textAlign,
     textScaleFactor: FetchPixels.getTextScale(),
+  );
+}
+
+Future showCustomBottomSheet(
+    BuildContext context, Widget widget, double height) {
+  return showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.white,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (context) {
+      return SizedBox(
+        height: height,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: widget,
+        ),
+      );
+    },
+  );
+}
+
+copyItem(
+  BuildContext context,
+  String title,
+  String subtitle,
+) {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+    decoration:
+        BoxDecoration(color: grey100, borderRadius: BorderRadius.circular(16)),
+    child: Row(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            getCustomFont(title, 13, greyColor, 1,
+                letterSpacing: 1.1, fontWeight: FontWeight.w500),
+            getVerSpace(FetchPixels.getPixelHeight(14)),
+            getCustomFont(subtitle, 14, h6, 1, fontWeight: FontWeight.w500),
+          ],
+        ),
+        const Spacer(),
+        InkWell(
+            onTap: () {
+              Clipboard.setData(ClipboardData(text: subtitle));
+              showToast(context, "Copied to clipboard");
+            },
+            child: getSvgImage("copy.svg"))
+      ],
+    ),
   );
 }
 
@@ -287,6 +341,7 @@ Widget customLeadingListTile(
     TextDecoration decoration = TextDecoration.none,
     FontWeight fontWeight = FontWeight.w600,
     double? letterSpacing,
+    String? subtitle,
     TextAlign textAlign = TextAlign.start,
     double? txtHeight,
     required String trailingImagePath,
@@ -313,6 +368,10 @@ Widget customLeadingListTile(
       textScaleFactor: FetchPixels.getTextScale(),
     ),
     leading: getSvgImage(leadingImagePath, width: 35, height: 35),
+    subtitle: Padding(
+      padding: const EdgeInsets.only(top: 4.0),
+      child: getCustomFont(subtitle ?? "", 12.5, greyColor, 1),
+    ),
     trailing: getSvgImage(trailingImagePath, width: 16, height: 16),
     onTap: onTap,
   );

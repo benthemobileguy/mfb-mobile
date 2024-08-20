@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   var horspace = FetchPixels.getPixelHeight(20);
+  bool _isBalanceVisible = true;
   @override
   Widget build(BuildContext context) {
     FetchPixels(context);
@@ -155,10 +156,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: getCustomFont("₦", 20, Colors.black, 1,
                     fontWeight: FontWeight.w500, letterSpacing: 1.5),
               ),
-              getCustomFont("0", 34, Colors.black, 1,
-                  fontWeight: FontWeight.w500, letterSpacing: 1.5),
+              SizedBox(
+                width: 170,
+                child: getCustomFont(
+                    _isBalanceVisible ? "798,385" : "----", 34, Colors.black, 1,
+                    fontWeight: FontWeight.w500, letterSpacing: 1.5),
+              ),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      _isBalanceVisible =
+                          !_isBalanceVisible; // Toggle visibility
+                    });
+                  },
                   style: ButtonStyle(
                     minimumSize: WidgetStateProperty.all(const Size(0, 0)),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,

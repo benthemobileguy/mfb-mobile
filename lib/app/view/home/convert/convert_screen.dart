@@ -76,7 +76,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
                 height: FetchPixels.getPixelHeight(60),
                 withSuffix: true,
                 withPrefix: true,
-                image: "britain_logo.svg",
+                image: "ngn_logo.svg",
                 suffixImageHeight: 10,
                 suffixImageWidth: 10,
               ),

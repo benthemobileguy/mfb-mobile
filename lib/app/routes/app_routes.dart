@@ -6,6 +6,7 @@ abstract class Routes {
   static const forgotPassRoute = Paths.forgotPath;
   static const createPassRoute = Paths.createPassPath;
   static const verifyEmailRoute = Paths.verifyEmailPath;
+  static const verifyIdentityRoute = Paths.verifyIdentityPath;
   static const signupRoute = Paths.signUpPath;
   static const homeScreenRoute = Paths.homeScreenPath;
   static const sendMoneyRoute = Paths.sendMoneyPath;
@@ -17,6 +18,7 @@ abstract class Routes {
   static const insuranceRoute = Paths.insurancePath;
   static const internetRoute = Paths.internetPath;
   static const travelRoute = Paths.travelPath;
+  static const verifyPhoneNumberRoute = Paths.verifyPhoneNumberPath;
   static const sendWithTampayRoute = Paths.sendWithTampayPath;
   static const offlineTransfersRoute = Paths.offlineTransfersPath;
   static const bankTransferRoute = Paths.bankTransferPath;
@@ -31,6 +33,13 @@ abstract class Routes {
   static const fundingSuccessRoute = Paths.fundingSuccessPath;
   static const conversionSuccessRoute = Paths.conversionSuccessPath;
   static const setTransactionPinRoute = Paths.setTransactionPinRoutePath;
+  static const verifyPhoneConfirmationRoute = Paths.verifyPhoneConfirmationRoutePath;
+  static const accountSecurityRoute = Paths.accountSecurityPath;
+  static const legalRoute = Paths.legalPath;
+  static const profileBeneficiariesRoute = Paths.profileBeneficiariesPath;
+  static const statementReportsRoute = Paths.statementReportsPath;
+  static const supportRoute = Paths.supportPath;
+  static const referralsRoute = Paths.referralsPath;
 }
 
 abstract class Paths {
@@ -41,6 +50,7 @@ abstract class Paths {
   static const welcomePath = "/WelcomeScreen";
   static const loginPath = "/LoginScreen";
   static const forgotPath = "/ForgotPassword";
+  static const verifyIdentityPath = "/VerifyIdentity";
   static const verifyEmailPath = "/VerifyEmailPassword";
   static const createPassPath = "/CreatePassPassword";
   static const changePasswordPath = "/ChangePassword";
@@ -52,6 +62,7 @@ abstract class Paths {
   static const electricityPath = "/ElectricityScreen";
   static const internetPath = "/InternetScreen";
   static const travelPath = "/TravelScreen";
+  static const verifyPhoneNumberPath = "/VerifyPhoneNumberScreen";
   static const tvPath = "/TvScreen";
   static const sendWithTampayPath = "/SendWithTampayTag";
   static const offlineTransfersPath = "/OfflineTransfersScreen";
@@ -67,4 +78,12 @@ abstract class Paths {
   static const fundingSuccessPath = "/FundingSuccessScreen";
   static const conversionSuccessPath = "/ConversionSuccessScreen";
   static const setTransactionPinRoutePath = "/SetTransactionPinScreen";
+  static const verifyPhoneConfirmationRoutePath = "VerifyPhoneConfirmationScreen";
+  static const accountSecurityPath = "/AccountSecurityScreen";
+  static const legalPath = "/LegalScreen";
+  static const profileBeneficiariesPath = "/ProfileBeneficiariesScreen";
+  static const statementReportsPath = "/StatementsReportsScreen";
+  static const supportPath = "/SupportScreen";
+  static const referralsPath = "/ReferralsScreen";
+
 }

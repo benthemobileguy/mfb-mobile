@@ -73,7 +73,7 @@ class _SetTransactionPinScreenState extends State<SetTransactionPinScreen> {
         _forceErrorState = true;
       });
     } else {
-      showToast(context);
+      showToast(context, "Passcode set successfully");
       _forceErrorState = false; // Reset the error state
       finishView(); // Close the app or go to the next screen
     }

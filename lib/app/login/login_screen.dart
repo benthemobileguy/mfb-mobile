@@ -101,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       getVerSpace(FetchPixels.getPixelHeight(60)),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),

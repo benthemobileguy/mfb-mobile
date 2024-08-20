@@ -1,9 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:tampay_mobile/app/login/login_screen.dart';
+import 'package:tampay_mobile/app/profile/account_secuity_screen.dart';
+import 'package:tampay_mobile/app/profile/legal_screen.dart';
+import 'package:tampay_mobile/app/profile/profile_beneficiaries_screen.dart';
+import 'package:tampay_mobile/app/profile/referrals_screen.dart';
+import 'package:tampay_mobile/app/profile/statements_reports_screen.dart';
+import 'package:tampay_mobile/app/profile/support_screen.dart';
 import 'package:tampay_mobile/app/signup/account_setup_screen.dart';
 import 'package:tampay_mobile/app/signup/create_pass_screen.dart';
 import 'package:tampay_mobile/app/signup/forgot_password.dart';
 import 'package:tampay_mobile/app/signup/set_transaction_pin_screen.dart';
+import 'package:tampay_mobile/app/signup/verify_identity_screen.dart';
+import 'package:tampay_mobile/app/signup/verify_phone_confirmation_screen.dart';
+import 'package:tampay_mobile/app/signup/verify_phone_number_screen.dart';
 import 'package:tampay_mobile/app/signup/welcome_screen.dart';
 import 'package:tampay_mobile/app/view/home/add_money/add_money_screen.dart';
 import 'package:tampay_mobile/app/view/home/add_money/funding_success_screen.dart';
@@ -47,14 +56,18 @@ class AppPages {
     Routes.profileRoute: (context) => const ProfileScreen(),
     Routes.sendMoneyRoute: (context) => const SendMoneyScreen(),
     Routes.airtimeRoute: (context) => const AirtimeScreen(),
+    Routes.verifyIdentityRoute: (context) => const VerifyIdentityScreen(),
     Routes.electricityRoute: (context) => const ElectricityScreen(),
     Routes.internetRoute: (context) => const InternetScreen(),
     Routes.travelRoute: (context) => const TravelScreen(),
+    Routes.verifyPhoneNumberRoute: (context) => const VerifyPhoneNumberScreen(),
     Routes.tvRoute: (context) => const TvScreen(),
     Routes.sendWithTampayRoute: (context) => const SendWithTampayTag(),
     Routes.offlineTransfersRoute: (context) => const OfflineTransfersScreen(),
     Routes.bankTransferRoute: (context) => const BankTransferScreen(),
     Routes.accountSetUpRoute: (context) => const AccountSetupScreen(),
+    Routes.verifyPhoneConfirmationRoute: (context) =>
+        const VerifyPhoneConfirmationScreen(),
     Routes.sendMoneyConfirmationRoute: (context) =>
         const SendMoneyConfirmationScreen(),
     Routes.transactionDetailsRoute: (context) =>
@@ -69,5 +82,12 @@ class AppPages {
     Routes.conversionSuccessRoute: (context) => const ConversionSuccessScreen(),
     Routes.fundingSuccessRoute: (context) => const FundingSuccessScreen(),
     Routes.setTransactionPinRoute: (context) => const SetTransactionPinScreen(),
+    Routes.accountSecurityRoute: (context) => const AccountSecuityScreen(),
+    Routes.legalRoute: (context) => const LegalScreen(),
+    Routes.profileBeneficiariesRoute: (context) =>
+        const ProfileBeneficiariesScreen(),
+    Routes.statementReportsRoute: (context) => const StatementsReportsScreen(),
+    Routes.supportRoute: (context) => const SupportScreen(),
+    Routes.referralsRoute: (context) => const ReferralsScreen(),
   };
 }

@@ -156,51 +156,12 @@ class _IntroScreenState extends State<IntroScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     loginButton(context),
-                    getHorSpace(FetchPixels.getPixelWidth(20)),
+                    getHorSpace(FetchPixels.getPixelWidth(30)),
                     signUpButton(context),
                   ],
                 ),
               ),
-
-              /*      Align(
-                alignment: Alignment.bottomCenter,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    getVerSpace(FetchPixels.getPixelHeight(38.12)),
-                    getButton(context, blueColor,
-                        select == 2 ? "Get Started" : 'Next', Colors.white, () {
-                      if (select <= 1) {
-                        setState(() {
-                          select = select + 1;
-                        });
-                      } else {
-                        PrefData.setIntro(false);
-                        Constant.sendToNext(context, Routes.loginRoute);
-                      }
-                      _controller.animateToPage(select,
-                          duration: const Duration(milliseconds: 250),
-                          curve: Curves.easeInSine);
-                    }, 16,
-                        weight: FontWeight.w600,
-                        buttonHeight: FetchPixels.getPixelHeight(60),
-                        insetsGeometry: EdgeInsets.symmetric(
-                            horizontal: FetchPixels.getPixelWidth(50)),
-                        borderRadius: BorderRadius.circular(
-                            FetchPixels.getPixelHeight(15))),
-                    getVerSpace(FetchPixels.getPixelHeight(30)),
-                    GestureDetector(
-                      onTap: () {
-                        PrefData.setIntro(false);
-                        Constant.sendToNext(context, Routes.loginRoute);
-                      },
-                      child: getCustomFont("Skip", 16, skipColor, 1,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    getVerSpace(FetchPixels.getPixelHeight(84))
-                  ],
-                ),
-              )*/
+              getVerSpace(FetchPixels.getPixelHeight(35)),
             ],
           ),
         ),
