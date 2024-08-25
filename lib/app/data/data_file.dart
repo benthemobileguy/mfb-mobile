@@ -15,21 +15,21 @@ class DataFile {
         Colors.white,
         "onboarding_1.png",
         "Your Wallet, Reimagined",
-        "Create and manage virtual cards effortlessly.",
+        "Create and manage virtual\ncards effortlessly.",
         "Next"),
     ModelIntro(
         2,
         Colors.white,
         "onboarding_2.png",
         "Go Global with Confidence",
-        "Pay anywhere, anytime, without borders.",
+        "Pay anywhere, anytime, without\nborders.",
         "Next"),
     ModelIntro(
         3,
         Colors.white,
         "onboarding_3.png",
         "Seamless Local Transfers",
-        "Send and receive money across Nigeria instantly.",
+        "Send and receive money across\nNigeria instantly.",
         "Get Started"),
   ];
   //

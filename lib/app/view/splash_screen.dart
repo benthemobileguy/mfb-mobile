@@ -6,6 +6,7 @@ import '../../base/resizer/fetch_pixels.dart';
 import '../../base/widget_utils.dart';
 import '../../theme/color_data.dart';
 import '../routes/app_routes.dart';
+import 'package:lottie/lottie.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,23 +15,27 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
+  late final AnimationController _controller;
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(vsync: this);
     getStarting();
   }
 
   getStarting() async {
-    bool isLogin = await PrefData.isLogIn();
-    bool isIntro = await PrefData.getIntro();
+    bool isLogin = await PrefData.isLoggedIn();
+    bool isOnBoardingCompleted = await PrefData.getIsOnboardingCompleted();
     Timer(const Duration(seconds: 5), () {
-      if (isIntro) {
-        Constant.sendToNext(context, Routes.introRoute);
-      } else if (isLogin) {
+      if (isOnBoardingCompleted) {
         Constant.sendToNext(context, Routes.loginRoute);
-      } else {
-        Constant.sendToNext(context, Routes.homeScreenRoute);
+        if (isLogin) {
+          Constant.sendToNext(context, Routes.homeScreenRoute);
+        } else {
+          Constant.sendToNext(context, Routes.loginRoute);
+        }
       }
     });
   }
@@ -43,28 +48,20 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     FetchPixels(context);
     return Scaffold(
-      body: Stack(
-        children: [
-          getPngImage(
-            boxFit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-            "splash_bg.png",
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Spacer(),
-                getPngImage("welcome_tampay.png", width: 185, height: 139),
-                getVerSpace(FetchPixels.getPixelHeight(50)),
-                viewDashboardButton(context),
-                getVerSpace(FetchPixels.getPixelHeight(30)),
-              ],
-            ),
-          ),
-        ],
+      body: Center(
+        // add lottie file
+        child: Lottie.asset(
+          'assets/lottie/splash_logo.json',
+          controller: _controller,
+          repeat: false,
+          onLoaded: (composition) {
+            // Configure the AnimationController with the duration of the
+            // Lottie file and start the animation.
+            _controller
+              ..duration = composition.duration
+              ..forward();
+          },
+        ),
       ),
     );
   }

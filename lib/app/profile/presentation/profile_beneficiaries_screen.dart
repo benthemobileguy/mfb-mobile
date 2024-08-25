@@ -3,7 +3,7 @@ import 'package:tampay_mobile/base/resizer/fetch_pixels.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
 import 'package:tampay_mobile/theme/color_data.dart';
 
-import '../../base/constant.dart';
+import '../../../base/constant.dart';
 
 class ProfileBeneficiariesScreen extends StatefulWidget {
   const ProfileBeneficiariesScreen({super.key});

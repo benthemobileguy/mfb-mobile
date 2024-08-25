@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:tampay_mobile/app/data/data_file.dart';
+import 'package:tampay_mobile/base/pref_data.dart';
 import '../../../base/constant.dart';
 import '../../../base/resizer/fetch_pixels.dart';
 import '../../../base/widget_utils.dart';
@@ -30,7 +30,7 @@ class _IntroScreenState extends State<IntroScreen> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) {
       if (select < introLists.length - 1) {
         select++;
       } else {
@@ -39,7 +39,7 @@ class _IntroScreenState extends State<IntroScreen> {
 
       _controller.animateToPage(
         select,
-        duration: const Duration(milliseconds: 800),
+        duration: const Duration(seconds: 1),
         curve: Curves.easeInOut,
       );
       selectedPage.value = select;
@@ -92,17 +92,21 @@ class _IntroScreenState extends State<IntroScreen> {
                           child: getAssetImage(
                             introModel.image ?? "",
                             width: select == 0 ? 350 : double.infinity,
-                            opacity: select == 1 ? 0.7 : 1,
+                            opacity: select == 1 ? 0.9 : 1,
                           ),
                         ),
                         Positioned(
                           bottom: FetchPixels.getPixelHeight(80),
+                          right: FetchPixels.getPixelHeight(0),
+                          left: FetchPixels.getPixelHeight(0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SizedBox(
                                   child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   getVerSpace(FetchPixels.getPixelHeight(40)),
                                   getCustomFont(introModel.title ?? "", 18,
@@ -171,7 +175,9 @@ class _IntroScreenState extends State<IntroScreen> {
 
   loginButton(BuildContext context) {
     return getButton(context, Colors.transparent, "Login", grey700, () {
-      Constant.sendToNext(context, Routes.loginRoute);
+      PrefData.setIsOnboardingCompleted(true).then((value) {
+        Constant.sendToNext(context, Routes.loginRoute);
+      });
     }, 16,
         weight: FontWeight.w600,
         buttonWidth: MediaQuery.of(context).size.width * 0.35,
@@ -184,7 +190,11 @@ class _IntroScreenState extends State<IntroScreen> {
 
   signUpButton(BuildContext context) {
     return getButton(context, primaryColor, "Sign Up", Colors.white, () {
-      Constant.sendToNext(context, Routes.signupRoute);
+      PrefData.setIsOnboardingCompleted(true).then(
+        (value) {
+          Constant.sendToNext(context, Routes.signupRoute);
+        },
+      );
     }, 16,
         weight: FontWeight.w600,
         borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(16)),

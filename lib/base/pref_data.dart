@@ -1,10 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PrefData {
-  static String isCode = "${prefName}isCode";
-  static String prefName = "com.screensizer.screen_sizer";
-  static String introAvailable = "${prefName}isIntroAvailable";
-  static String isLoggedIn = "${prefName}isLoggedIn";
+  static String isCode = "isCode";
+  static String onboardingCompletedKey = "onboardingCompletedKey";
+  static String introAvailable = "isIntroAvailable";
+  static String isLoggedInKey = "isLoggedIn";
 
   static Future<SharedPreferences> getPrefInstance() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -13,13 +13,25 @@ class PrefData {
 
   static setLogIn(bool avail) async {
     SharedPreferences preferences = await getPrefInstance();
-    preferences.setBool(isLoggedIn, avail);
+    preferences.setBool(isLoggedInKey, avail);
   }
 
-  static Future<bool> isLogIn() async {
+  static setIsOnboardingCompleted(bool avail) async {
     SharedPreferences preferences = await getPrefInstance();
-    bool isIntroAvailable = preferences.getBool(isLoggedIn) ?? true;
-    return isIntroAvailable;
+    preferences.setBool(onboardingCompletedKey, avail);
+  }
+
+  static Future<bool> getIsOnboardingCompleted() async {
+    SharedPreferences preferences = await getPrefInstance();
+    bool isOnboardingCompleted =
+        preferences.getBool(onboardingCompletedKey) ?? false;
+    return isOnboardingCompleted;
+  }
+
+  static Future<bool> isLoggedIn() async {
+    SharedPreferences preferences = await getPrefInstance();
+    bool isLogIn = preferences.getBool(isLoggedInKey) ?? false;
+    return isLogIn;
   }
 
   static setIntro(bool code) async {

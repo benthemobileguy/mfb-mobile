@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
-import 'package:tampay_mobile/app/login/login_screen.dart';
-import 'package:tampay_mobile/app/profile/account_secuity_screen.dart';
-import 'package:tampay_mobile/app/profile/legal_screen.dart';
-import 'package:tampay_mobile/app/profile/profile_beneficiaries_screen.dart';
-import 'package:tampay_mobile/app/profile/referrals_screen.dart';
-import 'package:tampay_mobile/app/profile/statements_reports_screen.dart';
-import 'package:tampay_mobile/app/profile/support_screen.dart';
-import 'package:tampay_mobile/app/signup/account_setup_screen.dart';
-import 'package:tampay_mobile/app/signup/create_pass_screen.dart';
-import 'package:tampay_mobile/app/signup/forgot_password.dart';
-import 'package:tampay_mobile/app/signup/set_transaction_pin_screen.dart';
-import 'package:tampay_mobile/app/signup/verify_identity_screen.dart';
-import 'package:tampay_mobile/app/signup/verify_phone_confirmation_screen.dart';
-import 'package:tampay_mobile/app/signup/verify_phone_number_screen.dart';
-import 'package:tampay_mobile/app/signup/welcome_screen.dart';
+import 'package:tampay_mobile/app/login/presentation/view/login_screen.dart';
+import 'package:tampay_mobile/app/profile/presentation/account_secuity_screen.dart';
+import 'package:tampay_mobile/app/profile/presentation/legal_screen.dart';
+import 'package:tampay_mobile/app/profile/presentation/profile_beneficiaries_screen.dart';
+import 'package:tampay_mobile/app/profile/presentation/referrals_screen.dart';
+import 'package:tampay_mobile/app/profile/presentation/statements_reports_screen.dart';
+import 'package:tampay_mobile/app/profile/presentation/support_screen.dart';
+import 'package:tampay_mobile/app/signup/presentation/account_setup_screen.dart';
+import 'package:tampay_mobile/app/signup/presentation/create_pass_screen.dart';
+import 'package:tampay_mobile/app/signup/presentation/forgot_password.dart';
+import 'package:tampay_mobile/app/signup/presentation/set_transaction_pin_screen.dart';
+import 'package:tampay_mobile/app/signup/presentation/verify_identity_screen.dart';
+import 'package:tampay_mobile/app/signup/presentation/verify_phone_confirmation_screen.dart';
+import 'package:tampay_mobile/app/signup/presentation/verify_phone_number_screen.dart';
+import 'package:tampay_mobile/app/signup/presentation/welcome_screen.dart';
 import 'package:tampay_mobile/app/view/home/add_money/add_money_screen.dart';
 import 'package:tampay_mobile/app/view/home/add_money/funding_success_screen.dart';
 import 'package:tampay_mobile/app/view/home/base.dart';
@@ -33,8 +33,8 @@ import 'package:tampay_mobile/app/view/home/send/pay_bills/tv/tv_screen.dart';
 import 'package:tampay_mobile/app/view/home/send/send_money_screen.dart';
 import 'package:tampay_mobile/app/view/home/send/send_tampay_tag/send_with_tampay_tag.dart';
 import 'package:tampay_mobile/app/view/splash_screen.dart';
-import '../signup/signup_screen.dart.dart';
-import '../signup/verify_email.dart';
+import '../signup/presentation/signup_screen.dart.dart';
+import '../signup/presentation/verify_email.dart';
 import '../view/home/cards/cards_screen.dart';
 import '../view/home/send/bank_transfer/send_money_confirmation_screen.dart';
 import '../view/home/send/bank_transfer/transaction_successful_screen.dart';
@@ -42,9 +42,9 @@ import '../view/intro/intro_screen.dart';
 import 'app_routes.dart';
 
 class AppPages {
-  static const initialRoute = Routes.introRoute;
+  static const initialRoute = Routes.splashRoute;
   static Map<String, WidgetBuilder> routes = {
-    Routes.homeRoute: (context) => const SplashScreen(),
+    Routes.splashRoute: (context) => const SplashScreen(),
     Routes.homeScreenRoute: (context) => const Base(),
     Routes.introRoute: (context) => const IntroScreen(),
     Routes.loginRoute: (context) => const LoginScreen(),
