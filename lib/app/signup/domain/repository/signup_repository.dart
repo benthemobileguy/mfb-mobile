@@ -1,0 +1,47 @@
+import 'package:tampay_mobile/app/signup/domain/model/request/change_passcode_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/change_pin_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/create_passcode_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/create_password_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/create_pin_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/reset-passcode-request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/reset_password_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/send_otp_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/sign_up_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/verify_bvn_request.dart.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/verify_email_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/verify_otp_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/verify_passcode_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/verify_phone_number.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/verify_pin_request.dart';
+
+abstract class SignupRepository {
+  Future<dynamic> createAccount(
+      SignUpRequest createAccountRequest, String accessKey, String secretKey);
+  Future<dynamic> resetPassword(ResetPasswordRequest resetPassRequest,
+      String accessKey, String secretKey);
+  Future<dynamic> createPassword(CreatePasswordRequest createAccountRequest,
+      String accessKey, String secretKey);
+  Future<dynamic> setPasscode(
+      CreatePasscodeRequest createAccountRequest, String authorization);
+  Future<dynamic> verifyPasscode(
+      VerifyPasscodeRequest createAccountRequest, String authorization);
+  Future<dynamic> changePasscode(
+      ChangePasscodeRequest createAccountRequest, String authorization);
+  Future<dynamic> verifyEmail(
+      VerifyEmailRequest createAccountRequest, String authorization);
+  Future<dynamic> resetPasscode(
+      ResetPasscodeRequest resetPasscodeRequest, String authorization);
+  Future<dynamic> verifyPhoneNumber(
+      VerifyPhoneNumberRequest createAccountRequest, String authorization);
+  Future<dynamic> verifyBVN(
+      VerifyBvnRequest createAccountRequest, String authorization);
+  Future<dynamic> verifyOTP(
+      VerifyOtpRequest createAccountRequest, String authorization);
+  Future<dynamic> verifyPIN(
+      VerifyPinRequest createAccountRequest, String authorization);
+  Future<dynamic> sendOTP(
+      SendOtpRequest createAccountRequest, String authorization);
+  Future<dynamic> setPin(CreatePinRequest setPinRequest, String authorization);
+  Future<dynamic> changePin(
+      ChangePinRequest changePinRequest, String authorization);
+}

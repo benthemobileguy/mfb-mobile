@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../base/constant.dart';
-import '../../../base/resizer/fetch_pixels.dart';
-import '../../../base/widget_utils.dart';
-import '../../../theme/color_data.dart';
-import '../../routes/app_routes.dart';
-import '../../view/dialog/verify_dialog.dart';
+import '../../../../base/constant.dart';
+import '../../../../base/resizer/fetch_pixels.dart';
+import '../../../../base/widget_utils.dart';
+import '../../../../theme/color_data.dart';
+import '../../../routes/app_routes.dart';
+import '../../../view/dialog/verify_dialog.dart';
 
 class VerifyScreen extends StatefulWidget {
   const VerifyScreen({super.key});

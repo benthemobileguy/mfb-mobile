@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:tampay_mobile/app/routes/app_routes.dart';
 import 'package:tampay_mobile/base/constant.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tampay_mobile/app/routes/app_routes.dart';
-import '../../../base/constant.dart';
-import '../../../base/resizer/fetch_pixels.dart';
-import '../../../base/widget_utils.dart';
-import '../../../theme/color_data.dart';
-import '../../view/dialog/verify_dialog.dart';
+import '../../../../base/constant.dart';
+import '../../../../base/resizer/fetch_pixels.dart';
+import '../../../../base/widget_utils.dart';
+import '../../../../theme/color_data.dart';
+import '../../../view/dialog/verify_dialog.dart';
 
 class AccountSetupScreen extends StatefulWidget {
   const AccountSetupScreen({super.key});

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:tampay_mobile/base/custom_progess_dialog.dart';
 import 'package:tampay_mobile/base/resizer/fetch_pixels.dart';
 import '../theme/color_data.dart';
 import 'constant.dart';
@@ -162,6 +163,17 @@ DecorationImage getDecorationAssetImage(BuildContext buildContext, String image,
       scale: FetchPixels.getScale());
 }
 
+Future<void> showCustomDialog(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible:
+        false, // Prevent dismissal by tapping outside the dialog
+    builder: (BuildContext context) {
+      return const CustomProgressDialog();
+    },
+  );
+}
+
 ToastFuture showToast(BuildContext context, String message) {
   return //Interactive toast, set [isIgnoring] false.
       showToastWidget(
@@ -190,6 +202,45 @@ ToastFuture showToast(BuildContext context, String message) {
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: getSvgImage("checkmark.svg", width: 35, height: 35),
+          ),
+          getHorSpace(5),
+          getCustomFont(message, 14, h6, 1),
+        ],
+      ),
+    ),
+    context: context,
+    isIgnoring: true,
+  );
+}
+
+ToastFuture showErrorToast(BuildContext context, String message) {
+  return //Interactive toast, set [isIgnoring] false.
+      showToastWidget(
+    animation: StyledToastAnimation.slideFromLeftFade,
+    reverseAnimation: StyledToastAnimation.slideToBottom,
+    position: StyledToastPosition.top,
+    startOffset: const Offset(-1.0, 0.0),
+    reverseEndOffset: const Offset(0.0, -1.0),
+    duration: const Duration(seconds: 4),
+    //Animation duration   animDuration * 2 <= duration
+    animDuration: const Duration(seconds: 1),
+    curve: Curves.easeInOut,
+    reverseCurve: Curves.fastOutSlowIn,
+    Container(
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(horizontal: 16.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+        border: Border.all(color: redColor2),
+        color: error50,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 0.0),
+            child: getSvgImage("cancel_circle.svg", width: 35, height: 35),
           ),
           getHorSpace(5),
           getCustomFont(message, 14, h6, 1),
@@ -449,7 +500,7 @@ BoxDecoration getButtonDecoration(Color bgColor,
 }
 
 Widget getButton(BuildContext context, Color bgColor, String text,
-    Color textColor, Function function, double fontSize,
+    Color textColor, Function()? function, double fontSize,
     {bool isBorder = false,
     EdgeInsetsGeometry? insetsGeometry,
     borderColor = Colors.transparent,
@@ -467,9 +518,7 @@ Widget getButton(BuildContext context, Color bgColor, String text,
     BorderRadius? borderRadius,
     double? borderWidth}) {
   return InkWell(
-    onTap: () {
-      function();
-    },
+    onTap: function,
     child: Container(
       margin: insetsGeometry,
       padding: insetsGeometryPadding,
@@ -679,11 +728,13 @@ Widget getDefaultTextFiledWithLabel(
     String? image,
     String? suffixImage,
     Function()? onTap,
-    Function? imageFunction,
+    Function()? imageFunction,
     AlignmentGeometry alignmentGeometry = Alignment.centerLeft,
-    List<TextInputFormatter>? inputFormatters}) {
+    List<TextInputFormatter>? inputFormatters,
+    Function(String)? onChanged}) {
   FocusNode myFocusNode = FocusNode();
   Color color = borderColor;
+
   return StatefulBuilder(
     builder: (context, setState) {
       final mqData = MediaQuery.of(context);
@@ -691,7 +742,7 @@ Widget getDefaultTextFiledWithLabel(
           textScaler: TextScaler.linear(FetchPixels.getTextScale()));
 
       return AbsorbPointer(
-        absorbing: isEnable,
+        absorbing: !isEnable,
         child: Focus(
           onFocusChange: (hasFocus) {
             if (hasFocus) {
@@ -755,6 +806,8 @@ Widget getDefaultTextFiledWithLabel(
                           showCursor: false,
                           focusNode: myFocusNode,
                           onTap: onTap,
+                          textDirection: TextDirection.ltr,
+                          onChanged: onChanged,
                           style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w400,
@@ -778,11 +831,7 @@ Widget getDefaultTextFiledWithLabel(
                                   right: FetchPixels.getPixelHeight(18),
                                   left: FetchPixels.getPixelHeight(12)),
                               child: InkWell(
-                                onTap: () {
-                                  if (imageFunction != null) {
-                                    imageFunction();
-                                  }
-                                },
+                                onTap: imageFunction,
                                 child: getSvgImage(suffixImage!,
                                     height: FetchPixels.getPixelHeight(
                                         suffixImageHeight),
@@ -1283,6 +1332,7 @@ Widget getSearchWidget(
                     },
                     autofocus: false,
                     onChanged: onChanged,
+                    textDirection: TextDirection.ltr,
                     textInputAction: TextInputAction.search,
                     controller: searchController,
                     decoration: InputDecoration(

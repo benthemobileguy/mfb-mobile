@@ -78,7 +78,7 @@ class _VerifyDialogState extends State<VerifyDialog>
                 EdgeInsets.symmetric(
                     horizontal: FetchPixels.getPixelHeight(20)),
                 getButton(context, primaryColor, widget.okText, Colors.white,
-                    widget.onOk, 16,
+                    widget.onOk(), 16,
                     weight: FontWeight.w600,
                     borderRadius:
                         BorderRadius.circular(FetchPixels.getPixelHeight(15)),

@@ -36,6 +36,8 @@ class _SplashScreenState extends State<SplashScreen>
         } else {
           Constant.sendToNext(context, Routes.loginRoute);
         }
+      } else {
+        Constant.sendToNext(context, Routes.introRoute);
       }
     });
   }

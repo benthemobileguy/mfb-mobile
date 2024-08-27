@@ -1,36 +1,61 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import '../../../base/constant.dart';
-import '../../../base/resizer/fetch_pixels.dart';
-import '../../../base/widget_utils.dart';
-import '../../../theme/color_data.dart';
-import '../../routes/app_routes.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tampay_mobile/app/signup/presentation/controller/signup_form_controller.dart';
+import 'package:tampay_mobile/app/signup/presentation/state/signup_form_state.dart';
+import '../../../../base/constant.dart';
+import '../../../../base/resizer/fetch_pixels.dart';
+import '../../../../base/widget_utils.dart';
+import '../../../../theme/color_data.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class CreateNewPasswordScreen extends StatefulWidget {
+import '../controller/signup_controller.dart';
+
+class CreateNewPasswordScreen extends ConsumerStatefulWidget {
   const CreateNewPasswordScreen({super.key});
 
   @override
-  State<CreateNewPasswordScreen> createState() =>
+  ConsumerState<CreateNewPasswordScreen> createState() =>
       _CreateNewPasswordScreenState();
 }
 
-class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
-  void finishView() {
-    Constant.closeApp();
-  }
-
+class _CreateNewPasswordScreenState
+    extends ConsumerState<CreateNewPasswordScreen> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   var isPass = false;
   var isConfirmPass = false;
 
   @override
+  void initState() {
+    super.initState();
+    final signUpFormState = ref.read(signUpFormControllerProvider);
+
+    passwordController.text = signUpFormState.password;
+    confirmPasswordController.text = signUpFormState.confirmPassword;
+
+    passwordController.addListener(() {
+      ref
+          .read(signUpFormControllerProvider.notifier)
+          .updatePassword(passwordController.text);
+    });
+
+    confirmPasswordController.addListener(() {
+      ref
+          .read(signUpFormControllerProvider.notifier)
+          .updateConfirmPassword(confirmPasswordController.text);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // FetchPixels(context);
+    final sign_up_form_state = ref.watch(signUpFormControllerProvider);
+    bool isFormValid = sign_up_form_state.isPasswordValid &&
+        sign_up_form_state.isConfirmPasswordValid;
+
     return WillPopScope(
       onWillPop: () async {
-        finishView();
+        Constant.closeApp();
         return false;
       },
       child: Scaffold(
@@ -59,9 +84,9 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                           textInputType: TextInputType.visiblePassword,
                           height: FetchPixels.getPixelHeight(60),
                           withSuffix: true,
-                          suffixImage: "eye.svg",
-                          isEnable: false,
-                          isPass: isPass, imageFunction: () {
+                          suffixImage: isPass ? "eye.svg" : "eye_slash.svg",
+                          isEnable: true,
+                          isPass: !isPass, imageFunction: () {
                         setState(() {
                           isPass = !isPass;
                         });
@@ -75,9 +100,10 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                           textInputType: TextInputType.visiblePassword,
                           height: FetchPixels.getPixelHeight(60),
                           withSuffix: true,
-                          suffixImage: "eye.svg",
-                          isEnable: false,
-                          isPass: isConfirmPass, imageFunction: () {
+                          suffixImage:
+                              isConfirmPass ? "eye.svg" : "eye_slash.svg",
+                          isEnable: true,
+                          isPass: !isConfirmPass, imageFunction: () {
                         setState(() {
                           isConfirmPass = !isConfirmPass;
                         });
@@ -98,10 +124,17 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       getButton(
-                          context, primaryColor, "Create Account", Colors.white,
-                          () {
-                        Constant.sendToNext(context, Routes.verifyEmailRoute);
-                      }, 16,
+                          context,
+                          isFormValid ? primaryColor : greyColor300,
+                          "Create Account",
+                          Colors.white,
+                          isFormValid
+                              ? () async {
+                                  await _performCreateAccount(
+                                      context, ref, sign_up_form_state);
+                                }
+                              : null,
+                          16,
                           weight: FontWeight.w600,
                           borderRadius: BorderRadius.circular(
                               FetchPixels.getPixelHeight(15)),
@@ -170,5 +203,19 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
         ),
       ),
     );
+  }
+
+  _performCreateAccount(BuildContext context, WidgetRef ref,
+      SignUpFormState signUpFormState) async {
+    await ref.read(signUpControllerProvider).createAccount(
+          email: signUpFormState.email.trim(),
+          firstName: signUpFormState.firstName.trim(),
+          lastName: signUpFormState.lastName.trim(),
+          password: passwordController.text.trim(),
+          confirmPassword: confirmPasswordController.text.trim(),
+          phone: signUpFormState.phone.trim(),
+          referralCode: signUpFormState.referralCode.trim(),
+          context: context,
+        );
   }
 }

@@ -1,25 +1,30 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tampay_mobile/app/login/services/login_service.dart';
+import 'package:tampay_mobile/app/signup/services/signup_service.dart';
 import 'package:tampay_mobile/app/routes/app_routes.dart';
 import 'package:tampay_mobile/base/constant.dart';
 import 'package:tampay_mobile/base/custom_progess_dialog.dart';
 import 'package:tampay_mobile/base/pref_data.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
 
-final loginControllerProvider = ChangeNotifierProvider<LoginController>((ref) {
-  return LoginController(ref);
+final signUpControllerProvider =
+    ChangeNotifierProvider<SignUpController>((ref) {
+  return SignUpController(ref);
 });
 
-class LoginController extends ChangeNotifier {
+class SignUpController extends ChangeNotifier {
   final Ref ref;
 
-  LoginController(this.ref);
+  SignUpController(this.ref);
 
-  Future<void> login({
+  Future<void> createAccount({
+    required String? firstName,
+    required String? lastName,
+    required String? confirmPassword,
+    required String? phone,
     required String? email,
     required String? password,
+    String referralCode = "",
     required BuildContext context,
   }) async {
     // Show the progress dialog before making the request
@@ -30,9 +35,14 @@ class LoginController extends ChangeNotifier {
     );
 
     try {
-      final result = await ref.read(loginServiceProvider).login(
+      final result = await ref.read(signUpServiceProvider).signUp(
             email: email!,
             password: password!,
+            confirmPassword: confirmPassword!,
+            firstName: firstName!,
+            lastName: lastName!,
+            phone: phone!,
+            referralCode: referralCode,
           );
 
       result.when(

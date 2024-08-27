@@ -27,6 +27,7 @@ Color textFieldActiveColor = "#41E755".toColor();
 Color greyColor300 = "#D0D5DD".toColor();
 Color successGreen = "#0F973D".toColor();
 Color grey100 = "#F0F2F5".toColor();
+Color error50 = "#FBEAE9".toColor();
 Color redColor2 = "#D42620".toColor();
 Color grey900Color = "#101928".toColor();
 Color grey400Color = "#98A2B3".toColor();
