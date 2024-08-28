@@ -4,7 +4,7 @@
    <application
         android:label="tampay_mobile"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/app_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"

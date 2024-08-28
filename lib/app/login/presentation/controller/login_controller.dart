@@ -35,6 +35,9 @@ class LoginController extends ChangeNotifier {
             password: password!,
           );
 
+      // Dismiss the dialog before handling the result
+      Navigator.of(context, rootNavigator: true).pop();
+
       result.when(
         (success) {
           PrefData.setLogIn(true).then((value) {
@@ -46,9 +49,11 @@ class LoginController extends ChangeNotifier {
           showErrorToast(context, error.message);
         },
       );
-    } finally {
-      // Ensure the progress dialog is dismissed
+    } catch (e) {
+      // Dismiss the dialog if an exception occurs
       Navigator.of(context, rootNavigator: true).pop();
+      showErrorToast(
+          context, 'An unexpected error occurred. Please try again.');
     }
   }
 }

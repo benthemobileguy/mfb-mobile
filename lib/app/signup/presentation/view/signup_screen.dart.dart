@@ -114,7 +114,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     height: FetchPixels.getPixelHeight(60)),
                 getVerSpace(FetchPixels.getPixelHeight(19)),
                 getDefaultTextFiledWithLabel(
-                    context, "e.g +2348123456789", phoneController,
+                    context, "e.g 08123456789", phoneController,
                     isEnable: true,
                     textInputType: TextInputType.phone,
                     title: "Phone Number",

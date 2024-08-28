@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tampay_mobile/app/signup/presentation/state/verify_email_state.dart';
 import 'package:tampay_mobile/app/signup/services/signup_service.dart';
 import 'package:tampay_mobile/app/routes/app_routes.dart';
-import 'package:tampay_mobile/base/constant.dart';
 import 'package:tampay_mobile/base/custom_progess_dialog.dart';
-import 'package:tampay_mobile/base/pref_data.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
 
 final signUpControllerProvider =
@@ -27,38 +26,35 @@ class SignUpController extends ChangeNotifier {
     String referralCode = "",
     required BuildContext context,
   }) async {
-    // Show the progress dialog before making the request
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) => const CustomProgressDialog(),
     );
 
-    try {
-      final result = await ref.read(signUpServiceProvider).signUp(
-            email: email!,
-            password: password!,
-            confirmPassword: confirmPassword!,
-            firstName: firstName!,
-            lastName: lastName!,
-            phone: phone!,
-            referralCode: referralCode,
-          );
+    final result = await ref.read(signUpServiceProvider).signUp(
+          email: email!,
+          password: password!,
+          confirmPassword: confirmPassword!,
+          firstName: firstName!,
+          lastName: lastName!,
+          phone: phone!,
+          referralCode: referralCode,
+        );
+    Navigator.pop(context);
+    result.when(
+      (success) {
+        String otp = success.data?.otp ?? "";
+        String email = success.data?.email ?? "";
 
-      result.when(
-        (success) {
-          PrefData.setLogIn(true).then((value) {
-            Constant.sendToNext(context, Routes.homeScreenRoute);
-          });
-        },
-        (error) {
-          // Show error as a toast notification
-          showErrorToast(context, error.message);
-        },
-      );
-    } finally {
-      // Ensure the progress dialog is dismissed
-      Navigator.of(context, rootNavigator: true).pop();
-    }
+        // Set the OTP and email in the VerifyEmailController
+        ref.read(verifyEmailProvider.notifier).setOtpAndEmail(otp, email);
+
+        Navigator.pushNamed(context, Routes.verifyEmailRoute);
+      },
+      (error) {
+        showErrorToast(context, error.message);
+      },
+    );
   }
 }

@@ -4,21 +4,23 @@ import '../../../base/widget_utils.dart';
 import '../../../theme/color_data.dart';
 
 class VerifyDialog extends StatefulWidget {
-  String title;
-  String description;
-  Function onOk;
-  String okText;
-  String? imagePath;
-  VerifyDialog(
-      {super.key,
-      required this.title,
-      required this.onOk,
-      required this.okText,
-      required this.description,
-      this.imagePath});
+  final String title;
+  final String description;
+  final VoidCallback onOk;
+  final String okText;
+  final String? imagePath;
+
+  const VerifyDialog({
+    super.key,
+    required this.title,
+    required this.onOk,
+    required this.okText,
+    required this.description,
+    this.imagePath,
+  });
 
   @override
-  State<VerifyDialog> createState() => _VerifyDialogState();
+  _VerifyDialogState createState() => _VerifyDialogState();
 }
 
 class _VerifyDialogState extends State<VerifyDialog>
@@ -31,15 +33,28 @@ class _VerifyDialogState extends State<VerifyDialog>
     super.initState();
 
     controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 500));
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
     scaleAnimation =
         CurvedAnimation(parent: controller, curve: Curves.easeInOut);
 
     controller.addListener(() {
-      setState(() {});
+      // Ensure setState is called only if the widget is still mounted
+      if (mounted) {
+        setState(() {});
+      }
     });
 
     controller.forward();
+  }
+
+  @override
+  void dispose() {
+    // Stop the controller before disposing of it
+    controller.stop();
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -48,45 +63,44 @@ class _VerifyDialogState extends State<VerifyDialog>
     return ScaleTransition(
       scale: scaleAnimation,
       child: Dialog(
-          insetPadding:
-              EdgeInsets.symmetric(horizontal: FetchPixels.getPixelWidth(20)),
-          shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(FetchPixels.getPixelHeight(16))),
-          backgroundColor: Colors.white,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              getVerSpace(FetchPixels.getPixelHeight(40)),
-              getSvgImage(widget.imagePath ?? "tampay_logo.svg",
-                  width: 50, height: 50),
-              getVerSpace(FetchPixels.getPixelHeight(27)),
-              getCustomFont(widget.title, 20, Colors.black, 1,
-                  fontWeight: FontWeight.w700),
-              getVerSpace(FetchPixels.getPixelHeight(8)),
-              getPaddingWidget(
-                EdgeInsets.symmetric(
-                    horizontal: FetchPixels.getPixelHeight(20)),
-                getMultilineCustomFont(widget.description, 13.5, Colors.black,
-                    fontWeight: FontWeight.w400,
-                    textAlign: TextAlign.center,
-                    txtHeight: FetchPixels.getPixelHeight(1.5)),
-              ),
-              getVerSpace(FetchPixels.getPixelHeight(20)),
-              getPaddingWidget(
-                EdgeInsets.symmetric(
-                    horizontal: FetchPixels.getPixelHeight(20)),
-                getButton(context, primaryColor, widget.okText, Colors.white,
-                    widget.onOk(), 16,
-                    weight: FontWeight.w600,
-                    borderRadius:
-                        BorderRadius.circular(FetchPixels.getPixelHeight(15)),
-                    buttonHeight: FetchPixels.getPixelHeight(60)),
-              ),
-              getVerSpace(FetchPixels.getPixelHeight(40)),
-            ],
-          )),
+        insetPadding:
+            EdgeInsets.symmetric(horizontal: FetchPixels.getPixelWidth(20)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(16)),
+        ),
+        backgroundColor: Colors.white,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            getVerSpace(FetchPixels.getPixelHeight(40)),
+            getSvgImage(widget.imagePath ?? "tampay_logo.svg",
+                width: 50, height: 50),
+            getVerSpace(FetchPixels.getPixelHeight(27)),
+            getCustomFont(widget.title, 20, Colors.black, 1,
+                fontWeight: FontWeight.w700),
+            getVerSpace(FetchPixels.getPixelHeight(8)),
+            getPaddingWidget(
+              EdgeInsets.symmetric(horizontal: FetchPixels.getPixelHeight(20)),
+              getMultilineCustomFont(widget.description, 13.5, Colors.black,
+                  fontWeight: FontWeight.w400,
+                  textAlign: TextAlign.center,
+                  txtHeight: FetchPixels.getPixelHeight(1.5)),
+            ),
+            getVerSpace(FetchPixels.getPixelHeight(20)),
+            getPaddingWidget(
+              EdgeInsets.symmetric(horizontal: FetchPixels.getPixelHeight(20)),
+              getButton(context, primaryColor, widget.okText, Colors.white,
+                  widget.onOk, 16,
+                  weight: FontWeight.w600,
+                  borderRadius:
+                      BorderRadius.circular(FetchPixels.getPixelHeight(15)),
+                  buttonHeight: FetchPixels.getPixelHeight(60)),
+            ),
+            getVerSpace(FetchPixels.getPixelHeight(40)),
+          ],
+        ),
+      ),
     );
   }
 }
