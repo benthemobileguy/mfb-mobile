@@ -67,7 +67,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                backButtonWidget("back.svg", context: context),
                 getVerSpace(FetchPixels.getPixelHeight(30)),
                 getCustomFont("Login", 22, h6, 1, fontWeight: FontWeight.w600),
                 getVerSpace(FetchPixels.getPixelHeight(30)),

@@ -733,7 +733,7 @@ Widget getDefaultTextFiledWithLabel(
     List<TextInputFormatter>? inputFormatters,
     Function(String)? onChanged}) {
   FocusNode myFocusNode = FocusNode();
-  Color color = borderColor;
+  Color color = greyColor300;
 
   return StatefulBuilder(
     builder: (context, setState) {

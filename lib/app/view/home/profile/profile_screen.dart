@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tampay_mobile/app/routes/app_routes.dart';
 import 'package:tampay_mobile/base/constant.dart';
 import 'package:tampay_mobile/theme/color_data.dart';
@@ -105,11 +106,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fontWeight: FontWeight.w500, onTap: () {
                   Constant.sendToNext(context, Routes.legalRoute);
                 }),
+                getVerSpace(FetchPixels.getPixelHeight(10)),
+                getButton(
+                  context,
+                  redColor2,
+                  "Log out",
+                  Colors.white,
+                  () {
+                   logOut();
+                  },
+                  16,
+                  weight: FontWeight.w600,
+                  borderRadius:
+                  BorderRadius.circular(FetchPixels.getPixelHeight(15)),
+                  buttonHeight: FetchPixels.getPixelHeight(60),
+                ),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  void logOut() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+    Constant.sendToNext(context, Routes.loginRoute);
+
   }
 }

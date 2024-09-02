@@ -1,5 +1,5 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tampay_mobile/app/data/data_file.dart';
 import 'package:tampay_mobile/base/pref_data.dart';
 import '../../../base/constant.dart';
@@ -26,29 +26,14 @@ class _IntroScreenState extends State<IntroScreen> {
 
   List<ModelIntro> introLists = DataFile.introList;
   int select = 0;
-  late Timer _timer;
+
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) {
-      if (select < introLists.length - 1) {
-        select++;
-      } else {
-        select = 0;
-      }
-
-      _controller.animateToPage(
-        select,
-        duration: const Duration(seconds: 1),
-        curve: Curves.easeInOut,
-      );
-      selectedPage.value = select;
-    });
   }
 
   @override
   void dispose() {
-    _timer.cancel();
     _controller.dispose();
     super.dispose();
   }
@@ -88,11 +73,15 @@ class _IntroScreenState extends State<IntroScreen> {
                     ModelIntro introModel = introLists[index];
                     return Stack(
                       children: [
-                        Center(
-                          child: getAssetImage(
-                            introModel.image ?? "",
-                            width: select == 0 ? 350 : double.infinity,
-                            opacity: select == 1 ? 0.9 : 1,
+                        Positioned(
+                          top: FetchPixels.getPixelHeight(-160),
+                          left: 0,
+                          right: 0,
+                          child: Lottie.asset(
+                            introModel.lottieImage!,
+                            repeat: false,
+                            alignment: Alignment.topCenter,
+                            fit: BoxFit.cover,
                           ),
                         ),
                         Positioned(

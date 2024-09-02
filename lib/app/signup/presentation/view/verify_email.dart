@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pinput/pinput.dart';
+import 'package:tampay_mobile/app/signup/presentation/controller/signup_controller.dart';
 import 'package:tampay_mobile/app/signup/presentation/state/verify_email_state.dart';
 import 'package:tampay_mobile/base/pref_data.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -136,8 +137,12 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
                     pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                     showCursor: true,
                     onCompleted: (pin) {
+                      ref.read(verifyEmailProvider.notifier).setOtpAndEmail(
+                          pin, ref.read(verifyEmailProvider).email);
                       if (pin == verifyEmailState.otp) {
                         _showVerifyDialog(context);
+                      } else if (verifyEmailState.otp.isEmpty) {
+                        verifyOtpFunction(ref, context);
                       } else {
                         showErrorToast(context, "Invalid OTP entered.");
                       }
@@ -188,4 +193,12 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
       });
     }
   }
+}
+
+Future<void> verifyOtpFunction(WidgetRef ref, BuildContext context) async {
+  await ref.read(signUpControllerProvider).verifyOTP(
+        otp: ref.read(verifyEmailProvider).otp,
+        email: ref.read(verifyEmailProvider).email,
+        context: context,
+      );
 }

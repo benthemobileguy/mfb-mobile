@@ -92,7 +92,8 @@ abstract class SignUpApiClient {
   @POST("api/v1/verification/otp/validation")
   Future<dynamic> verifyOtp(
     @Body() VerifyOtpRequest createAccountRequest,
-    @Header("Authorization") String authorization,
+    @Header("Access-Key") String accessKey,
+    @Header("Secret-Key") String secretKey,
   );
   @POST("api/v1/verification/phone-number")
   Future<dynamic> verifyPhoneNumber(

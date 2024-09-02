@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tampay_mobile/app/signup/presentation/controller/signup_form_controller.dart';
 import 'package:tampay_mobile/app/signup/presentation/state/signup_form_state.dart';
+import 'package:tampay_mobile/app/signup/presentation/state/verify_email_state.dart';
 import '../../../../base/constant.dart';
 import '../../../../base/resizer/fetch_pixels.dart';
 import '../../../../base/widget_utils.dart';
@@ -207,15 +208,24 @@ class _CreateNewPasswordScreenState
 
   _performCreateAccount(BuildContext context, WidgetRef ref,
       SignUpFormState signUpFormState) async {
-    await ref.read(signUpControllerProvider).createAccount(
-          email: signUpFormState.email.trim(),
-          firstName: signUpFormState.firstName.trim(),
-          lastName: signUpFormState.lastName.trim(),
-          password: passwordController.text.trim(),
-          confirmPassword: confirmPasswordController.text.trim(),
-          phone: signUpFormState.phone.trim(),
-          referralCode: signUpFormState.referralCode.trim(),
-          context: context,
-        );
+    if (signUpFormState.phone.isEmpty) {
+      await ref.read(signUpControllerProvider).createNewPassword(
+            email: ref.read(verifyEmailProvider).email,
+            newPassword: passwordController.text.trim(),
+            confirmPassword: confirmPasswordController.text.trim(),
+            context: context,
+          );
+    } else {
+      await ref.read(signUpControllerProvider).createAccount(
+            email: signUpFormState.email.trim(),
+            firstName: signUpFormState.firstName.trim(),
+            lastName: signUpFormState.lastName.trim(),
+            password: passwordController.text.trim(),
+            confirmPassword: confirmPasswordController.text.trim(),
+            phone: signUpFormState.phone.trim(),
+            referralCode: signUpFormState.referralCode.trim(),
+            context: context,
+          );
+    }
   }
 }

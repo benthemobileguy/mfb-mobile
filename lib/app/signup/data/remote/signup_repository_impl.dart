@@ -93,8 +93,11 @@ class SignUpRepositoryImpl implements SignupRepository {
       return resetPasswordResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('failed: $e');
     }
-    return null;
   }
 
   @override
@@ -138,10 +141,10 @@ class SignUpRepositoryImpl implements SignupRepository {
 
   @override
   Future verifyEmail(
-      VerifyEmailRequest createAccountRequest, String authorization) async {
+      VerifyEmailRequest verifyEmailtRequest, String authorization) async {
     try {
       final verifyEmailResponse =
-          await _signupClient.verifyEmail(createAccountRequest, authorization);
+          await _signupClient.verifyEmail(verifyEmailtRequest, authorization);
       return verifyEmailResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
@@ -150,11 +153,11 @@ class SignUpRepositoryImpl implements SignupRepository {
   }
 
   @override
-  Future verifyOTP(
-      VerifyOtpRequest createAccountRequest, String authorization) async {
+  Future verifyOTP(VerifyOtpRequest verifyOtpRequest, String accessKey,
+      String secretKey) async {
     try {
       final verifyOtpResponse =
-          await _signupClient.verifyOtp(createAccountRequest, authorization);
+          await _signupClient.verifyOtp(verifyOtpRequest, accessKey, secretKey);
       return verifyOtpResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
