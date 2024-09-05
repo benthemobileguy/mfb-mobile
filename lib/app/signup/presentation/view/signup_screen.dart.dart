@@ -125,7 +125,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     isEnable: true,
                     title: "Referral Code (optional)",
                     height: FetchPixels.getPixelHeight(60)),
-                const Spacer(),
+                getVerSpace(FetchPixels.getPixelHeight(40)),
                 getButton(context, isFormValid ? primaryColor : greyColor300,
                     "Continue", Colors.white, () {
                   if (isFormValid) {

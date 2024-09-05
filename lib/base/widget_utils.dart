@@ -803,7 +803,7 @@ Widget getDefaultTextFiledWithLabel(
                           autofocus: false,
                           obscureText: isPass,
                           keyboardType: textInputType,
-                          showCursor: false,
+                          showCursor: true,
                           focusNode: myFocusNode,
                           onTap: onTap,
                           textDirection: TextDirection.ltr,
@@ -1013,7 +1013,7 @@ Widget getCardDateTextField(
                   autofocus: false,
                   focusNode: myFocusNode,
                   obscureText: isPass,
-                  showCursor: false,
+                  showCursor: true,
                   onTap: () {
                     function();
                   },
@@ -1135,7 +1135,7 @@ Widget getCardEditText(BuildContext context, String s,
                   autofocus: false,
                   focusNode: myFocusNode,
                   obscureText: isPass,
-                  showCursor: false,
+                  showCursor: true,
                   onTap: () {
                     function();
                   },
@@ -1256,7 +1256,7 @@ Widget getCountryTextField(BuildContext context, String s,
                       autofocus: false,
                       focusNode: myFocusNode,
                       obscureText: isPass,
-                      showCursor: false,
+                      showCursor: true,
                       onTap: () {
                         function();
                       },
