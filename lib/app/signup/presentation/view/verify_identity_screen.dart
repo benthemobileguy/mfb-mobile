@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tampay_mobile/base/resizer/fetch_pixels.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
@@ -13,6 +14,10 @@ class VerifyIdentityScreen extends StatefulWidget {
 class _VerifyIdentityScreenState extends State<VerifyIdentityScreen> {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
+  TextEditingController bvnController = TextEditingController();
+  FocusNode firstNameFocusNode = FocusNode();
+  FocusNode bvnFocusNode = FocusNode();
+  FocusNode lastNameFocusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +45,7 @@ class _VerifyIdentityScreenState extends State<VerifyIdentityScreen> {
               getDefaultTextFiledWithLabel(
                   context, "Jefferey", firstNameController,
                   isEnable: false,
+                  focusNode: firstNameFocusNode,
                   title: "First Name",
                   height: FetchPixels.getPixelHeight(60)),
               getVerSpace(FetchPixels.getPixelHeight(20)),
@@ -47,6 +53,7 @@ class _VerifyIdentityScreenState extends State<VerifyIdentityScreen> {
                 context,
                 "Mamadu",
                 title: "Last Name",
+                focusNode: lastNameFocusNode,
                 lastNameController,
                 height: FetchPixels.getPixelHeight(60),
                 isEnable: false,
@@ -56,17 +63,20 @@ class _VerifyIdentityScreenState extends State<VerifyIdentityScreen> {
                 context,
                 "Enter BVN",
                 title: "BVN",
-                lastNameController,
+                bvnController,
+                focusNode: bvnFocusNode,
                 height: FetchPixels.getPixelHeight(60),
                 isEnable: true,
               ),
               const Spacer(),
-              getButton(context, primaryColor, "Verify My Identity", Colors.white, () {
+              getButton(
+                  context, primaryColor, "Verify My Identity", Colors.white,
+                  () {
                 Navigator.pop(context);
               }, 16,
                   weight: FontWeight.w600,
                   borderRadius:
-                  BorderRadius.circular(FetchPixels.getPixelHeight(15)),
+                      BorderRadius.circular(FetchPixels.getPixelHeight(15)),
                   buttonHeight: FetchPixels.getPixelHeight(60)),
             ],
           ),

@@ -56,7 +56,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 padding: EdgeInsets.only(
                   top: FetchPixels.getPixelHeight(30),
                 ),
-                child: getAssetImage("tampay_logo.png", width: 50, height: 50),
+                child: getAssetImage("logo_dark.png", width: 50, height: 50),
               ),
               Expanded(
                 child: PageView.builder(

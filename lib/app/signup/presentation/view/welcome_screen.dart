@@ -43,7 +43,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             padding: EdgeInsets.only(
               top: FetchPixels.getPixelHeight(20),
             ),
-            child: getAssetImage("tampay_logo.png", width: 60, height: 60),
+            child: getAssetImage("logo_dark.png", width: 60, height: 60),
           ),
           getVerSpace(20),
           getCustomFont("Welcome to\nTampay", 33, grey700, 3,

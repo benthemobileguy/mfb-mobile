@@ -24,6 +24,8 @@ class _CreateNewPasswordScreenState
     extends ConsumerState<CreateNewPasswordScreen> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  FocusNode passwordFocusNode = FocusNode();
+  FocusNode confirmPasswordFocusNode = FocusNode();
   var isPass = false;
   var isConfirmPass = false;
 
@@ -82,6 +84,7 @@ class _CreateNewPasswordScreenState
                           "Enter Password",
                           title: "Password",
                           passwordController,
+                          focusNode: passwordFocusNode,
                           textInputType: TextInputType.visiblePassword,
                           height: FetchPixels.getPixelHeight(60),
                           withSuffix: true,
@@ -97,6 +100,7 @@ class _CreateNewPasswordScreenState
                           context,
                           "Enter Password",
                           title: "Confirm Password",
+                          focusNode: confirmPasswordFocusNode,
                           confirmPasswordController,
                           textInputType: TextInputType.visiblePassword,
                           height: FetchPixels.getPixelHeight(60),

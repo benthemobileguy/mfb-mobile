@@ -19,6 +19,8 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  FocusNode _emailFocusNode = FocusNode();
+  FocusNode _passwordFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -75,6 +77,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   "e.g Johndoe@gmail.com",
                   _emailController,
                   isEnable: true,
+                  focusNode: _emailFocusNode,
                   title: "Email",
                   height: FetchPixels.getPixelHeight(60),
                 ),
@@ -84,6 +87,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   "Enter Password",
                   _passwordController,
                   isEnable: true,
+                  focusNode: _passwordFocusNode,
                   title: "Password",
                   imageFunction: () {
                     // Toggle password visibility

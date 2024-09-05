@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';
-import 'package:tampay_mobile/app/routes/app_routes.dart';
 import 'package:tampay_mobile/app/view/dialog/verify_dialog.dart';
 import 'package:tampay_mobile/base/constant.dart';
 import 'package:tampay_mobile/base/resizer/fetch_pixels.dart';

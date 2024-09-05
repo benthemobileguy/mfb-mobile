@@ -18,6 +18,7 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
 
 class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   late TextEditingController emailController;
+  FocusNode emailFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -80,6 +81,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   "Email",
                   emailController,
                   isEnable: true,
+                  focusNode: emailFocusNode,
                   height: FetchPixels.getPixelHeight(60),
                 ),
                 if (!isFormValid && emailController.text.isNotEmpty)

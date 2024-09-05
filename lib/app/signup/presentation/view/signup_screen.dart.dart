@@ -20,6 +20,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController referralCodeController = TextEditingController();
+  FocusNode firstNameFocusNode = FocusNode();
+  FocusNode lastNameFocusNode = FocusNode();
+  FocusNode emailFocusNode = FocusNode();
+  FocusNode phoneFocusNode = FocusNode();
+  FocusNode referralCodeFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -98,6 +103,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 getDefaultTextFiledWithLabel(
                     context, "e.g John", firstNameController,
                     isEnable: true,
+                    focusNode: firstNameFocusNode,
                     title: "First name",
                     height: FetchPixels.getPixelHeight(60)),
                 getVerSpace(FetchPixels.getPixelHeight(20)),
@@ -105,17 +111,20 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     context, "e.g Doe", lastNameController,
                     isEnable: true,
                     title: "Last name",
+                    focusNode: lastNameFocusNode,
                     height: FetchPixels.getPixelHeight(60)),
                 getVerSpace(FetchPixels.getPixelHeight(19)),
                 getDefaultTextFiledWithLabel(
                     context, "e.g johndoe@gmail.com", emailController,
                     isEnable: true,
+                    focusNode: emailFocusNode,
                     title: "Email",
                     height: FetchPixels.getPixelHeight(60)),
                 getVerSpace(FetchPixels.getPixelHeight(19)),
                 getDefaultTextFiledWithLabel(
                     context, "e.g 08123456789", phoneController,
                     isEnable: true,
+                    focusNode: phoneFocusNode,
                     textInputType: TextInputType.phone,
                     title: "Phone Number",
                     height: FetchPixels.getPixelHeight(60)),
@@ -123,6 +132,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 getDefaultTextFiledWithLabel(
                     context, "Enter Referral Code", referralCodeController,
                     isEnable: true,
+                    focusNode: referralCodeFocusNode,
                     title: "Referral Code (optional)",
                     height: FetchPixels.getPixelHeight(60)),
                 getVerSpace(FetchPixels.getPixelHeight(40)),

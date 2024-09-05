@@ -731,8 +731,9 @@ Widget getDefaultTextFiledWithLabel(
     Function()? imageFunction,
     AlignmentGeometry alignmentGeometry = Alignment.centerLeft,
     List<TextInputFormatter>? inputFormatters,
-    Function(String)? onChanged}) {
-  FocusNode myFocusNode = FocusNode();
+    Function(String)? onChanged,
+    FocusNode? focusNode // Add focusNode as a named parameter
+    }) {
   Color color = greyColor300;
 
   return StatefulBuilder(
@@ -748,12 +749,10 @@ Widget getDefaultTextFiledWithLabel(
             if (hasFocus) {
               setState(() {
                 color = textFieldActiveColor;
-                myFocusNode.canRequestFocus = true;
               });
             } else {
               setState(() {
                 color = borderColor;
-                myFocusNode.canRequestFocus = false;
               });
             }
           },
@@ -800,11 +799,11 @@ Widget getDefaultTextFiledWithLabel(
                           maxLines: (minLines) ? null : 1,
                           controller: textEditingController,
                           obscuringCharacter: "*",
-                          autofocus: false,
+                          autofocus: true,
                           obscureText: isPass,
                           keyboardType: textInputType,
                           showCursor: true,
-                          focusNode: myFocusNode,
+                          focusNode: focusNode, // Use the provided focusNode
                           onTap: onTap,
                           textDirection: TextDirection.ltr,
                           onChanged: onChanged,

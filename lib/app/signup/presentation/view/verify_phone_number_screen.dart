@@ -16,6 +16,7 @@ class VerifyPhoneNumberScreen extends StatefulWidget {
 
 class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen> {
   TextEditingController phoneNumberController = TextEditingController();
+  FocusNode phoneNumberNode = FocusNode();
   void finishView() {
     Constant.closeApp();
   }
@@ -45,6 +46,7 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen> {
                 getDefaultTextFiledWithLabel(
                     context, "e.g 08034568944", phoneNumberController,
                     isEnable: false,
+                    focusNode: phoneNumberNode,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
