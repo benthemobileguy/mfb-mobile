@@ -81,7 +81,8 @@ Widget getSvgImage(String image,
     BoxFit boxFit = BoxFit.contain}) {
   return SvgPicture.asset(
     Constant.assetImagePath + image,
-    color: color,
+    colorFilter:
+        color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
     width: width,
     height: height,
     fit: boxFit,
@@ -719,6 +720,7 @@ Widget getDefaultTextFiledWithLabel(
     String? title = "",
     EdgeInsetsGeometry margin = EdgeInsets.zero,
     bool isPass = false,
+    int? maxLength = 100,
     bool isEnable = true,
     EdgeInsetsGeometry? contentPadding = EdgeInsets.zero,
     double? height,
@@ -800,6 +802,7 @@ Widget getDefaultTextFiledWithLabel(
                           controller: textEditingController,
                           obscuringCharacter: "*",
                           autofocus: true,
+                          maxLength: maxLength,
                           obscureText: isPass,
                           keyboardType: textInputType,
                           showCursor: true,
@@ -816,6 +819,7 @@ Widget getDefaultTextFiledWithLabel(
                               contentPadding: contentPadding,
                               border: InputBorder.none,
                               hintText: s,
+                              counterText: "",
                               hintStyle: TextStyle(
                                   color: textColor,
                                   fontWeight: FontWeight.w400,

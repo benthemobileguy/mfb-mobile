@@ -8,6 +8,7 @@ Color grey600 = "#F7F9FC".toColor();
 Color intro3 = "#F7ECFF".toColor();
 Color grey400 = "#F7F9FC".toColor();
 Color grey650 = "#475367".toColor();
+Color grey800 = "#1D2739".toColor();
 Color successLightColor = "#EFFEF0".toColor();
 Color successColor = blueColor.withOpacity(0.10);
 Color switchColor = "#18CF2D".toColor();

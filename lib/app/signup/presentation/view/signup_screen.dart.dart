@@ -124,6 +124,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 getDefaultTextFiledWithLabel(
                     context, "e.g 08123456789", phoneController,
                     isEnable: true,
+                    maxLength: 11,
                     focusNode: phoneFocusNode,
                     textInputType: TextInputType.phone,
                     title: "Phone Number",

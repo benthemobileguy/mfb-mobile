@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tampay_mobile/app/signup/presentation/controller/signup_form_controller.dart';
 import 'package:tampay_mobile/app/signup/presentation/state/signup_form_state.dart';
 import 'package:tampay_mobile/app/signup/presentation/state/verify_email_state.dart';
+import 'package:tampay_mobile/app/signup/presentation/view/widgets/pass_condition.dart';
 import '../../../../base/constant.dart';
 import '../../../../base/resizer/fetch_pixels.dart';
 import '../../../../base/widget_utils.dart';
@@ -113,9 +114,30 @@ class _CreateNewPasswordScreenState
                           isConfirmPass = !isConfirmPass;
                         });
                       }),
-                      getVerSpace(FetchPixels.getPixelHeight(19)),
-                      getVerSpace(FetchPixels.getPixelHeight(
-                          100)), // Added space to ensure the content is scrollable and doesn't overlap the bottom elements
+                      getVerSpace(FetchPixels.getPixelHeight(30)),
+                      getCustomFont(
+                          "PASSWORD MUST CONTAIN AT LEAST", 14.5, grey800, 1,
+                          fontWeight: FontWeight.w400),
+                      getVerSpace(FetchPixels.getPixelHeight(14)),
+                      PassCondition(
+                        title: "8 characters",
+                        isMet: sign_up_form_state.hasMinLength,
+                      ),
+                      getVerSpace(FetchPixels.getPixelHeight(5)),
+                      PassCondition(
+                        title: "One uppercase letter",
+                        isMet: sign_up_form_state.hasUppercase,
+                      ),
+                      getVerSpace(FetchPixels.getPixelHeight(5)),
+                      PassCondition(
+                        title: "One number",
+                        isMet: sign_up_form_state.hasDigits,
+                      ),
+                      getVerSpace(FetchPixels.getPixelHeight(5)),
+                      PassCondition(
+                        title: "One Special Character e.g !^@*#(",
+                        isMet: sign_up_form_state.hasSpecialCharacters,
+                      ),
                     ],
                   ),
                 ),
@@ -226,7 +248,7 @@ class _CreateNewPasswordScreenState
             lastName: signUpFormState.lastName.trim(),
             password: passwordController.text.trim(),
             confirmPassword: confirmPasswordController.text.trim(),
-            phone: signUpFormState.phone.trim(),
+            phone: "+234${signUpFormState.phone.trim().substring(1)}",
             referralCode: signUpFormState.referralCode.trim(),
             context: context,
           );

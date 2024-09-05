@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tampay_mobile/app/signup/presentation/state/signup_form_state.dart';
 
 final signUpFormControllerProvider =
-StateNotifierProvider<SignUpFormController, SignUpFormState>((ref) {
+    StateNotifierProvider<SignUpFormController, SignUpFormState>((ref) {
   return SignUpFormController();
 });
 
@@ -13,6 +13,24 @@ class SignUpFormController extends StateNotifier<SignUpFormState> {
     state = state.copyWith(
       firstName: firstName,
       isFirstNameValid: firstName.isNotEmpty,
+    );
+  }
+
+  void updatePassword(String password) {
+    // Regex for conditions
+    bool hasUppercase = password.contains(RegExp(r'[A-Z]'));
+    bool hasDigits = password.contains(RegExp(r'[0-9]'));
+    bool hasSpecialCharacters = password.contains(RegExp(r'[!@#$&*~^]'));
+    bool hasMinLength = password.length >= 8;
+
+    state = state.copyWith(
+      password: password,
+      isPasswordValid:
+          hasUppercase && hasDigits && hasSpecialCharacters && hasMinLength,
+      hasUppercase: hasUppercase,
+      hasDigits: hasDigits,
+      hasSpecialCharacters: hasSpecialCharacters,
+      hasMinLength: hasMinLength,
     );
   }
 
@@ -33,7 +51,7 @@ class SignUpFormController extends StateNotifier<SignUpFormState> {
   void updatePhone(String phone) {
     state = state.copyWith(
       phone: phone,
-      isPhoneValid: phone.length >= 10, // Example validation
+      isPhoneValid: phone.length == 11, // Example validation
     );
   }
 
@@ -41,18 +59,11 @@ class SignUpFormController extends StateNotifier<SignUpFormState> {
     state = state.copyWith(referralCode: referralCode);
   }
 
-  void updatePassword(String password) {
-    state = state.copyWith(
-      password: password,
-      isPasswordValid: password.length >= 8, // Example validation
-    );
-  }
-
   void updateConfirmPassword(String confirmPassword) {
     state = state.copyWith(
       confirmPassword: confirmPassword,
       isConfirmPasswordValid:
-      confirmPassword == state.password && confirmPassword.length >= 8,
+          confirmPassword == state.password && confirmPassword.length >= 8,
     );
   }
 }

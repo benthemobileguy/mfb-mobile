@@ -13,6 +13,12 @@ class SignUpFormState {
   final bool isPasswordValid;
   final bool isConfirmPasswordValid;
 
+  // Password validation conditions
+  final bool hasUppercase;
+  final bool hasDigits;
+  final bool hasSpecialCharacters;
+  final bool hasMinLength;
+
   SignUpFormState({
     this.firstName = '',
     this.lastName = '',
@@ -27,6 +33,10 @@ class SignUpFormState {
     this.isPhoneValid = false,
     this.isPasswordValid = false,
     this.isConfirmPasswordValid = false,
+    this.hasUppercase = false,
+    this.hasDigits = false,
+    this.hasSpecialCharacters = false,
+    this.hasMinLength = false,
   });
 
   SignUpFormState copyWith({
@@ -43,6 +53,10 @@ class SignUpFormState {
     bool? isPhoneValid,
     bool? isPasswordValid,
     bool? isConfirmPasswordValid,
+    bool? hasUppercase,
+    bool? hasDigits,
+    bool? hasSpecialCharacters,
+    bool? hasMinLength,
   }) {
     return SignUpFormState(
       firstName: firstName ?? this.firstName,
@@ -58,7 +72,11 @@ class SignUpFormState {
       isPhoneValid: isPhoneValid ?? this.isPhoneValid,
       isPasswordValid: isPasswordValid ?? this.isPasswordValid,
       isConfirmPasswordValid:
-      isConfirmPasswordValid ?? this.isConfirmPasswordValid,
+          isConfirmPasswordValid ?? this.isConfirmPasswordValid,
+      hasUppercase: hasUppercase ?? this.hasUppercase,
+      hasDigits: hasDigits ?? this.hasDigits,
+      hasSpecialCharacters: hasSpecialCharacters ?? this.hasSpecialCharacters,
+      hasMinLength: hasMinLength ?? this.hasMinLength,
     );
   }
 }
