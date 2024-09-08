@@ -5,8 +5,9 @@ import 'package:tampay_mobile/app/signup/services/signup_service.dart';
 import 'package:tampay_mobile/app/routes/app_routes.dart';
 import 'package:tampay_mobile/base/constant.dart';
 import 'package:tampay_mobile/base/custom_progess_dialog.dart';
-import 'package:tampay_mobile/base/pref_data.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
+
+import '../../../../base/pref_data.dart';
 
 final signUpControllerProvider =
     ChangeNotifierProvider<SignUpController>((ref) {
@@ -45,12 +46,17 @@ class SignUpController extends ChangeNotifier {
         );
     Navigator.pop(context);
     result.when(
-      (success) {
+      (success) async {
         String otp = success.data?.otp ?? "";
         String email = success.data?.email ?? "";
 
         // Set the OTP and email in the VerifyEmailController
-        ref.read(verifyEmailProvider.notifier).setOtpAndEmail(otp, email);
+        await ref
+            .read(localStorageProvider)
+            .saveJsonData(PrefData.user, result.tryGetSuccess())
+            .then((value) {
+          ref.read(verifyEmailProvider.notifier).setOtpAndEmail(otp, email);
+        });
 
         Navigator.pushNamed(context, Routes.verifyEmailRoute);
       },
@@ -142,7 +148,7 @@ class SignUpController extends ChangeNotifier {
         Navigator.pushNamed(context, Routes.createPassRoute);
       },
       (error) {
-        showErrorToast(context, error.message);
+        showErrorToast(context, "Invalid OTP, please try again");
       },
     );
   }

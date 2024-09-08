@@ -140,11 +140,11 @@ class SignUpRepositoryImpl implements SignupRepository {
   }
 
   @override
-  Future verifyEmail(
-      VerifyEmailRequest verifyEmailtRequest, String authorization) async {
+  Future verifyEmail(VerifyEmailRequest verifyEmailRequest, String accessKey,
+      String secretKey) async {
     try {
-      final verifyEmailResponse =
-          await _signupClient.verifyEmail(verifyEmailtRequest, authorization);
+      final verifyEmailResponse = await _signupClient.verifyEmail(
+          verifyEmailRequest, accessKey, secretKey);
       return verifyEmailResponse;
     } on DioException catch (e) {
       debugPrint(e.message);

@@ -1,22 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tampay_mobile/app/profile/presentation/controller/profile_controller.dart';
 import '../../../base/constant.dart';
 import '../../../base/resizer/fetch_pixels.dart';
 import '../../../base/widget_utils.dart';
 import '../../../theme/color_data.dart';
 import '../../routes/app_routes.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   var horspace = FetchPixels.getPixelHeight(20);
   bool _isBalanceVisible = true;
+  @override
+  void initState() {
+    ref.read(profileControllerProvider).getProfile();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     FetchPixels(context);
@@ -159,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 width: 170,
                 child: getCustomFont(
-                    _isBalanceVisible ? "798,385" : "----", 34, Colors.black, 1,
+                    _isBalanceVisible ? "0" : "----", 34, Colors.black, 1,
                     fontWeight: FontWeight.w500, letterSpacing: 1.5),
               ),
               TextButton(
@@ -206,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 image: "add_money_icon.svg",
                 isIcon: true,
                 borderRadius: BorderRadius.circular(30),
-                buttonHeight: 60),
+                buttonHeight: 53),
           ),
           getHorSpace(12),
           Expanded(
@@ -217,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 isIcon: true,
                 weight: FontWeight.w600,
                 borderRadius: BorderRadius.circular(30),
-                buttonHeight: 60),
+                buttonHeight: 53),
           ),
         ],
       ),

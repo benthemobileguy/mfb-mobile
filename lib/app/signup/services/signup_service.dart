@@ -6,10 +6,14 @@ import 'package:tampay_mobile/app/signup/data/remote/signup_repository_impl.dart
 import 'package:tampay_mobile/app/signup/domain/model/request/create_password_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/reset_password_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/sign_up_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/verify_email_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/response/signup_response.dart';
 import 'package:tampay_mobile/base/failure.dart';
 import 'package:tampay_mobile/base/resizer/error_handler.dart';
+
+import '../../../base/app_strings.dart';
+import '../../../base/pref_data.dart';
 
 final signUpServiceProvider = Provider<SignUpService>((ref) {
   return SignUpService(ref);
@@ -29,6 +33,9 @@ class SignUpService {
     String? referralCode,
   }) async {
     try {
+      final deviceId = await ref
+          .read(localStorageProvider)
+          .getStringValue(AppStrings.deviceIdString);
       final response = await ref.read(signUpRepositoryProvider).createAccount(
             SignUpRequest(
               firstName: firstName,
@@ -36,7 +43,10 @@ class SignUpService {
               email: email,
               phone: phone,
               confirmPassword: confirmPassword,
-              deviceOS: Platform.isIOS ? "ios" : "android",
+              deviceInfo: DeviceInfo(
+                deviceOS: Platform.isIOS ? "ios" : "android",
+                deviceId: deviceId,
+              ),
               password: password,
               refCode: referralCode,
             ),
@@ -125,10 +135,9 @@ class SignUpService {
     required String otp,
   }) async {
     try {
-      final response = await ref.read(signUpRepositoryProvider).verifyOTP(
-          VerifyOtpRequest(
-            channel: channel,
-            to: to,
+      final response = await ref.read(signUpRepositoryProvider).verifyEmail(
+          VerifyEmailRequest(
+            email: to,
             otp: otp,
           ),
           Env.accessKey,

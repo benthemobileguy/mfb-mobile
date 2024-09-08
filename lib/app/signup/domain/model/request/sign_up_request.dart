@@ -5,7 +5,7 @@ class SignUpRequest {
   String? phone;
   String? password;
   String? confirmPassword;
-  String? deviceOS;
+  DeviceInfo? deviceInfo;
   String? refCode;
 
   SignUpRequest(
@@ -15,7 +15,7 @@ class SignUpRequest {
         this.phone,
         this.password,
         this.confirmPassword,
-        this.deviceOS,
+        this.deviceInfo,
         this.refCode});
 
   SignUpRequest.fromJson(Map<String, dynamic> json) {
@@ -25,7 +25,9 @@ class SignUpRequest {
     phone = json['phone'];
     password = json['password'];
     confirmPassword = json['confirmPassword'];
-    deviceOS = json['deviceOS'];
+    deviceInfo = json['deviceInfo'] != null
+        ? DeviceInfo.fromJson(json['deviceInfo'])
+        : null;
     refCode = json['refCode'];
   }
 
@@ -37,8 +39,29 @@ class SignUpRequest {
     data['phone'] = phone;
     data['password'] = password;
     data['confirmPassword'] = confirmPassword;
-    data['deviceOS'] = deviceOS;
+    if (deviceInfo != null) {
+      data['deviceInfo'] = deviceInfo!.toJson();
+    }
     data['refCode'] = refCode;
+    return data;
+  }
+}
+
+class DeviceInfo {
+  String? deviceOS;
+  String? deviceId;
+
+  DeviceInfo({this.deviceOS, this.deviceId});
+
+  DeviceInfo.fromJson(Map<String, dynamic> json) {
+    deviceOS = json['deviceOS'];
+    deviceId = json['deviceId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['deviceOS'] = deviceOS;
+    data['deviceId'] = deviceId;
     return data;
   }
 }

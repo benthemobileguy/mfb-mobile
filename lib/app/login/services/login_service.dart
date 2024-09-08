@@ -4,9 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:tampay_mobile/app/login/domain/model/request/login_request.dart';
-import 'package:tampay_mobile/app/login/domain/model/response/login_reponse.dart';
+import 'package:tampay_mobile/app/login/domain/model/response/login_response.dart';
+import 'package:tampay_mobile/base/app_strings.dart';
 import 'package:tampay_mobile/base/failure.dart';
+import 'package:tampay_mobile/base/pref_data.dart';
 import 'package:tampay_mobile/base/resizer/error_handler.dart';
+import 'package:tampay_mobile/main.dart';
+import 'package:tampay_mobile/manager/auth_manager.dart';
 import '../data/remote/login_repository_impl.dart';
 
 final loginServiceProvider = Provider<AuthService>((ref) {
@@ -22,14 +26,22 @@ class AuthService {
     required String password,
   }) async {
     try {
-      final response = await ref.read(loginRepositoryProvider).login(
-          LoginRequest(
+      final deviceId = await ref
+          .read(localStorageProvider)
+          .getStringValue(AppStrings.deviceIdString);
+      final response =
+          await ref.read(loginRepositoryProvider).login(LoginRequest(
               email: email,
               password: password,
-              deviceOS: Platform.isIOS ? 'ios' : 'android'));
+              deviceInfo: DeviceInfo(
+                deviceOS: Platform.isIOS ? "ios" : "android",
+                deviceId: deviceId,
+              )));
 
       // Wrap the successful response in a `Success` result
-      return Success(LoginResponse.fromJson(response??{}));
+      getIt<AuthManager>()
+          .authenticateUser(LoginResponse.fromJson(response ?? {}));
+      return Success(LoginResponse.fromJson(response ?? {}));
     } catch (error) {
       // Use the ErrorHandler to process the error
       final errorMessage = ErrorHandler.getErrorMessage(error);

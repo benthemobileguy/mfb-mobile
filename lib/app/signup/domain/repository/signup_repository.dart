@@ -27,16 +27,16 @@ abstract class SignupRepository {
       VerifyPasscodeRequest createAccountRequest, String authorization);
   Future<dynamic> changePasscode(
       ChangePasscodeRequest createAccountRequest, String authorization);
-  Future<dynamic> verifyEmail(
-      VerifyEmailRequest createAccountRequest, String authorization);
+  Future<dynamic> verifyEmail(VerifyEmailRequest createAccountRequest,
+      String accessKey, String secretKey);
   Future<dynamic> resetPasscode(
       ResetPasscodeRequest resetPasscodeRequest, String authorization);
   Future<dynamic> verifyPhoneNumber(
       VerifyPhoneNumberRequest createAccountRequest, String authorization);
   Future<dynamic> verifyBVN(
       VerifyBvnRequest createAccountRequest, String authorization);
-  Future<dynamic> verifyOTP(
-      VerifyOtpRequest createAccountRequest, String accessKey, String secretKey);
+  Future<dynamic> verifyOTP(VerifyOtpRequest createAccountRequest,
+      String accessKey, String secretKey);
   Future<dynamic> verifyPIN(
       VerifyPinRequest createAccountRequest, String authorization);
   Future<dynamic> sendOTP(

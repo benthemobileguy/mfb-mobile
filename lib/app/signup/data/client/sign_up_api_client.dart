@@ -57,7 +57,8 @@ abstract class SignUpApiClient {
   @POST("api/v1/verification/email")
   Future<dynamic> verifyEmail(
     @Body() VerifyEmailRequest createAccountRequest,
-    @Header("Authorization") String authorization,
+      @Header("Access-Key") String accessKey,
+      @Header("Secret-Key") String secretKey,
   );
   @POST("api/v1/profiles/me/passcode/reset")
   Future<dynamic> resetPasscode(

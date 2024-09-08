@@ -228,11 +228,15 @@ class _SignUpApiClient implements SignUpApiClient {
   @override
   Future<dynamic> verifyEmail(
     VerifyEmailRequest createAccountRequest,
-    String authorization,
+    String accessKey,
+    String secretKey,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': authorization};
+    final _headers = <String, dynamic>{
+      r'Access-Key': accessKey,
+      r'Secret-Key': secretKey,
+    };
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(createAccountRequest.toJson());

@@ -78,6 +78,7 @@ class _VerifyIdentityScreenState extends State<VerifyIdentityScreen> {
                   borderRadius:
                       BorderRadius.circular(FetchPixels.getPixelHeight(15)),
                   buttonHeight: FetchPixels.getPixelHeight(60)),
+              getVerSpace(FetchPixels.getPixelHeight(20)),
             ],
           ),
         ),

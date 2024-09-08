@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tampay_mobile/app/env/env.dart';
 import 'package:tampay_mobile/app/login/data/client/login_api_client.dart';
 import 'package:tampay_mobile/app/login/domain/model/request/login_request.dart';
-import 'package:tampay_mobile/app/login/domain/model/response/login_reponse.dart';
 import 'package:tampay_mobile/app/login/domain/repository/login_repository.dart';
 import 'package:tampay_mobile/base/dio_provider.dart';
 

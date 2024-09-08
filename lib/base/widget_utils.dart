@@ -176,15 +176,13 @@ Future<void> showCustomDialog(BuildContext context) async {
 }
 
 ToastFuture showToast(BuildContext context, String message) {
-  return //Interactive toast, set [isIgnoring] false.
-      showToastWidget(
+  return showToastWidget(
     animation: StyledToastAnimation.slideFromLeftFade,
     reverseAnimation: StyledToastAnimation.slideToBottom,
     position: StyledToastPosition.top,
     startOffset: const Offset(-1.0, 0.0),
     reverseEndOffset: const Offset(0.0, -1.0),
     duration: const Duration(seconds: 4),
-    //Animation duration   animDuration * 2 <= duration
     animDuration: const Duration(seconds: 1),
     curve: Curves.easeInOut,
     reverseCurve: Curves.fastOutSlowIn,
@@ -205,7 +203,16 @@ ToastFuture showToast(BuildContext context, String message) {
             child: getSvgImage("checkmark.svg", width: 35, height: 35),
           ),
           getHorSpace(5),
-          getCustomFont(message, 14, h6, 1),
+          Flexible(
+            child: getCustomFont(
+              message,
+              14,
+              h6,
+              3,
+              overflow: TextOverflow
+                  .ellipsis, // Truncate text with ellipsis if too long
+            ),
+          ),
         ],
       ),
     ),
@@ -215,15 +222,13 @@ ToastFuture showToast(BuildContext context, String message) {
 }
 
 ToastFuture showErrorToast(BuildContext context, String message) {
-  return //Interactive toast, set [isIgnoring] false.
-      showToastWidget(
+  return showToastWidget(
     animation: StyledToastAnimation.slideFromLeftFade,
     reverseAnimation: StyledToastAnimation.slideToBottom,
     position: StyledToastPosition.top,
     startOffset: const Offset(-1.0, 0.0),
     reverseEndOffset: const Offset(0.0, -1.0),
     duration: const Duration(seconds: 4),
-    //Animation duration   animDuration * 2 <= duration
     animDuration: const Duration(seconds: 1),
     curve: Curves.easeInOut,
     reverseCurve: Curves.fastOutSlowIn,
@@ -244,7 +249,15 @@ ToastFuture showErrorToast(BuildContext context, String message) {
             child: getSvgImage("cancel_circle.svg", width: 35, height: 35),
           ),
           getHorSpace(5),
-          getCustomFont(message, 14, h6, 1),
+          Flexible(
+            child: getCustomFont(
+              message,
+              14,
+              h6,
+              3,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
     ),
@@ -538,9 +551,11 @@ Widget getButton(BuildContext context, Color bgColor, String text,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          (isIcon) ? getSvgImage(image!) : getHorSpace(0),
           (isIcon)
-              ? getHorSpace(FetchPixels.getPixelHeight(10))
+              ? getSvgImage(image!, width: 21, height: 21)
+              : getHorSpace(0),
+          (isIcon)
+              ? getHorSpace(FetchPixels.getPixelHeight(5))
               : getHorSpace(0),
           getCustomFont(text, fontSize, textColor, 1,
               textAlign: TextAlign.center,
@@ -752,10 +767,6 @@ Widget getDefaultTextFiledWithLabel(
               setState(() {
                 color = textFieldActiveColor;
               });
-            } else {
-              setState(() {
-                color = borderColor;
-              });
             }
           },
           child: Column(
@@ -796,6 +807,12 @@ Widget getDefaultTextFiledWithLabel(
                                   width: FetchPixels.getPixelHeight(24)),
                             ),
                       Expanded(
+                          child: TextSelectionTheme(
+                        data: TextSelectionThemeData(
+                          selectionColor: Colors.black.withOpacity(0.4),
+                          cursorColor: Colors.black,
+                          selectionHandleColor: Colors.black.withOpacity(0.7),
+                        ),
                         child: TextField(
                           inputFormatters: inputFormatters,
                           maxLines: (minLines) ? null : 1,
@@ -806,6 +823,7 @@ Widget getDefaultTextFiledWithLabel(
                           obscureText: isPass,
                           keyboardType: textInputType,
                           showCursor: true,
+                          cursorColor: Colors.black,
                           focusNode: focusNode, // Use the provided focusNode
                           onTap: onTap,
                           textDirection: TextDirection.ltr,
@@ -826,7 +844,7 @@ Widget getDefaultTextFiledWithLabel(
                                   fontSize: 15,
                                   fontFamily: Constant.fontsFamily)),
                         ),
-                      ),
+                      )),
                       (!withSuffix)
                           ? getHorSpace(FetchPixels.getPixelHeight(16))
                           : Padding(

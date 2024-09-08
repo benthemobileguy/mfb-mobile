@@ -112,6 +112,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                       BorderRadius.circular(FetchPixels.getPixelHeight(15)),
                   buttonHeight: FetchPixels.getPixelHeight(60),
                 ),
+                getVerSpace(FetchPixels.getPixelHeight(20)),
               ],
             ),
           ),

@@ -107,19 +107,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Constant.sendToNext(context, Routes.legalRoute);
                 }),
                 getVerSpace(FetchPixels.getPixelHeight(10)),
-                getButton(
-                  context,
-                  redColor2,
-                  "Log out",
-                  Colors.white,
-                  () {
-                   logOut();
-                  },
-                  16,
-                  weight: FontWeight.w600,
-                  borderRadius:
-                  BorderRadius.circular(FetchPixels.getPixelHeight(15)),
-                  buttonHeight: FetchPixels.getPixelHeight(60),
+                Center(
+                  child: getButton(
+                    context,
+                    grey100,
+                    "Log out",
+                    grey700,
+                    () {
+                      logOut();
+                    },
+                    16,
+                    weight: FontWeight.normal,
+                    borderRadius:
+                        BorderRadius.circular(FetchPixels.getPixelHeight(20)),
+                    buttonHeight: FetchPixels.getPixelHeight(45),
+                    buttonWidth: FetchPixels.getPixelWidth(140),
+                  ),
                 ),
               ],
             ),
@@ -131,8 +134,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void logOut() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    await preferences.clear();
-    Constant.sendToNext(context, Routes.loginRoute);
 
+    /// TODO
+    /// clear required shared pref data
+    Constant.sendToNext(context, Routes.loginRoute);
   }
 }

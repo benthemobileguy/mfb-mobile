@@ -139,13 +139,7 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
                     onCompleted: (pin) {
                       ref.read(verifyEmailProvider.notifier).setOtpAndEmail(
                           pin, ref.read(verifyEmailProvider).email);
-                      if (pin == verifyEmailState.otp) {
-                        _showVerifyDialog(context);
-                      } else if (verifyEmailState.otp.isEmpty) {
-                        verifyOtpFunction(ref, context);
-                      } else {
-                        showErrorToast(context, "Invalid OTP entered.");
-                      }
+                      verifyOtpFunction(ref, context);
                     },
                     mainAxisAlignment: MainAxisAlignment.center,
                   ),

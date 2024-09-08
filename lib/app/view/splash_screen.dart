@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tampay_mobile/main.dart';
+import 'package:tampay_mobile/manager/auth_manager.dart';
 import '../../base/constant.dart';
 import '../../base/pref_data.dart';
 import '../../base/resizer/fetch_pixels.dart';
@@ -8,14 +11,14 @@ import '../../theme/color_data.dart';
 import '../routes/app_routes.dart';
 import 'package:lottie/lottie.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with TickerProviderStateMixin {
   late final AnimationController _controller;
   @override
