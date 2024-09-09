@@ -226,42 +226,6 @@ class _SignUpApiClient implements SignUpApiClient {
   }
 
   @override
-  Future<dynamic> verifyEmail(
-    VerifyEmailRequest createAccountRequest,
-    String accessKey,
-    String secretKey,
-  ) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{
-      r'Access-Key': accessKey,
-      r'Secret-Key': secretKey,
-    };
-    _headers.removeWhere((k, v) => v == null);
-    final _data = <String, dynamic>{};
-    _data.addAll(createAccountRequest.toJson());
-    final _options = _setStreamType<dynamic>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          'api/v1/verification/email',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
-    return _value;
-  }
-
-  @override
   Future<dynamic> resetPasscode(
     ResetPasscodeRequest createAccountRequest,
     String authorization,
@@ -422,38 +386,6 @@ class _SignUpApiClient implements SignUpApiClient {
   }
 
   @override
-  Future<dynamic> sendOtp(
-    SendOtpRequest createAccountRequest,
-    String authorization,
-  ) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': authorization};
-    _headers.removeWhere((k, v) => v == null);
-    final _data = <String, dynamic>{};
-    _data.addAll(createAccountRequest.toJson());
-    final _options = _setStreamType<dynamic>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          'api/v1/verification/otp/request',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
-    return _value;
-  }
-
-  @override
   Future<dynamic> verifyOtp(
     VerifyOtpRequest createAccountRequest,
     String accessKey,
@@ -490,13 +422,17 @@ class _SignUpApiClient implements SignUpApiClient {
   }
 
   @override
-  Future<dynamic> verifyPhoneNumber(
-    VerifyPhoneNumberRequest createAccountRequest,
-    String authorization,
+  Future<dynamic> verifyEmail(
+    VerifyEmailRequest createAccountRequest,
+    String accessKey,
+    String secretKey,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': authorization};
+    final _headers = <String, dynamic>{
+      r'Access-Key': accessKey,
+      r'Secret-Key': secretKey,
+    };
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(createAccountRequest.toJson());
@@ -507,7 +443,83 @@ class _SignUpApiClient implements SignUpApiClient {
     )
         .compose(
           _dio.options,
-          'api/v1/verification/phone-number',
+          'api/v1/verification/email',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
+  Future<dynamic> sendOtp(
+    SendOtpRequest createAccountRequest,
+    String authorization,
+    String accessKey,
+    String secretKey,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'Authorization': authorization,
+      r'Access-Key': accessKey,
+      r'Secret-Key': secretKey,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(createAccountRequest.toJson());
+    final _options = _setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'api/v1/verification/phone-number/send-otp',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
+  Future<dynamic> verifyPhoneNumber(
+    VerifyPhoneNumberRequest createAccountRequest,
+    String authorization,
+    String accessKey,
+    String secretKey,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'Authorization': authorization,
+      r'Access-Key': accessKey,
+      r'Secret-Key': secretKey,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(createAccountRequest.toJson());
+    final _options = _setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'api/v1/verification/phone-number/verify-otp',
           queryParameters: queryParameters,
           data: _data,
         )

@@ -1,23 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tampay_mobile/app/routes/app_routes.dart';
 import 'package:tampay_mobile/base/constant.dart';
+import 'package:tampay_mobile/main.dart';
+import 'package:tampay_mobile/manager/auth_manager.dart';
 import 'package:tampay_mobile/theme/color_data.dart';
 
 import '../../../../base/resizer/fetch_pixels.dart';
 import '../../../../base/widget_utils.dart';
+import '../../../profile/presentation/controller/profile_controller.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final profileController = ref.watch(profileControllerProvider);
+    final userProfile = profileController.userProfile;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -48,7 +54,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          getCustomFont("Mamudu Jeffrey", 14, grey700, 1),
+                          getCustomFont(
+                              '${userProfile?.data?.firstName} ${userProfile?.data?.lastName}',
+                              14,
+                              grey700,
+                              1),
                           getVerSpace(10),
                           getCustomFont(
                               "View Account Details", 12.5, grey700, 1),
@@ -133,10 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void logOut() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-
-    /// TODO
-    /// clear required shared pref data
+      getIt<AuthManager>().clearAuthDetails();
     Constant.sendToNext(context, Routes.loginRoute);
   }
 }

@@ -66,4 +66,26 @@ class SignUpFormController extends StateNotifier<SignUpFormState> {
           confirmPassword == state.password && confirmPassword.length >= 8,
     );
   }
+
+  void resetForm() {
+    state = SignUpFormState(
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      referralCode: '',
+      password: '',
+      confirmPassword: '',
+      isFirstNameValid: false,
+      isLastNameValid: false,
+      isEmailValid: false,
+      isPhoneValid: false,
+      isPasswordValid: false,
+      isConfirmPasswordValid: false,
+      hasUppercase: false,
+      hasDigits: false,
+      hasSpecialCharacters: false,
+      hasMinLength: false,
+    );
+  }
 }

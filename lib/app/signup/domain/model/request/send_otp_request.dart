@@ -1,18 +1,15 @@
 class SendOtpRequest {
-  String? channel;
-  String? target;
+  String? phone;
 
-  SendOtpRequest({this.channel, this.target});
+  SendOtpRequest({this.phone});
 
   SendOtpRequest.fromJson(Map<String, dynamic> json) {
-    channel = json['channel'];
-    target = json['target'];
+    phone = json['phone'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['channel'] = channel;
-    data['target'] = target;
+    data['phone'] = phone;
     return data;
   }
 }

@@ -62,5 +62,6 @@ class AuthManager {
     isLoggedIn = false;
     await prefData.removeData(authDetailsKey);
     await prefData.removeData(PrefData.user);
+    await prefData.logOut();
   }
 }

@@ -84,4 +84,14 @@ class PrefData {
     bool isCodeAvailable = preferences.getBool(introAvailable) ?? true;
     return isCodeAvailable;
   }
+
+  Future<void> logOut() async {
+    SharedPreferences prefs = await PrefData.getPrefInstance();
+
+    // Clear user-specific data
+    await prefs.remove(PrefData.user);
+    await prefs.remove(PrefData.isLoggedInKey);
+    await prefs.remove(PrefData.onboardingCompletedKey);
+    await prefs.remove(PrefData.introAvailable);
+  }
 }

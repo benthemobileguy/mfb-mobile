@@ -101,11 +101,11 @@ class SignUpRepositoryImpl implements SignupRepository {
   }
 
   @override
-  Future sendOTP(
-      SendOtpRequest createAccountRequest, String authorization) async {
+  Future sendOTP(SendOtpRequest createAccountRequest, String authorization,
+      String accessKey, String secretKey) async {
     try {
-      final sendOtpResponse =
-          await _signupClient.sendOtp(createAccountRequest, authorization);
+      final sendOtpResponse = await _signupClient.sendOtp(
+          createAccountRequest, authorization, accessKey, secretKey);
       return sendOtpResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
@@ -223,10 +223,10 @@ class SignUpRepositoryImpl implements SignupRepository {
 
   @override
   Future verifyPhoneNumber(VerifyPhoneNumberRequest createAccountRequest,
-      String authorization) async {
+      String authorization, String accessKey, String secretKey) async {
     try {
       final verifyPhoneNumberResponse = await _signupClient.verifyPhoneNumber(
-          createAccountRequest, authorization);
+          createAccountRequest, authorization, accessKey, secretKey);
       return verifyPhoneNumberResponse;
     } on DioException catch (e) {
       debugPrint(e.message);

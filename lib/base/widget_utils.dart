@@ -452,14 +452,15 @@ Widget customListTile(
     TextAlign textAlign = TextAlign.start,
     double? txtHeight,
     required String trailingImagePath,
-    required VoidCallback onTap}) {
+    required VoidCallback? onTap,
+    required bool isCompleted}) {
   return ListTile(
     contentPadding: EdgeInsets.zero,
     title: Text(
       text,
       overflow: overflow,
       style: TextStyle(
-        decoration: decoration,
+        decoration: isCompleted ? TextDecoration.lineThrough : decoration,
         fontSize: fontSize,
         fontStyle: FontStyle.normal,
         color: fontColor,
@@ -473,7 +474,8 @@ Widget customListTile(
       textAlign: textAlign,
       textScaleFactor: FetchPixels.getTextScale(),
     ),
-    trailing: getSvgImage(trailingImagePath, width: 16, height: 16),
+    trailing: getSvgImage(trailingImagePath,
+        width: isCompleted ? 25 : 16, height: isCompleted ? 25 : 16),
     onTap: onTap,
   );
 }
@@ -730,6 +732,7 @@ Widget getDefaultTextFiledWithLabel(
     {bool withPrefix = false,
     bool withSuffix = false,
     bool minLines = false,
+    bool? showCursor = true,
     double suffixImageHeight = 24,
     double suffixImageWidth = 24,
     String? title = "",
@@ -822,7 +825,7 @@ Widget getDefaultTextFiledWithLabel(
                           maxLength: maxLength,
                           obscureText: isPass,
                           keyboardType: textInputType,
-                          showCursor: true,
+                          showCursor: showCursor,
                           cursorColor: Colors.black,
                           focusNode: focusNode, // Use the provided focusNode
                           onTap: onTap,

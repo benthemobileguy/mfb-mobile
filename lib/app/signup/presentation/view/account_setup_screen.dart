@@ -1,25 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tampay_mobile/app/routes/app_routes.dart';
 import '../../../../base/constant.dart';
 import '../../../../base/resizer/fetch_pixels.dart';
 import '../../../../base/widget_utils.dart';
 import '../../../../theme/color_data.dart';
+import '../../../profile/presentation/controller/profile_controller.dart';
 import '../../../view/dialog/verify_dialog.dart';
 
-class AccountSetupScreen extends StatefulWidget {
+class AccountSetupScreen extends ConsumerStatefulWidget {
   const AccountSetupScreen({super.key});
 
   @override
-  State<AccountSetupScreen> createState() => _AccountSetupScreenState();
+  ConsumerState<AccountSetupScreen> createState() => _AccountSetupScreenState();
 }
 
-class _AccountSetupScreenState extends State<AccountSetupScreen> {
+class _AccountSetupScreenState extends ConsumerState<AccountSetupScreen> {
   void finishView() {
     Constant.closeApp();
   }
 
   @override
   Widget build(BuildContext context) {
+    final profileController = ref.watch(profileControllerProvider);
+    final userProfile = profileController.userProfile;
+    final accountCompletion =
+        (userProfile?.data?.accountCompletionStatus ?? 0) / 100;
+
+    bool emailVerified = userProfile?.data?.emailVerified ?? false;
+    bool phoneNumberVerified = userProfile?.data?.phoneNumberVerified ?? false;
+    bool passcodeSet = userProfile?.data?.passCode != null;
+    bool pinSet = userProfile?.data?.pin != null;
+    bool bvnVerified = userProfile?.data?.bvnVerified ?? false;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: colorBg,
@@ -61,48 +74,124 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
                   Row(
                     children: [
                       CircularProgressIndicator(
-                        value: 0.4, // 40% progress
+                        value: accountCompletion,
                         backgroundColor: yellowBg,
                         valueColor: AlwaysStoppedAnimation<Color>(yellowColor),
                       ),
                       getHorSpace(FetchPixels.getPixelWidth(10)),
-                      getCustomFont("40% COMPLETE", 15, h6, 1,
-                          fontWeight: FontWeight.w600, letterSpacing: 1.5),
+                      getCustomFont(
+                          "${(accountCompletion * 100).toInt()}% COMPLETE",
+                          15,
+                          h6,
+                          1,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1.5),
                     ],
                   ),
                   getVerSpace(FetchPixels.getPixelHeight(20)),
-                  customListTile("Verify Your Identity", 14, grey700, 1,
-                      trailingImagePath: "chevron_right.svg", onTap: () {
-                    Constant.sendToNext(context, Routes.verifyIdentityRoute);
-                  }),
-                  customListTile("Email Verification", 14, grey700, 1,
-                      trailingImagePath: "chevron_right.svg", onTap: () {
-                    Constant.sendToNext(context, Routes.verifyEmailRoute);
-                  }),
-                  customListTile("Phone Number", 14, grey700, 1,
-                      trailingImagePath: "chevron_right.svg", onTap: () {
-                    Constant.sendToNext(context, Routes.verifyPhoneNumberRoute);
-                  }),
-                  customListTile("Set Transaction Pin", 14, grey700, 1,
-                      trailingImagePath: "chevron_right.svg", onTap: () {
-                    showDialog(
-                        barrierDismissible: true,
-                        builder: (context) {
-                          return VerifyDialog(
-                            title: "Set Transaction Pin",
-                            imagePath: "lock.svg",
-                            description:
-                                "This PIN will help us verify your identity to authorize transactions from your Tampay account.",
-                            onOk: () {
-                              Navigator.pop(context);
-                              Constant.sendToNext(
-                                  context, Routes.setTransactionPinRoute);
-                            },
-                            okText: "Create Pin",
-                          );
-                        },
-                        context: context);
-                  }),
+
+                  // Email Verification
+                  customListTile(
+                    "Email Verification",
+                    14,
+                    emailVerified ? grey400Color : grey700,
+                    1,
+                    trailingImagePath: emailVerified
+                        ? "check_circle.svg"
+                        : "chevron_right.svg",
+                    onTap: emailVerified
+                        ? null
+                        : () {
+                            Constant.sendToNext(
+                                context, Routes.verifyEmailRoute);
+                          },
+                    isCompleted: emailVerified,
+                  ),
+
+                  // Phone Number Verification (disabled until email verified)
+                  customListTile(
+                    "Phone Number",
+                    14,
+                    phoneNumberVerified ? grey400Color : grey700,
+                    1,
+                    trailingImagePath: phoneNumberVerified
+                        ? "check_circle.svg"
+                        : "chevron_right.svg",
+                    onTap: (emailVerified && !phoneNumberVerified)
+                        ? () {
+                            Constant.sendToNext(
+                                context, Routes.verifyPhoneNumberRoute);
+                          }
+                        : null,
+                    isCompleted: phoneNumberVerified,
+                  ),
+
+                  // Passcode Setup (disabled until phone number verified)
+                  customListTile(
+                    "Set Passcode",
+                    14,
+                    passcodeSet ? grey400Color : grey700,
+                    1,
+                    trailingImagePath:
+                        passcodeSet ? "check_circle.svg" : "chevron_right.svg",
+                    onTap: (phoneNumberVerified && !passcodeSet)
+                        ? () {
+                            Constant.sendToNext(
+                                context, Routes.verifyPhoneNumberRoute);
+                          }
+                        : null,
+                    isCompleted: passcodeSet,
+                  ),
+
+                  // Transaction Pin Setup (disabled until passcode set)
+                  customListTile(
+                    "Set Transaction Pin",
+                    14,
+                    pinSet ? grey400Color : grey700,
+                    1,
+                    trailingImagePath:
+                        pinSet ? "check_circle.svg" : "chevron_right.svg",
+                    onTap: (passcodeSet && !pinSet)
+                        ? () {
+                            showDialog(
+                              barrierDismissible: true,
+                              builder: (context) {
+                                return VerifyDialog(
+                                  title: "Set Transaction Pin",
+                                  imagePath: "lock.svg",
+                                  description:
+                                      "This PIN will help us verify your identity to authorize transactions from your Tampay account.",
+                                  onOk: () {
+                                    Navigator.pop(context);
+                                    Constant.sendToNext(
+                                        context, Routes.setTransactionPinRoute);
+                                  },
+                                  okText: "Create Pin",
+                                );
+                              },
+                              context: context,
+                            );
+                          }
+                        : null,
+                    isCompleted: pinSet,
+                  ),
+
+                  // BVN Verification (disabled until pin set)
+                  customListTile(
+                    "Verify Your Identity",
+                    14,
+                    bvnVerified ? grey400Color : grey700,
+                    1,
+                    trailingImagePath:
+                        bvnVerified ? "success.svg" : "chevron_right.svg",
+                    onTap: (pinSet && !bvnVerified)
+                        ? () {
+                            Constant.sendToNext(
+                                context, Routes.verifyIdentityRoute);
+                          }
+                        : null,
+                    isCompleted: bvnVerified,
+                  ),
                   getVerSpace(FetchPixels.getPixelHeight(20)),
                 ],
               ),

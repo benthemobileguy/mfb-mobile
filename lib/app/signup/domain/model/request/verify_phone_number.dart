@@ -1,15 +1,18 @@
 class VerifyPhoneNumberRequest {
-  String? phoneNumber;
+  String? phone;
+  String? otp;
 
-  VerifyPhoneNumberRequest({this.phoneNumber});
+  VerifyPhoneNumberRequest({this.phone, this.otp});
 
   VerifyPhoneNumberRequest.fromJson(Map<String, dynamic> json) {
-    phoneNumber = json['phoneNumber'];
+    phone = json['phone'];
+    otp = json['otp'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['phoneNumber'] = phoneNumber;
+    data['phone'] = phone;
+    data['otp'] = otp;
     return data;
   }
 }

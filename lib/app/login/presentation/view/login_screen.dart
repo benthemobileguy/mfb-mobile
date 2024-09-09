@@ -169,8 +169,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   void dispose() {
+    // Dispose controllers
     _emailController.dispose();
     _passwordController.dispose();
+    // Reset the login form state
+    ref.read(loginFormControllerProvider.notifier).resetForm();
     super.dispose();
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tampay_mobile/app/profile/domain/model/response/user_profile.dart';
 import 'package:tampay_mobile/app/profile/presentation/controller/profile_controller.dart';
 import '../../../base/constant.dart';
 import '../../../base/resizer/fetch_pixels.dart';
@@ -18,15 +19,12 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   var horspace = FetchPixels.getPixelHeight(20);
   bool _isBalanceVisible = true;
-  @override
-  void initState() {
-    ref.read(profileControllerProvider).getProfile();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     FetchPixels(context);
+    final profileController = ref.watch(profileControllerProvider);
+    final userProfile = profileController.userProfile;
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -36,9 +34,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               getVerSpace(FetchPixels.getPixelHeight(10)),
-              appBar(context),
+              appBar(context, userProfile ?? UserProfile()),
               getVerSpace(FetchPixels.getPixelHeight(30)),
-              accountCompletionStatus(context),
+              accountCompletionStatus(context, userProfile ?? UserProfile()),
               getVerSpace(FetchPixels.getPixelHeight(20)),
               currencyToggle(context),
               getVerSpace(FetchPixels.getPixelHeight(30)),
@@ -56,7 +54,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget appBar(BuildContext context) {
+  Widget appBar(BuildContext context, UserProfile userProfile) {
     return getPaddingWidget(
       EdgeInsets.symmetric(horizontal: horspace),
       Row(
@@ -66,7 +64,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              getCustomFont("Good Day Jeffrey", 16, h6, 1,
+              getCustomFont(
+                  "Good Day ${userProfile.data?.firstName}", 16, h6, 1,
                   fontWeight: FontWeight.w600),
             ],
           ),
@@ -83,7 +82,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  accountCompletionStatus(BuildContext context) {
+  accountCompletionStatus(BuildContext context, UserProfile userProfile) {
     return InkWell(
       onTap: () {
         Constant.sendToNext(context, Routes.accountSetUpRoute);
@@ -102,8 +101,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                getCustomFont("40% COMPLETE", 15, h6, 1,
-                    fontWeight: FontWeight.w600, letterSpacing: 1.5),
+                getCustomFont(
+                    "${userProfile.data?.accountCompletionStatus.toString()}% COMPLETE",
+                    15,
+                    h6,
+                    1,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1.5),
                 getVerSpace(FetchPixels.getPixelHeight(10)),
                 getCustomFont("Complete Account Setup", 14, h6, 1,
                     fontWeight: FontWeight.w500),

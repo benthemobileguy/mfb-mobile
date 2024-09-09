@@ -1,35 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pinput/pinput.dart';
 import 'package:tampay_mobile/app/view/dialog/verify_dialog.dart';
 import 'package:tampay_mobile/base/constant.dart';
 import 'package:tampay_mobile/base/resizer/fetch_pixels.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
 import 'package:tampay_mobile/theme/color_data.dart';
+import '../controller/signup_controller.dart';
 
-class VerifyPhoneConfirmationScreen extends StatefulWidget {
+class VerifyPhoneConfirmationScreen extends ConsumerWidget {
   const VerifyPhoneConfirmationScreen({super.key});
 
   @override
-  State<VerifyPhoneConfirmationScreen> createState() =>
-      _VerifyPhoneConfirmationScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Retrieve the phone number from the provider
+    final phoneNumber = ref.watch(phoneNumberProvider);
 
-class _VerifyPhoneConfirmationScreenState
-    extends State<VerifyPhoneConfirmationScreen> {
-  void finishView() {
-    Constant.closeApp();
-  }
-
-  FocusNode myFocusNode = FocusNode();
-  Color color = borderColor;
-  @override
-  Widget build(BuildContext context) {
     final defaultPinTheme = PinTheme(
       width: FetchPixels.getPixelHeight(60),
-      height: FetchPixels.getPixelHeight(
-        60,
-      ),
+      height: FetchPixels.getPixelHeight(60),
       textStyle: TextStyle(
         fontSize: FetchPixels.getPixelHeight(24),
         color: grey900Color,
@@ -37,10 +27,11 @@ class _VerifyPhoneConfirmationScreenState
       ),
       decoration: BoxDecoration(
           color: Colors.white,
-          border:
-              Border.all(color: color, width: FetchPixels.getPixelHeight(1)),
+          border: Border.all(
+              color: borderColor, width: FetchPixels.getPixelHeight(1)),
           borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(12))),
     );
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -52,14 +43,14 @@ class _VerifyPhoneConfirmationScreenState
             children: [
               backButtonWidget("back.svg", context: context),
               getVerSpace(FetchPixels.getPixelHeight(30)),
-              getCustomFont("Verify Email", 22, h6, 1,
+              getCustomFont("Verify Phone number", 22, h6, 1,
                   fontWeight: FontWeight.w600),
               getVerSpace(FetchPixels.getPixelHeight(10)),
               RichText(
                 textAlign: TextAlign.start,
                 text: TextSpan(
                   text:
-                      'We’ve sent you an OTP Code via SMS. Please enter 6-digit code sent to  ',
+                      'We’ve sent you an OTP Code via SMS. Please enter 6-digit code sent to ',
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 14,
@@ -69,7 +60,7 @@ class _VerifyPhoneConfirmationScreenState
                   ),
                   children: [
                     TextSpan(
-                      text: '08100345678',
+                      text: phoneNumber ?? 'Phone number',
                       style: TextStyle(
                         color: success2Color,
                         decoration: TextDecoration.underline,
@@ -87,35 +78,18 @@ class _VerifyPhoneConfirmationScreenState
                   txtHeight: FetchPixels.getPixelHeight(1.3),
                   textAlign: TextAlign.center),
               getVerSpace(FetchPixels.getPixelHeight(10)),
-              Focus(
-                onFocusChange: (hasFocus) {
-                  if (hasFocus) {
-                    setState(() {
-                      color = greyColor300;
-                      myFocusNode.canRequestFocus = true;
-                    });
-                  } else {
-                    setState(() {
-                      color = borderColor;
-                      myFocusNode.canRequestFocus = false;
-                    });
-                  }
+              Pinput(
+                defaultPinTheme: defaultPinTheme,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                cursor: Container(),
+                length: 6,
+                showCursor: true,
+                onCompleted: (otp) {
+                  verifyPhoneOtpFunction(ref, context, otp);
                 },
-                child: Pinput(
-                  defaultPinTheme: defaultPinTheme,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
-                  cursor: Container(),
-                  length: 6,
-                  focusNode: myFocusNode,
-                  pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-                  showCursor: true,
-                  onCompleted: (pin) {
-                    showToast(context, "Phone number verified");
-                  },
-                  mainAxisAlignment: MainAxisAlignment.center,
-                ),
+                mainAxisAlignment: MainAxisAlignment.center,
               ),
               getVerSpace(FetchPixels.getPixelHeight(25)),
               InkWell(
@@ -140,5 +114,16 @@ class _VerifyPhoneConfirmationScreenState
         ),
       ),
     );
+  }
+
+  Future<void> verifyPhoneOtpFunction(
+      WidgetRef ref, BuildContext context, String otp) async {
+    final phone = ref.read(phoneNumberProvider);
+
+    await ref.read(signUpControllerProvider).verifyPhoneOTP(
+          phone: phone,
+          otp: otp,
+          context: context,
+        );
   }
 }

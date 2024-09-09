@@ -52,6 +52,20 @@ class _CreateNewPasswordScreenState
   }
 
   @override
+  void dispose() {
+    // Dispose controllers and focus nodes
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    passwordFocusNode.dispose();
+    confirmPasswordFocusNode.dispose();
+
+    // Optionally, reset the form state using the provider
+    ref.read(signUpFormControllerProvider.notifier).resetForm();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final sign_up_form_state = ref.watch(signUpFormControllerProvider);
     bool isFormValid = sign_up_form_state.isPasswordValid &&
@@ -236,6 +250,7 @@ class _CreateNewPasswordScreenState
       SignUpFormState signUpFormState) async {
     if (signUpFormState.phone.isEmpty) {
       await ref.read(signUpControllerProvider).createNewPassword(
+            otp: ref.read(verifyEmailProvider).otp,
             email: ref.read(verifyEmailProvider).email,
             newPassword: passwordController.text.trim(),
             confirmPassword: confirmPasswordController.text.trim(),

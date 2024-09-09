@@ -7,9 +7,11 @@ import 'package:tampay_mobile/app/routes/app_routes.dart';
 import 'package:tampay_mobile/base/app_strings.dart';
 import 'package:tampay_mobile/base/pref_data.dart';
 import 'package:tampay_mobile/manager/auth_manager.dart';
+import 'app/profile/presentation/controller/profile_controller.dart';
 import 'app/routes/app_pages.dart';
 
 final getIt = GetIt.instance;
+
 void main() {
   runApp(
     const ProviderScope(
@@ -18,20 +20,21 @@ void main() {
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends ConsumerState<MyApp> {
   @override
   void initState() {
-    generateDeviceId();
-    registerDependencyInjection();
-    fetchData();
     super.initState();
+    generateDeviceId();
+    registerDependencyInjection().then((_) {
+      fetchData();
+    });
   }
 
   @override
@@ -49,7 +52,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> registerDependencyInjection() async {
-    getIt.registerSingleton<AuthManager>(AuthManager());
+    await getIt.registerSingleton<AuthManager>(AuthManager());
   }
 
   Future<String?> generateDeviceId() async {
@@ -63,6 +66,14 @@ class _MyAppState extends State<MyApp> {
   }
 
   void fetchData() {
-    getIt<AuthManager>().loadAuthDetails();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await getIt<AuthManager>().loadAuthDetails();
+      // Check if token is available and valid
+      final token = getIt<AuthManager>().token;
+      if (token != null && token.isNotEmpty) {
+        // Token exists, fetch the user profile
+        ref.read(profileControllerProvider).getProfile();
+      }
+    });
   }
 }

@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tampay_mobile/app/login/presentation/state/login_form_state.dart';
 
 final loginFormControllerProvider =
-StateNotifierProvider<LoginFormController, LoginFormState>(
-      (ref) => LoginFormController(),
+    StateNotifierProvider<LoginFormController, LoginFormState>(
+  (ref) => LoginFormController(),
 );
 
 class LoginFormController extends StateNotifier<LoginFormState> {
@@ -26,6 +26,17 @@ class LoginFormController extends StateNotifier<LoginFormState> {
   void togglePasswordVisibility() {
     state = state.copyWith(
       isPasswordVisible: !state.isPasswordVisible,
+    );
+  }
+
+  // Reset form state
+  void resetForm() {
+    state = LoginFormState(
+      email: '',
+      password: '',
+      isEmailValid: false,
+      isPasswordValid: false,
+      isPasswordVisible: false,
     );
   }
 

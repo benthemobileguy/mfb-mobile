@@ -8,6 +8,7 @@ import 'package:tampay_mobile/base/custom_progess_dialog.dart';
 import 'package:tampay_mobile/base/pref_data.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
 
+import '../../../profile/presentation/controller/profile_controller.dart';
 import '../../../signup/presentation/state/verify_email_state.dart';
 
 final loginControllerProvider = ChangeNotifierProvider<LoginController>((ref) {
@@ -47,6 +48,7 @@ class LoginController extends ChangeNotifier {
               .saveJsonData(PrefData.user, result.tryGetSuccess())
               .then((value) async {
             PrefData.setLogIn(true);
+           await ref.read(profileControllerProvider).getProfile();
             Constant.sendToNext(context, Routes.homeScreenRoute);
           });
         },

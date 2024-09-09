@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tampay_mobile/app/signup/presentation/controller/signup_form_controller.dart';
 import 'package:tampay_mobile/app/signup/presentation/state/verify_email_state.dart';
 import 'package:tampay_mobile/app/signup/services/signup_service.dart';
 import 'package:tampay_mobile/app/routes/app_routes.dart';
 import 'package:tampay_mobile/base/constant.dart';
 import 'package:tampay_mobile/base/custom_progess_dialog.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
-
 import '../../../../base/pref_data.dart';
+import '../../../profile/presentation/controller/profile_controller.dart';
+import '../../../profile/services/profile_service.dart';
 
+final phoneNumberProvider = StateProvider<String?>((ref) {
+  return null;
+});
 final signUpControllerProvider =
     ChangeNotifierProvider<SignUpController>((ref) {
   return SignUpController(ref);
@@ -67,6 +72,7 @@ class SignUpController extends ChangeNotifier {
   }
 
   Future<void> createNewPassword({
+    required String? otp,
     required String? email,
     required String? newPassword,
     required String? confirmPassword,
@@ -79,6 +85,7 @@ class SignUpController extends ChangeNotifier {
     );
 
     final result = await ref.read(signUpServiceProvider).createNewPassword(
+          otp: otp!,
           email: email!,
           newPassword: newPassword!,
           confirmPassword: confirmPassword!,
@@ -124,7 +131,7 @@ class SignUpController extends ChangeNotifier {
     );
   }
 
-  Future<void> verifyOTP({
+  Future<void> verifyEmailOTP({
     required String? otp,
     required String? email,
     required BuildContext context,
@@ -135,8 +142,7 @@ class SignUpController extends ChangeNotifier {
       builder: (_) => const CustomProgressDialog(),
     );
 
-    final result = await ref.read(signUpServiceProvider).verifyOtp(
-          channel: "email",
+    final result = await ref.read(signUpServiceProvider).verifyEmailOtp(
           to: email!,
           otp: otp!,
         );
@@ -145,10 +151,77 @@ class SignUpController extends ChangeNotifier {
       (success) {
         String message = success['message'] ?? "";
         showToast(context, message);
-        Navigator.pushNamed(context, Routes.createPassRoute);
+        ref.read(profileControllerProvider).getProfile().then((value) {
+          if (ref.watch(signUpFormControllerProvider).email.isEmpty) {
+            // Coming from the forgot password screen
+            Navigator.pushNamed(context, Routes.createPassRoute);
+          } else {
+            // Coming from the sign up screen
+            Navigator.pushNamed(context, Routes.homeScreenRoute);
+          }
+        });
       },
       (error) {
         showErrorToast(context, "Invalid OTP, please try again");
+      },
+    );
+  }
+
+  Future<void> sendPhoneOTP({
+    required String? phoneNumber,
+    required BuildContext context,
+  }) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const CustomProgressDialog(),
+    );
+
+    final result = await ref.read(signUpServiceProvider).sendPhoneOtp(
+          phoneNumber: phoneNumber!,
+        );
+    Navigator.pop(context);
+    result.when(
+      (success) {
+        String message = success['message'] ?? "";
+        showToast(context, message);
+        Navigator.pushNamed(context, Routes.verifyPhoneConfirmationRoute);
+      },
+      (error) {
+        showErrorToast(context, error.message);
+      },
+    );
+  }
+
+  Future<void> verifyPhoneOTP({
+    required String? phone,
+    required String? otp,
+    required BuildContext context,
+  }) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const CustomProgressDialog(),
+    );
+
+    final result = await ref.read(signUpServiceProvider).verifyPhoneOtp(
+          phone: phone!,
+          otp: otp!,
+        );
+    Navigator.pop(context);
+    result.when(
+      (success) async {
+        String message = success['message'] ?? "";
+        showToast(context, message);
+
+        // Fetch the updated profile after phone verification
+        await ref.read(profileControllerProvider).getProfile();
+
+        // Navigate to home screen or any relevant screen
+        Navigator.pushNamed(context, Routes.homeScreenRoute);
+      },
+      (error) {
+        showErrorToast(context, error.message);
       },
     );
   }

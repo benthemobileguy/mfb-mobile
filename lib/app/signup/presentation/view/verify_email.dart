@@ -11,6 +11,7 @@ import '../../../../base/constant.dart';
 import '../../../../base/resizer/fetch_pixels.dart';
 import '../../../../base/widget_utils.dart';
 import '../../../../theme/color_data.dart';
+import '../../../profile/presentation/controller/profile_controller.dart';
 import '../../../routes/app_routes.dart';
 import '../../../view/dialog/verify_dialog.dart';
 
@@ -172,7 +173,8 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
             description: "Your account has been successfully created!",
             onOk: () {
               Navigator.of(context).pop(); // Close the dialog
-              PrefData.setLogIn(true).then((value) {
+              PrefData.setLogIn(true).then((value) async {
+                await ref.read(profileControllerProvider).getProfile();
                 Constant.sendToNext(context, Routes.homeScreenRoute);
               });
               _dialogShown = false; // Reset the flag after dialog is closed
@@ -190,7 +192,7 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
 }
 
 Future<void> verifyOtpFunction(WidgetRef ref, BuildContext context) async {
-  await ref.read(signUpControllerProvider).verifyOTP(
+  await ref.read(signUpControllerProvider).verifyEmailOTP(
         otp: ref.read(verifyEmailProvider).otp,
         email: ref.read(verifyEmailProvider).email,
         context: context,

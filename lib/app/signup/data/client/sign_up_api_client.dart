@@ -54,12 +54,6 @@ abstract class SignUpApiClient {
     @Body() ChangePasscodeRequest createAccountRequest,
     @Header("Authorization") String authorization,
   );
-  @POST("api/v1/verification/email")
-  Future<dynamic> verifyEmail(
-    @Body() VerifyEmailRequest createAccountRequest,
-      @Header("Access-Key") String accessKey,
-      @Header("Secret-Key") String secretKey,
-  );
   @POST("api/v1/profiles/me/passcode/reset")
   Future<dynamic> resetPasscode(
     @Body() ResetPasscodeRequest createAccountRequest,
@@ -85,20 +79,30 @@ abstract class SignUpApiClient {
     @Body() VerifyBvnRequest createAccountRequest,
     @Header("Authorization") String authorization,
   );
-  @POST("api/v1/verification/otp/request")
-  Future<dynamic> sendOtp(
-    @Body() SendOtpRequest createAccountRequest,
-    @Header("Authorization") String authorization,
-  );
   @POST("api/v1/verification/otp/validation")
   Future<dynamic> verifyOtp(
     @Body() VerifyOtpRequest createAccountRequest,
     @Header("Access-Key") String accessKey,
     @Header("Secret-Key") String secretKey,
   );
-  @POST("api/v1/verification/phone-number")
+  @POST("api/v1/verification/email")
+  Future<dynamic> verifyEmail(
+    @Body() VerifyEmailRequest createAccountRequest,
+    @Header("Access-Key") String accessKey,
+    @Header("Secret-Key") String secretKey,
+  );
+  @POST("api/v1/verification/phone-number/send-otp")
+  Future<dynamic> sendOtp(
+    @Body() SendOtpRequest createAccountRequest,
+    @Header("Authorization") String authorization,
+    @Header("Access-Key") String accessKey,
+    @Header("Secret-Key") String secretKey,
+  );
+  @POST("api/v1/verification/phone-number/verify-otp")
   Future<dynamic> verifyPhoneNumber(
     @Body() VerifyPhoneNumberRequest createAccountRequest,
     @Header("Authorization") String authorization,
+    @Header("Access-Key") String accessKey,
+    @Header("Secret-Key") String secretKey,
   );
 }
