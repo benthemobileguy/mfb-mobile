@@ -9,6 +9,7 @@ import 'package:tampay_mobile/app/signup/domain/model/request/reset-passcode-req
 import 'package:tampay_mobile/app/signup/domain/model/request/reset_password_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/send_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/sign_up_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/verify-bvn-otp-request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_bvn_request.dart.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_email_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_otp_request.dart';
@@ -111,11 +112,18 @@ abstract class SignUpApiClient {
     @Header("Access-Key") String accessKey,
     @Header("Secret-Key") String secretKey,
   );
-  @POST("api/v1/verification/phone-number/send-otp")
+  @POST("api/v1/verification/bvn/send-otp")
   Future<dynamic> sendBvnOtp(
     @Body() SendBvnOtpRequest sendOtpRequest,
     @Header("Authorization") String authorization,
     @Header("Access-Key") String accessKey,
     @Header("Secret-Key") String secretKey,
   );
+  @POST("api/v1/verification/bvn/verify-otp")
+  Future<dynamic> verifyBvnOtp(
+      @Body() VerifyBvnOtpRequest verifyBvnOtpRequest,
+      @Header("Authorization") String authorization,
+      @Header("Access-Key") String accessKey,
+      @Header("Secret-Key") String secretKey,
+      );
 }

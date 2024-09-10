@@ -38,4 +38,8 @@ class ProfileController extends ChangeNotifier {
       return null;
     }
   }
+
+  bool isAccountSetupComplete(UserProfile userProfile) {
+    return userProfile.data?.accountCompletionStatus == 100;
+  }
 }

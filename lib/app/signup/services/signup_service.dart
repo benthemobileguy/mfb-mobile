@@ -3,22 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:tampay_mobile/app/env/env.dart';
+import 'package:tampay_mobile/app/login/domain/model/response/login_response.dart';
 import 'package:tampay_mobile/app/signup/data/remote/signup_repository_impl.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/create_passcode_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/create_password_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/create_pin_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/reset_password_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/send_bvn_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/send_otp_request.dart';
-import 'package:tampay_mobile/app/signup/domain/model/request/set_pin_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/sign_up_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/verify-bvn-otp-request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_email_request.dart';
-import 'package:tampay_mobile/app/signup/domain/model/request/verify_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_phone_number.dart';
 import 'package:tampay_mobile/app/signup/domain/model/response/signup_response.dart';
-import 'package:tampay_mobile/app/signup/presentation/view/set_passcode_screen.dart';
 import 'package:tampay_mobile/base/failure.dart';
 import 'package:tampay_mobile/base/resizer/error_handler.dart';
-
 import '../../../base/app_strings.dart';
 import '../../../base/pref_data.dart';
 import '../../../main.dart';
@@ -30,9 +29,10 @@ final signUpServiceProvider = Provider<SignUpService>((ref) {
 
 class SignUpService {
   final Ref ref;
+
   SignUpService(this.ref);
 
-  Future<Result<SignUpResponse, Failure>> signUp({
+  Future<Result<LoginResponse, Failure>> signUp({
     required String firstName,
     required String lastName,
     required String email,
@@ -66,7 +66,7 @@ class SignUpService {
       if (response['statusCode'] == 200 ||
           response['statusCode'] == 201 ||
           response['status'] == "Success") {
-        return Success(SignUpResponse.fromJson(response ?? {}));
+        return Success(LoginResponse.fromJson(response ?? {}));
       } else {
         // Handle the error case
         final errorMessage = response['message'] is List
@@ -194,6 +194,35 @@ class SignUpService {
     }
   }
 
+  Future<Result<Map<String, dynamic>, Failure>> sendBvnOTP(
+      {required String firstName,
+      required String lastName,
+      required String bvn}) async {
+    try {
+      final response =
+          await ref.read(signUpRepositoryProvider).sendBvnOTPRequest(
+              SendBvnOtpRequest(
+                firstName: firstName,
+                lastName: lastName,
+                bvn: bvn,
+              ),
+              "Bearer ${getIt<AuthManager>().token!}",
+              Env.accessKey,
+              Env.secretKey);
+      // Check the status code before parsing the response
+      if (response['statusCode'] == 200 || response['status'] == "Success") {
+        return Success(response);
+      } else {
+        // Handle the error case
+        final errorMessage = response['message'];
+        return Error(Failure(message: errorMessage));
+      }
+    } catch (error) {
+      final errorMessage = ErrorHandler.getErrorMessage(error);
+      return Error(Failure(message: errorMessage));
+    }
+  }
+
   Future<Result<Map<String, dynamic>, Failure>> createPasscode({
     required String confirmPasscode,
     required String newPasscode,
@@ -285,6 +314,31 @@ class SignUpService {
       }
     } catch (error) {
       debugPrint("Error occurred: $error");
+      final errorMessage = ErrorHandler.getErrorMessage(error);
+      return Error(Failure(message: errorMessage));
+    }
+  }
+
+  Future<Result<Map<String, dynamic>, Failure>> verifyBVNOtp({
+    required String otp,
+  }) async {
+    try {
+      final response = await ref.read(signUpRepositoryProvider).verifyBvnOTP(
+          VerifyBvnOtpRequest(
+            otp: otp,
+          ),
+          "Bearer ${getIt<AuthManager>().token!}",
+          Env.accessKey,
+          Env.secretKey);
+      // Check the status code before parsing the response
+      if (response['statusCode'] == 200 || response['status'] == "Success") {
+        return Success(response);
+      } else {
+        // Handle the error case
+        final errorMessage = response['message'];
+        return Error(Failure(message: errorMessage));
+      }
+    } catch (error) {
       final errorMessage = ErrorHandler.getErrorMessage(error);
       return Error(Failure(message: errorMessage));
     }

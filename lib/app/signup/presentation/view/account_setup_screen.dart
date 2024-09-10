@@ -136,8 +136,24 @@ class _AccountSetupScreenState extends ConsumerState<AccountSetupScreen> {
                         passcodeSet ? "check_circle.svg" : "chevron_right.svg",
                     onTap: (phoneNumberVerified && !passcodeSet)
                         ? () {
-                            Constant.sendToNext(
-                                context, Routes.setPasscodeRoute);
+                            showDialog(
+                              barrierDismissible: true,
+                              builder: (context) {
+                                return VerifyDialog(
+                                  title: "Set Passcode",
+                                  imagePath: "lock.svg",
+                                  description:
+                                      "This passcode will allow access to the app and help keep your Tampay account safe.",
+                                  onOk: () {
+                                    Navigator.pop(context);
+                                    Constant.sendToNext(
+                                        context, Routes.setPasscodeRoute);
+                                  },
+                                  okText: "Set Passcode",
+                                );
+                              },
+                              context: context,
+                            );
                           }
                         : null,
                     isCompleted: passcodeSet,

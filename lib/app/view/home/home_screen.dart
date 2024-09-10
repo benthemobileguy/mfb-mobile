@@ -24,6 +24,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     FetchPixels(context);
     final profileController = ref.watch(profileControllerProvider);
     final userProfile = profileController.userProfile;
+    bool accountSetupComplete =
+        profileController.isAccountSetupComplete(userProfile ?? UserProfile());
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -35,13 +37,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               getVerSpace(FetchPixels.getPixelHeight(10)),
               appBar(context, userProfile ?? UserProfile()),
               getVerSpace(FetchPixels.getPixelHeight(30)),
-              accountCompletionStatus(context, userProfile ?? UserProfile()),
+              if (!accountSetupComplete)
+                accountCompletionStatus(context, userProfile ?? UserProfile()),
               getVerSpace(FetchPixels.getPixelHeight(20)),
               currencyToggle(context),
               getVerSpace(FetchPixels.getPixelHeight(30)),
               balanceForUser(context),
               getVerSpace(FetchPixels.getPixelHeight(20)),
-              addConvertMoneyRow(context),
+              addConvertMoneyRow(context, accountSetupComplete),
               getVerSpace(FetchPixels.getPixelHeight(40)),
               recentTransactions(context),
               getVerSpace(FetchPixels.getPixelHeight(40)),
@@ -203,14 +206,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  addConvertMoneyRow(BuildContext context) {
+  addConvertMoneyRow(BuildContext context, bool accountSetupComplete) {
     return getPaddingWidget(
       EdgeInsets.symmetric(horizontal: horspace),
       Row(
         children: [
           Expanded(
             child: getButton(context, blue, "Add Money", Colors.white, () {
-              Constant.sendToNext(context, Routes.addMoneyRoute);
+              if (!accountSetupComplete) {
+                showCompleteAccountSetupDialog(context);
+              } else {
+                Constant.sendToNext(context, Routes.addMoneyRoute);
+              }
             }, 16,
                 weight: FontWeight.w600,
                 image: "add_money_icon.svg",
@@ -221,7 +228,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           getHorSpace(12),
           Expanded(
             child: getButton(context, lightBlue, "Convert", blue, () {
-              Constant.sendToNext(context, Routes.convertRoute);
+              if (!accountSetupComplete) {
+                showCompleteAccountSetupDialog(context);
+              } else {
+                Constant.sendToNext(context, Routes.addMoneyRoute);
+              }
             }, 16,
                 image: "convert_money_icon.svg",
                 isIcon: true,

@@ -12,8 +12,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   Future<UserProfile> getProfile() async {
-    print("Sdmskldmksd");
-    print( "Bearer ${getIt<AuthManager>().token!}");
     try {
       final userProfile = await _profileApiClient.getUserProfile(
           "Bearer ${getIt<AuthManager>().token!}",

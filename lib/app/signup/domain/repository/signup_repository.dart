@@ -15,6 +15,8 @@ import 'package:tampay_mobile/app/signup/domain/model/request/verify_passcode_re
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_phone_number.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_pin_request.dart';
 
+import '../model/request/verify-bvn-otp-request.dart';
+
 abstract class SignupRepository {
   Future<dynamic> createAccount(
       SignUpRequest createAccountRequest, String accessKey, String secretKey);
@@ -51,4 +53,6 @@ abstract class SignupRepository {
       String accessKey, String secretKey);
   Future<dynamic> changePin(
       ChangePinRequest changePinRequest, String authorization);
+  Future<dynamic> verifyBvnOTP(VerifyBvnOtpRequest verifyBvnOtpRequest,
+      String authorization, String accessKey, String secretKey);
 }

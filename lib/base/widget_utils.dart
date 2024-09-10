@@ -6,6 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tampay_mobile/base/custom_progess_dialog.dart';
 import 'package:tampay_mobile/base/resizer/fetch_pixels.dart';
+import '../app/routes/app_routes.dart';
+import '../app/view/dialog/verify_dialog.dart';
 import '../theme/color_data.dart';
 import 'constant.dart';
 
@@ -724,6 +726,26 @@ Widget getButtonWithIcon(BuildContext context, Color bgColor, String text,
         ],
       ),
     ),
+  );
+}
+
+Future<dynamic> showCompleteAccountSetupDialog(BuildContext context) {
+  return showDialog(
+    barrierDismissible: true,
+    builder: (context) {
+      return VerifyDialog(
+        title: "Complete Account Setup",
+        imagePath: "warning.svg",
+        description:
+            "To access this feature, please complete your account setup.",
+        onOk: () {
+          Navigator.pop(context);
+          Constant.sendToNext(context, Routes.accountSetUpRoute);
+        },
+        okText: "Complete Account Setup",
+      );
+    },
+    context: context,
   );
 }
 

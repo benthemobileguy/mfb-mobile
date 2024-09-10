@@ -13,6 +13,7 @@ import 'package:tampay_mobile/app/signup/domain/model/request/reset_password_req
 import 'package:tampay_mobile/app/signup/domain/model/request/send_bvn_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/send_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/sign_up_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/verify-bvn-otp-request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_bvn_request.dart.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_email_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_otp_request.dart';
@@ -42,8 +43,11 @@ class SignUpRepositoryImpl implements SignupRepository {
       return changePasscodeResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('changePasscode: $e');
     }
-    return null;
   }
 
   @override
@@ -55,8 +59,11 @@ class SignUpRepositoryImpl implements SignupRepository {
       return changePinResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('changePin: $e');
     }
-    return null;
   }
 
   @override
@@ -68,8 +75,11 @@ class SignUpRepositoryImpl implements SignupRepository {
       return createPasswordResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('createPassword: $e');
     }
-    return null;
   }
 
   @override
@@ -81,8 +91,11 @@ class SignUpRepositoryImpl implements SignupRepository {
       return resetPasscodeResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('resetPasscode: $e');
     }
-    return null;
   }
 
   @override
@@ -110,8 +123,11 @@ class SignUpRepositoryImpl implements SignupRepository {
       return sendOtpResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('sendOTP: $e');
     }
-    return null;
   }
 
   @override
@@ -123,8 +139,11 @@ class SignUpRepositoryImpl implements SignupRepository {
       return sendBvnOtpResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('verifyBvnOTPRequest: $e');
     }
-    return null;
   }
 
   @override
@@ -136,8 +155,11 @@ class SignUpRepositoryImpl implements SignupRepository {
       return setPasscodeResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('verifyPasscode: $e');
     }
-    return null;
   }
 
   @override
@@ -149,8 +171,11 @@ class SignUpRepositoryImpl implements SignupRepository {
       return verifyBvnResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('verifyBvn: $e');
     }
-    return null;
   }
 
   @override
@@ -162,8 +187,11 @@ class SignUpRepositoryImpl implements SignupRepository {
       return verifyEmailResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('verifyEmail: $e');
     }
-    return null;
   }
 
   @override
@@ -175,8 +203,11 @@ class SignUpRepositoryImpl implements SignupRepository {
       return verifyOtpResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('verifyOTP: $e');
     }
-    return null;
   }
 
   @override
@@ -188,8 +219,11 @@ class SignUpRepositoryImpl implements SignupRepository {
       return verifyPinResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('verifyPin: $e');
     }
-    return null;
   }
 
   @override
@@ -201,8 +235,11 @@ class SignUpRepositoryImpl implements SignupRepository {
       return verifyPasscodeResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('verifyPasscode: $e');
     }
-    return null;
   }
 
   @override
@@ -245,7 +282,26 @@ class SignUpRepositoryImpl implements SignupRepository {
       return verifyPhoneNumberResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('verifyPhoneNumber: $e');
     }
-    return null;
+  }
+
+  @override
+  Future verifyBvnOTP(VerifyBvnOtpRequest verifyBvnOtpRequest,
+      String authorization, String accessKey, String secretKey) async {
+    try {
+      final verifyBvnOTPResponse = await _signupClient.verifyBvnOtp(
+          verifyBvnOtpRequest, authorization, accessKey, secretKey);
+      return verifyBvnOTPResponse;
+    } on DioException catch (e) {
+      debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('verifyBvnOTP: $e');
+    }
   }
 }

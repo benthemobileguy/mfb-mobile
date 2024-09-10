@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tampay_mobile/base/resizer/fetch_pixels.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
 import 'package:tampay_mobile/theme/color_data.dart';
+import '../controller/signup_controller.dart';
 import '../controller/verify_identity_form_controller.dart';
 
 class VerifyIdentityScreen extends ConsumerWidget {
@@ -39,7 +40,7 @@ class VerifyIdentityScreen extends ConsumerWidget {
               // First Name Field
               getDefaultTextFiledWithLabel(
                   context, "Jefferey", formController.firstNameController,
-                  isEnable: true,  // Set to true so user can change if needed
+                  isEnable: true, // Set to true so user can change if needed
                   focusNode: formController.firstNameFocusNode,
                   title: "First Name",
                   height: FetchPixels.getPixelHeight(60)),
@@ -53,7 +54,7 @@ class VerifyIdentityScreen extends ConsumerWidget {
                 focusNode: formController.lastNameFocusNode,
                 formController.lastNameController,
                 height: FetchPixels.getPixelHeight(60),
-                isEnable: true,  // Set to true so user can change if needed
+                isEnable: true, // Set to true so user can change if needed
               ),
               getVerSpace(FetchPixels.getPixelHeight(20)),
 
@@ -79,13 +80,22 @@ class VerifyIdentityScreen extends ConsumerWidget {
                   Colors.white,
                   formController.isFormValid
                       ? () {
-                    Navigator.pop(context);
-                  }
+                          // Call the verifyIdentity method when button is clicked
+                          ref
+                              .read(signUpControllerProvider.notifier)
+                              .sendBvnPhoneOTP(
+                                  bvn: formController.bvnController.text,
+                                  firstName:
+                                      formController.firstNameController.text,
+                                  lastName:
+                                      formController.lastNameController.text,
+                                  context: context);
+                        }
                       : null, // Disable button if form is invalid
                   16,
                   weight: FontWeight.w600,
                   borderRadius:
-                  BorderRadius.circular(FetchPixels.getPixelHeight(15)),
+                      BorderRadius.circular(FetchPixels.getPixelHeight(15)),
                   buttonHeight: FetchPixels.getPixelHeight(60)),
 
               getVerSpace(FetchPixels.getPixelHeight(20)),
@@ -98,6 +108,7 @@ class VerifyIdentityScreen extends ConsumerWidget {
 }
 
 // Riverpod provider for the form controller
-final verifyIdentityFormProvider = ChangeNotifierProvider<VerifyIdentityFormController>((ref) {
+final verifyIdentityFormProvider =
+    ChangeNotifierProvider<VerifyIdentityFormController>((ref) {
   return VerifyIdentityFormController();
 });

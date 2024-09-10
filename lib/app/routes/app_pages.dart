@@ -11,6 +11,7 @@ import 'package:tampay_mobile/app/signup/presentation/view/create_pass_screen.da
 import 'package:tampay_mobile/app/signup/presentation/view/forgot_password.dart';
 import 'package:tampay_mobile/app/signup/presentation/view/set_passcode_screen.dart';
 import 'package:tampay_mobile/app/signup/presentation/view/set_transaction_pin_screen.dart';
+import 'package:tampay_mobile/app/signup/presentation/view/verify_bvn_otp_screen.dart';
 import 'package:tampay_mobile/app/signup/presentation/view/verify_identity_screen.dart';
 import 'package:tampay_mobile/app/signup/presentation/view/verify_phone_confirmation_screen.dart';
 import 'package:tampay_mobile/app/signup/presentation/view/verify_phone_number_screen.dart';
@@ -91,5 +92,6 @@ class AppPages {
     Routes.supportRoute: (context) => const SupportScreen(),
     Routes.referralsRoute: (context) => const ReferralsScreen(),
     Routes.setPasscodeRoute: (context) => const SetPasscodeScreen(),
+    Routes.verifyBvnOTPRoute: (context) => const VerifyBvnOtpScreen(),
   };
 }

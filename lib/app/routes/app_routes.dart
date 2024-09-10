@@ -42,6 +42,7 @@ abstract class Routes {
   static const supportRoute = Paths.supportPath;
   static const referralsRoute = Paths.referralsPath;
   static const setPasscodeRoute = Paths.setPasscodePath;
+  static const verifyBvnOTPRoute = Paths.verifyBvnOtpPath;
 }
 
 abstract class Paths {
@@ -89,4 +90,5 @@ abstract class Paths {
   static const supportPath = "/SupportScreen";
   static const referralsPath = "/ReferralsScreen";
   static const setPasscodePath = "SetPasscodeScreen";
+  static const verifyBvnOtpPath = "VerifyBVNOtpPath";
 }

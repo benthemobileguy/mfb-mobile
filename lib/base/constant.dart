@@ -26,6 +26,15 @@ class Constant {
     }
   }
 
+  static sendToReplacementNext(BuildContext context, String route,
+      {Object? arguments}) {
+    if (arguments != null) {
+      Navigator.pushReplacementNamed(context, route, arguments: arguments);
+    } else {
+      Navigator.pushReplacementNamed(context, route);
+    }
+  }
+
   static double getToolbarHeight(BuildContext context) {
     return MediaQuery.of(context).padding.top + kToolbarHeight;
   }
