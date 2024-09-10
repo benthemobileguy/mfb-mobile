@@ -28,7 +28,8 @@ class _ReferralsScreenState extends State<ReferralsScreen> {
                 getCustomFont("Referrals", 18, grey700, 1,
                     fontWeight: FontWeight.w600),
                 getVerSpace(FetchPixels.getPixelHeight(5)),
-                getCustomFont("Invite your friends and earn extra", 14.5, greyColor, 1,
+                getCustomFont(
+                    "Invite your friends and earn extra", 14.5, greyColor, 1,
                     fontWeight: FontWeight.normal),
                 getVerSpace(FetchPixels.getPixelHeight(20)),
                 getPngImage("referral_badge.png"),
@@ -67,7 +68,8 @@ class _ReferralsScreenState extends State<ReferralsScreen> {
                                 const SizedBox(width: 10),
                                 InkWell(
                                     onTap: () {
-                                      Clipboard.setData(const ClipboardData(text: ""));
+                                      Clipboard.setData(
+                                          const ClipboardData(text: ""));
                                       showToast(context, "Copied to clipboard");
                                     },
                                     child: getSvgImage("copy.svg")),
@@ -75,7 +77,6 @@ class _ReferralsScreenState extends State<ReferralsScreen> {
                             ),
                           ],
                         ),
-
                         const Spacer(),
                         getCustomFont("Share", 14.5, greyColor, 1),
                       ],

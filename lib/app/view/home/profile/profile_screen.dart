@@ -143,7 +143,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   void logOut() async {
-      getIt<AuthManager>().clearAuthDetails();
+    getIt<AuthManager>().clearAuthDetails();
     Constant.sendToNext(context, Routes.loginRoute);
   }
 }

@@ -133,10 +133,16 @@ class _SignUpApiClient implements SignUpApiClient {
   Future<dynamic> setPasscode(
     CreatePasscodeRequest createAccountRequest,
     String authorization,
+    String accessKey,
+    String secretKey,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': authorization};
+    final _headers = <String, dynamic>{
+      r'Authorization': authorization,
+      r'Access-Key': accessKey,
+      r'Secret-Key': secretKey,
+    };
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(createAccountRequest.toJson());
@@ -261,15 +267,21 @@ class _SignUpApiClient implements SignUpApiClient {
   Future<dynamic> setPin(
     CreatePinRequest createAccountRequest,
     String authorization,
+    String accessKey,
+    String secretKey,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': authorization};
+    final _headers = <String, dynamic>{
+      r'Authorization': authorization,
+      r'Access-Key': accessKey,
+      r'Secret-Key': secretKey,
+    };
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(createAccountRequest.toJson());
     final _options = _setStreamType<dynamic>(Options(
-      method: 'POST',
+      method: 'PATCH',
       headers: _headers,
       extra: _extra,
     )
@@ -520,6 +532,44 @@ class _SignUpApiClient implements SignUpApiClient {
         .compose(
           _dio.options,
           'api/v1/verification/phone-number/verify-otp',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
+  Future<dynamic> sendBvnOtp(
+    SendBvnOtpRequest sendOtpRequest,
+    String authorization,
+    String accessKey,
+    String secretKey,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'Authorization': authorization,
+      r'Access-Key': accessKey,
+      r'Secret-Key': secretKey,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(sendOtpRequest.toJson());
+    final _options = _setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'api/v1/verification/phone-number/send-otp',
           queryParameters: queryParameters,
           data: _data,
         )

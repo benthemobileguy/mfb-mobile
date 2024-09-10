@@ -9,19 +9,17 @@ import 'package:tampay_mobile/theme/color_data.dart';
 
 import '../controller/signup_controller.dart';
 
-class SetTransactionPinScreen extends ConsumerStatefulWidget {
-  const SetTransactionPinScreen({super.key});
+class SetPasscodeScreen extends ConsumerStatefulWidget {
+  const SetPasscodeScreen({super.key});
 
   @override
-  ConsumerState<SetTransactionPinScreen> createState() =>
-      _SetTransactionPinScreenState();
+  ConsumerState<SetPasscodeScreen> createState() => _SetPasscodeScreenState();
 }
 
-class _SetTransactionPinScreenState
-    extends ConsumerState<SetTransactionPinScreen> {
+class _SetPasscodeScreenState extends ConsumerState<SetPasscodeScreen> {
   String text = "";
-  String transactionPin = "";
-  String confirmPin = "";
+  String confirmPasscode = "";
+  String newPasscode = "";
   bool isConfirmingPin = false;
   bool _forceErrorState = false; // Track if error state should be enforced
   FocusNode myFocusNode = FocusNode();
@@ -30,6 +28,7 @@ class _SetTransactionPinScreenState
   @override
   void initState() {
     super.initState();
+
     // Prevent the native keyboard from appearing when Pinput is focused
     myFocusNode.addListener(() {
       if (myFocusNode.hasFocus) {
@@ -52,10 +51,10 @@ class _SetTransactionPinScreenState
         _pinController.text = text;
         if (text.length == 4) {
           if (isConfirmingPin) {
-            confirmPin = text;
+            confirmPasscode = text;
             _validatePin();
           } else {
-            transactionPin = text;
+            newPasscode = text;
             setState(() {
               isConfirmingPin = true;
               text = "";
@@ -68,7 +67,7 @@ class _SetTransactionPinScreenState
   }
 
   void _validatePin() {
-    if (transactionPin != confirmPin) {
+    if (newPasscode != confirmPasscode) {
       setState(() {
         _pinController.clear();
         text = "";
@@ -76,7 +75,7 @@ class _SetTransactionPinScreenState
         _forceErrorState = true;
       });
     } else {
-      createTransactionPin();
+      createPasscode();
     }
   }
 
@@ -128,9 +127,7 @@ class _SetTransactionPinScreenState
               getVerSpace(FetchPixels.getPixelHeight(15)),
               Center(
                 child: getCustomFont(
-                  isConfirmingPin
-                      ? "Confirm Transaction PIN"
-                      : "Set Transaction PIN",
+                  isConfirmingPin ? "Confirm Passcode" : "Set Passcode",
                   14.5,
                   grey700,
                   1,
@@ -147,7 +144,7 @@ class _SetTransactionPinScreenState
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Text(
-                          "Pins do not match",
+                          "Passcodes do not match",
                           style: TextStyle(
                             color: errorColor,
                             fontWeight: FontWeight.w500,
@@ -158,7 +155,7 @@ class _SetTransactionPinScreenState
                     );
                   },
                   forceErrorState: _forceErrorState, // Apply the error state
-                  errorText: "Pins do not match",
+                  errorText: "Incorrect PIN",
                   length: 4,
                   obscureText: true,
                   focusNode: myFocusNode,
@@ -206,10 +203,11 @@ class _SetTransactionPinScreenState
     );
   }
 
-  Future<void> createTransactionPin() async {
-    await ref.read(signUpControllerProvider).createTransactionPin(
-        newPin: transactionPin, confirmPin: confirmPin, context: context);
-    _forceErrorState = false;
-    finishView();
+  Future<void> createPasscode() async {
+    await ref.read(signUpControllerProvider).createPasscode(
+          context: context,
+          confirmPasscode: confirmPasscode,
+          newPasscode: newPasscode,
+        );
   }
 }

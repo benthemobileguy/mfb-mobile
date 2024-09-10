@@ -16,5 +16,5 @@ class VerifyEmailController extends StateNotifier<VerifyEmailState> {
 }
 
 final verifyEmailProvider =
-StateNotifierProvider<VerifyEmailController, VerifyEmailState>(
+    StateNotifierProvider<VerifyEmailController, VerifyEmailState>(
         (ref) => VerifyEmailController());

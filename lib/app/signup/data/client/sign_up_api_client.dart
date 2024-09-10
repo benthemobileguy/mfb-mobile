@@ -15,6 +15,8 @@ import 'package:tampay_mobile/app/signup/domain/model/request/verify_otp_request
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_passcode_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_phone_number.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_pin_request.dart';
+
+import '../../domain/model/request/send_bvn_otp_request.dart';
 part 'sign_up_api_client.g.dart';
 
 @RestApi()
@@ -43,6 +45,8 @@ abstract class SignUpApiClient {
   Future<dynamic> setPasscode(
     @Body() CreatePasscodeRequest createAccountRequest,
     @Header("Authorization") String authorization,
+    @Header("Access-Key") String accessKey,
+    @Header("Secret-Key") String secretKey,
   );
   @PATCH("api/v1/profiles/me/passcode/verification")
   Future<dynamic> verifyPasscode(
@@ -59,10 +63,12 @@ abstract class SignUpApiClient {
     @Body() ResetPasscodeRequest createAccountRequest,
     @Header("Authorization") String authorization,
   );
-  @POST("api/v1/profiles/me/pin/create")
+  @PATCH("api/v1/profiles/me/pin/create")
   Future<dynamic> setPin(
     @Body() CreatePinRequest createAccountRequest,
     @Header("Authorization") String authorization,
+    @Header("Access-Key") String accessKey,
+    @Header("Secret-Key") String secretKey,
   );
   @POST("api/v1/profiles/me/pin/verification")
   Future<dynamic> verifyPin(
@@ -101,6 +107,13 @@ abstract class SignUpApiClient {
   @POST("api/v1/verification/phone-number/verify-otp")
   Future<dynamic> verifyPhoneNumber(
     @Body() VerifyPhoneNumberRequest createAccountRequest,
+    @Header("Authorization") String authorization,
+    @Header("Access-Key") String accessKey,
+    @Header("Secret-Key") String secretKey,
+  );
+  @POST("api/v1/verification/phone-number/send-otp")
+  Future<dynamic> sendBvnOtp(
+    @Body() SendBvnOtpRequest sendOtpRequest,
     @Header("Authorization") String authorization,
     @Header("Access-Key") String accessKey,
     @Header("Secret-Key") String secretKey,

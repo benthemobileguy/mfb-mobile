@@ -18,11 +18,13 @@ class ProfileController extends ChangeNotifier {
 
   Future<UserProfile?> getProfile() async {
     try {
+      await getIt<AuthManager>().loadAuthDetails();
       // Fetch the profile from the service
       final UserProfile result =
           await ref.read(profileServiceProvider).getProfile();
 
-      getIt<AuthManager>().saveUser(result); // Save the profile for persistence
+      await getIt<AuthManager>()
+          .saveUser(result); // Save the profile for persistence
 
       // Assign the result to the profile
       userProfile = result;

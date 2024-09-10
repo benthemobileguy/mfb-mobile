@@ -1,25 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tampay_mobile/base/resizer/fetch_pixels.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
 import 'package:tampay_mobile/theme/color_data.dart';
+import '../controller/verify_identity_form_controller.dart';
 
-class VerifyIdentityScreen extends StatefulWidget {
+class VerifyIdentityScreen extends ConsumerWidget {
   const VerifyIdentityScreen({super.key});
 
   @override
-  State<VerifyIdentityScreen> createState() => _VerifyIdentityScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formController = ref.watch(verifyIdentityFormProvider);
 
-class _VerifyIdentityScreenState extends State<VerifyIdentityScreen> {
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController bvnController = TextEditingController();
-  FocusNode firstNameFocusNode = FocusNode();
-  FocusNode bvnFocusNode = FocusNode();
-  FocusNode lastNameFocusNode = FocusNode();
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -42,42 +35,59 @@ class _VerifyIdentityScreenState extends State<VerifyIdentityScreen> {
                   3,
                   fontWeight: FontWeight.normal),
               getVerSpace(FetchPixels.getPixelHeight(30)),
+
+              // First Name Field
               getDefaultTextFiledWithLabel(
-                  context, "Jefferey", firstNameController,
-                  isEnable: false,
-                  focusNode: firstNameFocusNode,
+                  context, "Jefferey", formController.firstNameController,
+                  isEnable: true,  // Set to true so user can change if needed
+                  focusNode: formController.firstNameFocusNode,
                   title: "First Name",
                   height: FetchPixels.getPixelHeight(60)),
               getVerSpace(FetchPixels.getPixelHeight(20)),
+
+              // Last Name Field
               getDefaultTextFiledWithLabel(
                 context,
                 "Mamadu",
                 title: "Last Name",
-                focusNode: lastNameFocusNode,
-                lastNameController,
+                focusNode: formController.lastNameFocusNode,
+                formController.lastNameController,
                 height: FetchPixels.getPixelHeight(60),
-                isEnable: false,
+                isEnable: true,  // Set to true so user can change if needed
               ),
               getVerSpace(FetchPixels.getPixelHeight(20)),
+
+              // BVN Field
               getDefaultTextFiledWithLabel(
                 context,
                 "Enter BVN",
                 title: "BVN",
-                bvnController,
-                focusNode: bvnFocusNode,
+                formController.bvnController,
+                focusNode: formController.bvnFocusNode,
                 height: FetchPixels.getPixelHeight(60),
                 isEnable: true,
               ),
               const Spacer(),
+
+              // Verify My Identity Button (Disabled until form is valid)
               getButton(
-                  context, primaryColor, "Verify My Identity", Colors.white,
-                  () {
-                Navigator.pop(context);
-              }, 16,
+                  context,
+                  formController.isFormValid
+                      ? primaryColor
+                      : greyColor300, // Change color based on form validity
+                  "Verify My Identity",
+                  Colors.white,
+                  formController.isFormValid
+                      ? () {
+                    Navigator.pop(context);
+                  }
+                      : null, // Disable button if form is invalid
+                  16,
                   weight: FontWeight.w600,
                   borderRadius:
-                      BorderRadius.circular(FetchPixels.getPixelHeight(15)),
+                  BorderRadius.circular(FetchPixels.getPixelHeight(15)),
                   buttonHeight: FetchPixels.getPixelHeight(60)),
+
               getVerSpace(FetchPixels.getPixelHeight(20)),
             ],
           ),
@@ -86,3 +96,8 @@ class _VerifyIdentityScreenState extends State<VerifyIdentityScreen> {
     );
   }
 }
+
+// Riverpod provider for the form controller
+final verifyIdentityFormProvider = ChangeNotifierProvider<VerifyIdentityFormController>((ref) {
+  return VerifyIdentityFormController();
+});

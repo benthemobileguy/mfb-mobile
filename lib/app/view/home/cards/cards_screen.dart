@@ -148,7 +148,8 @@ class _CardsScreenState extends State<CardsScreen> {
                                 const Spacer(),
                                 getButton(context, primaryColor, "Fund card",
                                     Colors.white, () {
-                                  showToast(context, "Card Funded Successfully");
+                                  showToast(
+                                      context, "Card Funded Successfully");
                                   Navigator.pop(context);
                                 }, 16,
                                     weight: FontWeight.w600,

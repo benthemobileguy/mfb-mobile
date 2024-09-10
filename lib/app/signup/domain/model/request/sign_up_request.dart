@@ -10,13 +10,13 @@ class SignUpRequest {
 
   SignUpRequest(
       {this.firstName,
-        this.lastName,
-        this.email,
-        this.phone,
-        this.password,
-        this.confirmPassword,
-        this.deviceInfo,
-        this.refCode});
+      this.lastName,
+      this.email,
+      this.phone,
+      this.password,
+      this.confirmPassword,
+      this.deviceInfo,
+      this.refCode});
 
   SignUpRequest.fromJson(Map<String, dynamic> json) {
     firstName = json['firstName'];

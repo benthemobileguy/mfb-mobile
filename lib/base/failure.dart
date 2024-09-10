@@ -6,9 +6,9 @@ class Failure implements Exception {
 
   Failure(
       {required this.message,
-        this.code,
-        this.exception,
-        this.isReportable = false});
+      this.code,
+      this.exception,
+      this.isReportable = false});
 
   @override
   String toString() =>

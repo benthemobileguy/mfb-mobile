@@ -6,7 +6,6 @@ class Constant {
   static const String fontsFamily = "Sora";
   static const String fromLogin = "getFromLoginClick";
 
-
   static double getPercentSize(double total, double percent) {
     return (percent * total) / 100;
   }

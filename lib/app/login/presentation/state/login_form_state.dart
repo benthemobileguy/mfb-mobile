@@ -25,8 +25,8 @@ class LoginFormState {
       password: password ?? this.password,
       isEmailValid: isEmailValid ?? this.isEmailValid,
       isPasswordValid: isPasswordValid ?? this.isPasswordValid,
-      isPasswordVisible: isPasswordVisible ?? this.isPasswordVisible, // Include in copyWith
+      isPasswordVisible:
+          isPasswordVisible ?? this.isPasswordVisible, // Include in copyWith
     );
   }
 }
-

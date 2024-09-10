@@ -10,6 +10,7 @@ import 'package:tampay_mobile/app/signup/domain/model/request/create_password_re
 import 'package:tampay_mobile/app/signup/domain/model/request/create_pin_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/reset-passcode-request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/reset_password_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/send_bvn_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/send_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/sign_up_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_bvn_request.dart.dart';
@@ -114,11 +115,24 @@ class SignUpRepositoryImpl implements SignupRepository {
   }
 
   @override
-  Future setPasscode(
-      CreatePasscodeRequest createAccountRequest, String authorization) async {
+  Future sendBvnOTPRequest(SendBvnOtpRequest sendBvnOtpRequest,
+      String authorization, String accessKey, String secretKey) async {
     try {
-      final setPasscodeResponse =
-          await _signupClient.setPasscode(createAccountRequest, authorization);
+      final sendBvnOtpResponse = await _signupClient.sendBvnOtp(
+          sendBvnOtpRequest, authorization, accessKey, secretKey);
+      return sendBvnOtpResponse;
+    } on DioException catch (e) {
+      debugPrint(e.message);
+    }
+    return null;
+  }
+
+  @override
+  Future setPasscode(CreatePasscodeRequest createAccountRequest,
+      String authorization, String accessKey, String secretKey) async {
+    try {
+      final setPasscodeResponse = await _signupClient.setPasscode(
+          createAccountRequest, authorization, accessKey, secretKey);
       return setPasscodeResponse;
     } on DioException catch (e) {
       debugPrint(e.message);
@@ -210,10 +224,11 @@ class SignUpRepositoryImpl implements SignupRepository {
   }
 
   @override
-  Future setPin(CreatePinRequest setPinRequest, String authorization) async {
+  Future setPin(CreatePinRequest setPinRequest, String authorization,
+      String accessKey, String secretKey) async {
     try {
-      final setPinResponse =
-          await _signupClient.setPin(setPinRequest, authorization);
+      final setPinResponse = await _signupClient.setPin(
+          setPinRequest, authorization, accessKey, secretKey);
       return setPinResponse;
     } on DioException catch (e) {
       debugPrint(e.message);

@@ -33,13 +33,15 @@ abstract class Routes {
   static const fundingSuccessRoute = Paths.fundingSuccessPath;
   static const conversionSuccessRoute = Paths.conversionSuccessPath;
   static const setTransactionPinRoute = Paths.setTransactionPinRoutePath;
-  static const verifyPhoneConfirmationRoute = Paths.verifyPhoneConfirmationRoutePath;
+  static const verifyPhoneConfirmationRoute =
+      Paths.verifyPhoneConfirmationRoutePath;
   static const accountSecurityRoute = Paths.accountSecurityPath;
   static const legalRoute = Paths.legalPath;
   static const profileBeneficiariesRoute = Paths.profileBeneficiariesPath;
   static const statementReportsRoute = Paths.statementReportsPath;
   static const supportRoute = Paths.supportPath;
   static const referralsRoute = Paths.referralsPath;
+  static const setPasscodeRoute = Paths.setPasscodePath;
 }
 
 abstract class Paths {
@@ -78,12 +80,13 @@ abstract class Paths {
   static const fundingSuccessPath = "/FundingSuccessScreen";
   static const conversionSuccessPath = "/ConversionSuccessScreen";
   static const setTransactionPinRoutePath = "/SetTransactionPinScreen";
-  static const verifyPhoneConfirmationRoutePath = "VerifyPhoneConfirmationScreen";
+  static const verifyPhoneConfirmationRoutePath =
+      "VerifyPhoneConfirmationScreen";
   static const accountSecurityPath = "/AccountSecurityScreen";
   static const legalPath = "/LegalScreen";
   static const profileBeneficiariesPath = "/ProfileBeneficiariesScreen";
   static const statementReportsPath = "/StatementsReportsScreen";
   static const supportPath = "/SupportScreen";
   static const referralsPath = "/ReferralsScreen";
-
+  static const setPasscodePath = "SetPasscodeScreen";
 }

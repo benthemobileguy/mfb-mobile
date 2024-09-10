@@ -9,7 +9,6 @@ import 'package:tampay_mobile/base/custom_progess_dialog.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
 import '../../../../base/pref_data.dart';
 import '../../../profile/presentation/controller/profile_controller.dart';
-import '../../../profile/services/profile_service.dart';
 
 final phoneNumberProvider = StateProvider<String?>((ref) {
   return null;
@@ -55,15 +54,14 @@ class SignUpController extends ChangeNotifier {
         String otp = success.data?.otp ?? "";
         String email = success.data?.email ?? "";
 
-        // Set the OTP and email in the VerifyEmailController
         await ref
             .read(localStorageProvider)
             .saveJsonData(PrefData.user, result.tryGetSuccess())
             .then((value) {
+          // Set the OTP and email in the VerifyEmailController
           ref.read(verifyEmailProvider.notifier).setOtpAndEmail(otp, email);
+          Navigator.pushNamed(context, Routes.verifyEmailRoute);
         });
-
-        Navigator.pushNamed(context, Routes.verifyEmailRoute);
       },
       (error) {
         showErrorToast(context, error.message);
@@ -222,6 +220,95 @@ class SignUpController extends ChangeNotifier {
       },
       (error) {
         showErrorToast(context, error.message);
+      },
+    );
+  }
+
+  Future<void> createPasscode({
+    required String? newPasscode,
+    required String? confirmPasscode,
+    required BuildContext context,
+  }) async {
+    // Show the loading dialog before the async operation
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const CustomProgressDialog(),
+    );
+
+    // Perform the async operation
+    final result = await ref.read(signUpServiceProvider).createPasscode(
+          confirmPasscode: confirmPasscode!,
+          newPasscode: newPasscode!,
+        );
+
+    // Remove the loading dialog
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context); // Dismiss the loading dialog
+    }
+
+    // Handle the result after async operation
+    result.when(
+      (success) async {
+        String message = success['message'] ?? "";
+        showToast(context, message); // Show success message
+
+        // Fetch the updated profile and perform navigation if the widget is still mounted
+        await ref.read(profileControllerProvider).getProfile();
+
+        // Check if the widget is still in the tree before navigating
+        if (context.mounted) {
+          Navigator.pop(context); // Navigate to a different screen
+        }
+      },
+      (error) {
+        if (context.mounted) {
+          showErrorToast(context, error.message); // Show error message
+        }
+      },
+    );
+  }
+
+  Future<void> createTransactionPin({
+    required String? newPin,
+    required String? confirmPin,
+    required BuildContext context,
+  }) async {
+    // Show the loading dialog before the async operation
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const CustomProgressDialog(),
+    );
+
+    // Perform the async operation to create the pin
+    final result = await ref
+        .read(signUpServiceProvider)
+        .createPin(confirmPin: confirmPin!, pin: newPin!);
+
+    // Remove the loading dialog
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context); // Dismiss the loading dialog
+    }
+
+    // Handle the result after async operation
+    result.when(
+      (success) async {
+        String message = success['message'] ?? "";
+        showToast(context, message); // Show success message
+
+        // Fetch the updated profile after pin creation
+        await ref.read(profileControllerProvider).getProfile();
+
+        // Check if the widget is still in the tree before navigating
+        if (context.mounted) {
+          Navigator.pop(context); // Navigate to a different screen if needed
+        }
+      },
+      (error) {
+        if (context.mounted) {
+          showErrorToast(context, error.message); // Show error message
+        }
       },
     );
   }

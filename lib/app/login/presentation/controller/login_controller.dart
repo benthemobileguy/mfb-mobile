@@ -48,7 +48,7 @@ class LoginController extends ChangeNotifier {
               .saveJsonData(PrefData.user, result.tryGetSuccess())
               .then((value) async {
             PrefData.setLogIn(true);
-           await ref.read(profileControllerProvider).getProfile();
+            await ref.read(profileControllerProvider).getProfile();
             Constant.sendToNext(context, Routes.homeScreenRoute);
           });
         },

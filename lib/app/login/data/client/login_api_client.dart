@@ -14,4 +14,3 @@ abstract class LoginApiClient {
     @Body() LoginRequest loginRequest,
   );
 }
-

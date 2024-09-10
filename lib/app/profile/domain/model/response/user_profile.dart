@@ -206,7 +206,8 @@ class Region {
     defaultCurrency = json['default'] ?? false; // Handle bool
     code = json['code'];
     denomination = json['demonym'];
-    currency = json['currency'] != null ? Currency.fromJson(json['currency']) : null;
+    currency =
+        json['currency'] != null ? Currency.fromJson(json['currency']) : null;
   }
 
   Map<String, dynamic> toJson() {

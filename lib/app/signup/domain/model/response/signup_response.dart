@@ -6,7 +6,13 @@ class SignUpResponse {
   Data? data;
   Request? request;
 
-  SignUpResponse({this.statusCode, this.status, this.time, this.message, this.data, this.request});
+  SignUpResponse(
+      {this.statusCode,
+      this.status,
+      this.time,
+      this.message,
+      this.data,
+      this.request});
 
   SignUpResponse.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
@@ -14,7 +20,8 @@ class SignUpResponse {
     time = json['time'];
     message = json['message'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
-    request = json['request'] != null ? Request.fromJson(json['request']) : null;
+    request =
+        json['request'] != null ? Request.fromJson(json['request']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -68,36 +75,36 @@ class Data {
 
   Data(
       {this.firstName,
-        this.lastName,
-        this.email,
-        this.phone,
-        this.otp,
-        this.verificationExpiresAt,
-        this.refCode,
-        this.region,
-        this.pin,
-        this.tag,
-        this.bvn,
-        this.bvnPhoto,
-        this.ninPhoto,
-        this.nin,
-        this.referrerId,
-        this.passCode,
-        this.biometric,
-        this.dob,
-        this.cardHolderId,
-        this.gender,
-        this.id,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt,
-        this.version,
-        this.emailVerified,
-        this.bvnVerified,
-        this.ninVerified,
-        this.accountCompletionStatus,
-        this.phoneNumberVerified,
-        this.enabledBiometric});
+      this.lastName,
+      this.email,
+      this.phone,
+      this.otp,
+      this.verificationExpiresAt,
+      this.refCode,
+      this.region,
+      this.pin,
+      this.tag,
+      this.bvn,
+      this.bvnPhoto,
+      this.ninPhoto,
+      this.nin,
+      this.referrerId,
+      this.passCode,
+      this.biometric,
+      this.dob,
+      this.cardHolderId,
+      this.gender,
+      this.id,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt,
+      this.version,
+      this.emailVerified,
+      this.bvnVerified,
+      this.ninVerified,
+      this.accountCompletionStatus,
+      this.phoneNumberVerified,
+      this.enabledBiometric});
 
   Data.fromJson(Map<String, dynamic> json) {
     firstName = json['firstName'];
@@ -189,18 +196,18 @@ class Region {
 
   Region(
       {this.id,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt,
-        this.version,
-        this.name,
-        this.flagSvg,
-        this.flagPng,
-        this.active,
-        this.defaultRegion,
-        this.code,
-        this.demonym,
-        this.currency});
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt,
+      this.version,
+      this.name,
+      this.flagSvg,
+      this.flagPng,
+      this.active,
+      this.defaultRegion,
+      this.code,
+      this.demonym,
+      this.currency});
 
   Region.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -215,7 +222,8 @@ class Region {
     defaultRegion = json['default'];
     code = json['code'];
     demonym = json['demonym'];
-    currency = json['currency'] != null ? Currency.fromJson(json['currency']) : null;
+    currency =
+        json['currency'] != null ? Currency.fromJson(json['currency']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -253,15 +261,15 @@ class Currency {
 
   Currency(
       {this.id,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt,
-        this.version,
-        this.name,
-        this.code,
-        this.symbol,
-        this.defaultCurrency,
-        this.active});
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt,
+      this.version,
+      this.name,
+      this.code,
+      this.symbol,
+      this.defaultCurrency,
+      this.active});
 
   Currency.fromJson(Map<String, dynamic> json) {
     id = json['id'];

@@ -4,14 +4,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:tampay_mobile/app/env/env.dart';
 import 'package:tampay_mobile/app/signup/data/remote/signup_repository_impl.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/create_passcode_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/create_password_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/create_pin_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/reset_password_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/send_otp_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/set_pin_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/sign_up_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_email_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_phone_number.dart';
 import 'package:tampay_mobile/app/signup/domain/model/response/signup_response.dart';
+import 'package:tampay_mobile/app/signup/presentation/view/set_passcode_screen.dart';
 import 'package:tampay_mobile/base/failure.dart';
 import 'package:tampay_mobile/base/resizer/error_handler.dart';
 
@@ -190,6 +194,31 @@ class SignUpService {
     }
   }
 
+  Future<Result<Map<String, dynamic>, Failure>> createPasscode({
+    required String confirmPasscode,
+    required String newPasscode,
+  }) async {
+    try {
+      final response = await ref.read(signUpRepositoryProvider).setPasscode(
+          CreatePasscodeRequest(
+              newPasscode: newPasscode, confirmPasscode: confirmPasscode),
+          "Bearer ${getIt<AuthManager>().token!}",
+          Env.accessKey,
+          Env.secretKey);
+      // Check the status code before parsing the response
+      if (response['statusCode'] == 200 || response['status'] == "Success") {
+        return Success(response);
+      } else {
+        // Handle the error case
+        final errorMessage = response['message'];
+        return Error(Failure(message: errorMessage));
+      }
+    } catch (error) {
+      final errorMessage = ErrorHandler.getErrorMessage(error);
+      return Error(Failure(message: errorMessage));
+    }
+  }
+
   Future<Result<Map<String, dynamic>, Failure>> sendPhoneOtp({
     required String phoneNumber,
   }) async {
@@ -198,6 +227,41 @@ class SignUpService {
           SendOtpRequest(
             phone: phoneNumber,
           ),
+          "Bearer ${getIt<AuthManager>().token!}",
+          Env.accessKey,
+          Env.secretKey);
+
+      // Check if the response is null
+      if (response == null) {
+        return Error(Failure(message: "No response from server"));
+      }
+
+      // Safely check the status code or status message
+      final statusCode = response['statusCode'] as int?;
+      final status = response['status'] as String?;
+      final message = response['message'] as String?;
+
+      if (statusCode == 200 || status?.toLowerCase() == "success") {
+        return Success(response);
+      } else {
+        // Handle the error case
+        final errorMessage = message ?? "An unknown error occurred.";
+        return Error(Failure(message: errorMessage));
+      }
+    } catch (error) {
+      debugPrint("Error occurred: $error");
+      final errorMessage = ErrorHandler.getErrorMessage(error);
+      return Error(Failure(message: errorMessage));
+    }
+  }
+
+  Future<Result<Map<String, dynamic>, Failure>> createPin({
+    required String confirmPin,
+    required String pin,
+  }) async {
+    try {
+      final response = await ref.read(signUpRepositoryProvider).setPin(
+          CreatePinRequest(newPin: pin, confirmPin: confirmPin),
           "Bearer ${getIt<AuthManager>().token!}",
           Env.accessKey,
           Env.secretKey);

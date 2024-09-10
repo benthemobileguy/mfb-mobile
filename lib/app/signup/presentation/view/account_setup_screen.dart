@@ -137,7 +137,7 @@ class _AccountSetupScreenState extends ConsumerState<AccountSetupScreen> {
                     onTap: (phoneNumberVerified && !passcodeSet)
                         ? () {
                             Constant.sendToNext(
-                                context, Routes.verifyPhoneNumberRoute);
+                                context, Routes.setPasscodeRoute);
                           }
                         : null,
                     isCompleted: passcodeSet,

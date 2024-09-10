@@ -4,7 +4,7 @@ import 'package:tampay_mobile/app/env/env.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 final dioProvider = Provider<Dio>(
-      (ref) {
+  (ref) {
     Dio dio = Dio(BaseOptions(
       baseUrl: Env.stagingUrl,
       connectTimeout: const Duration(seconds: 30),

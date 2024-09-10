@@ -19,7 +19,11 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
       "screen": Routes.electricityRoute
     },
     {"icon": "airtime.svg", "text": "Airtime", "screen": Routes.airtimeRoute},
-    {"icon": "internet.svg", "text": "Internet", "screen": Routes.internetRoute},
+    {
+      "icon": "internet.svg",
+      "text": "Internet",
+      "screen": Routes.internetRoute
+    },
     {"icon": "tv.svg", "text": "TV", "screen": Routes.tvRoute},
     {
       "icon": "insurance.svg",
