@@ -23,9 +23,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     FetchPixels(context);
     final profileController = ref.watch(profileControllerProvider);
-    final userProfile = profileController.userProfile;
+    final userProfile = profileController.userProfile ?? UserProfile();
     bool accountSetupComplete =
-        profileController.isAccountSetupComplete(userProfile ?? UserProfile());
+        profileController.isAccountSetupComplete(userProfile);
+    final bool isWalletNotCreated = userProfile.data?.wallets?.isEmpty ?? false;
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -35,12 +37,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               getVerSpace(FetchPixels.getPixelHeight(10)),
-              appBar(context, userProfile ?? UserProfile()),
+              appBar(context, userProfile),
               getVerSpace(FetchPixels.getPixelHeight(30)),
-              if (!accountSetupComplete)
-                accountCompletionStatus(context, userProfile ?? UserProfile()),
+              if (!accountSetupComplete || isWalletNotCreated)
+                accountCompletionStatus(context, userProfile,
+                    accountSetupComplete, !isWalletNotCreated),
               getVerSpace(FetchPixels.getPixelHeight(20)),
-              currencyToggle(context),
+              currencyToggle(context, accountSetupComplete, userProfile),
               getVerSpace(FetchPixels.getPixelHeight(30)),
               balanceForUser(context),
               getVerSpace(FetchPixels.getPixelHeight(20)),
@@ -58,7 +61,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget appBar(BuildContext context, UserProfile userProfile) {
     return getPaddingWidget(
-      EdgeInsets.symmetric(horizontal: horspace),
+      const EdgeInsets.symmetric(horizontal: 0),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -84,7 +87,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  accountCompletionStatus(BuildContext context, UserProfile userProfile) {
+  accountCompletionStatus(BuildContext context, UserProfile userProfile,
+      bool isAccountSetUpComplete, bool isWalletCreated) {
+    bool accountInReview = isAccountSetUpComplete && !isWalletCreated;
     return InkWell(
       onTap: () {
         Constant.sendToNext(context, Routes.accountSetUpRoute);
@@ -93,8 +98,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: yellowBg.withOpacity(0.3),
-            border: Border.all(color: yellowBg, width: 2)),
+            color: accountInReview
+                ? successLightColor
+                : yellowBg.withOpacity(0.3),
+            border: Border.all(
+                color: accountInReview ? successGreen : yellowBg, width: 2)),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -111,11 +119,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     fontWeight: FontWeight.w600,
                     letterSpacing: 1.5),
                 getVerSpace(FetchPixels.getPixelHeight(10)),
-                getCustomFont("Complete Account Setup", 14, h6, 1,
+                getCustomFont(
+                    isWalletCreated
+                        ? "Account in Review"
+                        : "Complete Account Setup",
+                    14,
+                    h6,
+                    1,
                     fontWeight: FontWeight.w500),
                 getVerSpace(FetchPixels.getPixelHeight(5)),
                 getCustomFont(
-                    "Unlock all features by completing your profile", 14, h6, 1,
+                    isWalletCreated
+                        ? "Features would be unlocked after verification"
+                        : "Unlock all features by completing your profile",
+                    14,
+                    h6,
+                    2,
                     fontWeight: FontWeight.w400),
               ],
             ),
@@ -126,7 +145,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  currencyToggle(BuildContext context) {
+  currencyToggle(BuildContext context, bool accountSetupComplete,
+      UserProfile userProfile) {
     return getPaddingWidget(
       EdgeInsets.symmetric(horizontal: horspace),
       Row(
@@ -140,7 +160,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           const Spacer(),
           TextButton(
               onPressed: () {
-                _showAccountDetails(context);
+                if (!accountSetupComplete) {
+                  showCompleteAccountSetupDialog(context);
+                } else {
+                  _showAccountDetails(context, userProfile);
+                }
               },
               style: ButtonStyle(
                 minimumSize: WidgetStateProperty.all(const Size(0, 0)),
@@ -251,9 +275,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          getCustomFont("Recent Transactions", 16, grey600, 1,
+          getCustomFont("Recent Transactions", 16, grey650, 1,
               fontWeight: FontWeight.w600),
-          getVerSpace(30),
+          getVerSpace(20),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -285,7 +309,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  void _showAccountDetails(BuildContext context) {
+  void _showAccountDetails(BuildContext context, UserProfile userProfile) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -316,10 +340,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ],
               ),
               getVerSpace(25),
-              accountDetailComponent(
-                  "ACCOUNT HOLDER", "Mamudu Jefferey", false),
+              accountDetailComponent("ACCOUNT HOLDER",
+                  userProfile.data?.wallets?[0].accountName ?? "", false),
               getVerSpace(12),
-              accountDetailComponent("ACCOUNT NUMBER", "121233211", true),
+              accountDetailComponent("ACCOUNT NUMBER",
+                  userProfile.data?.wallets?[0].accountNumber ?? "", true),
               getVerSpace(12),
               accountDetailComponent("ROUTING", "232120910290101", true),
               getVerSpace(12),

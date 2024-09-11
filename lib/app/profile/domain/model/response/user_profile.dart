@@ -63,6 +63,7 @@ class Data {
   String? dob;
   String? cardHolderId;
   Region? region;
+  List<Wallet>? wallets;
 
   Data({
     this.id,
@@ -93,6 +94,7 @@ class Data {
     this.dob,
     this.cardHolderId,
     this.region,
+    this.wallets,
   });
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -108,22 +110,28 @@ class Data {
     password = json['password'];
     otp = json['otp'];
     verificationExpiresAt = json['verificationExpiresAt'];
-    emailVerified = json['emailVerified'] ?? false; // Handle bool
+    emailVerified = json['emailVerified'] ?? false;
     pin = json['pin'];
     tag = json['tag'];
     bvn = json['bvn'];
     bvnPhoto = json['bvnPhoto'];
-    bvnVerified = json['bvnVerified'] ?? false; // Handle bool
+    bvnVerified = json['bvnVerified'] ?? false;
     refCode = json['refCode'];
     referrerId = json['referrerId'];
     accountCompletionStatus = json['accountCompletionStatus'];
-    phoneNumberVerified = json['phoneNumberVerified'] ?? false; // Handle bool
+    phoneNumberVerified = json['phoneNumberVerified'] ?? false;
     passCode = json['passCode'];
     biometric = json['biometric'];
-    enabledBiometric = json['enabledBiometric'] ?? false; // Handle bool
+    enabledBiometric = json['enabledBiometric'] ?? false;
     dob = json['dob'];
     cardHolderId = json['cardHolderId'];
     region = json['region'] != null ? Region.fromJson(json['region']) : null;
+    if (json['wallets'] != null) {
+      wallets = <Wallet>[];
+      json['wallets'].forEach((v) {
+        wallets!.add(Wallet.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -158,6 +166,75 @@ class Data {
     if (region != null) {
       data['region'] = region!.toJson();
     }
+    if (wallets != null) {
+      data['wallets'] = wallets!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Wallet {
+  String? id;
+  String? createdAt;
+  String? updatedAt;
+  String? deletedAt;
+  int? version;
+  String? balance;
+  String? currency;
+  bool? isActive;
+  bool? isDefault;
+  String? status;
+  String? accountId;
+  String? accountName;
+  String? accountNumber;
+
+  Wallet({
+    this.id,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+    this.version,
+    this.balance,
+    this.currency,
+    this.isActive,
+    this.isDefault,
+    this.status,
+    this.accountId,
+    this.accountName,
+    this.accountNumber,
+  });
+
+  Wallet.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    deletedAt = json['deletedAt'];
+    version = json['version'];
+    balance = json['balance'];
+    currency = json['currency'];
+    isActive = json['isActive'] ?? false;
+    isDefault = json['isDefault'] ?? false;
+    status = json['status'];
+    accountId = json['accountId'];
+    accountName = json['accountName'];
+    accountNumber = json['accountNumber'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['deletedAt'] = deletedAt;
+    data['version'] = version;
+    data['balance'] = balance;
+    data['currency'] = currency;
+    data['isActive'] = isActive;
+    data['isDefault'] = isDefault;
+    data['status'] = status;
+    data['accountId'] = accountId;
+    data['accountName'] = accountName;
+    data['accountNumber'] = accountNumber;
     return data;
   }
 }
@@ -171,8 +248,8 @@ class Region {
   String? name;
   String? flagSvg;
   String? flagPng;
-  bool? active; // Boolean field
-  bool? defaultCurrency; // Boolean field
+  bool? active;
+  bool? defaultCurrency;
   String? code;
   String? denomination;
   Currency? currency;
@@ -202,8 +279,8 @@ class Region {
     name = json['name'];
     flagSvg = json['flagSvg'];
     flagPng = json['flagPng'];
-    active = json['active'] ?? false; // Handle bool
-    defaultCurrency = json['default'] ?? false; // Handle bool
+    active = json['active'] ?? false;
+    defaultCurrency = json['default'] ?? false;
     code = json['code'];
     denomination = json['demonym'];
     currency =
@@ -240,8 +317,8 @@ class Currency {
   String? name;
   String? code;
   String? symbol;
-  bool? defaultCurrency; // Boolean field
-  bool? active; // Boolean field
+  bool? defaultCurrency;
+  bool? active;
 
   Currency({
     this.id,
@@ -265,8 +342,8 @@ class Currency {
     name = json['name'];
     code = json['code'];
     symbol = json['symbol'];
-    defaultCurrency = json['default'] ?? false; // Handle bool
-    active = json['active'] ?? false; // Handle bool
+    defaultCurrency = json['default'] ?? false;
+    active = json['active'] ?? false;
   }
 
   Map<String, dynamic> toJson() {

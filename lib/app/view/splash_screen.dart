@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tampay_mobile/main.dart';
-import 'package:tampay_mobile/manager/auth_manager.dart';
 import '../../base/constant.dart';
 import '../../base/pref_data.dart';
 import '../../base/resizer/fetch_pixels.dart';
 import '../../base/widget_utils.dart';
 import '../../theme/color_data.dart';
+import '../profile/presentation/controller/profile_controller.dart';
 import '../routes/app_routes.dart';
 import 'package:lottie/lottie.dart';
 
@@ -31,11 +30,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   getStarting() async {
     bool isLogin = await PrefData.isLoggedIn();
     bool isOnBoardingCompleted = await PrefData.getIsOnboardingCompleted();
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 5), () async {
       if (isOnBoardingCompleted) {
-        Constant.sendToNext(context, Routes.loginRoute);
         if (isLogin) {
-          Constant.sendToNext(context, Routes.homeScreenRoute);
+          await ref.read(profileControllerProvider).getProfile().then((value) {
+            Constant.sendToNext(context, Routes.homeScreenRoute);
+          });
         } else {
           Constant.sendToNext(context, Routes.loginRoute);
         }

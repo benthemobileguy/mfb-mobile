@@ -48,14 +48,20 @@ class _AccountSetupScreenState extends ConsumerState<AccountSetupScreen> {
             getVerSpace(FetchPixels.getPixelHeight(20)),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: getCustomFont("Account Setup", 18, grey700, 1,
+              child: getCustomFont(
+                  accountCompletion != 1 ? "Account Setup" : "Almost there!",
+                  18,
+                  grey700,
+                  1,
                   fontWeight: FontWeight.w600),
             ),
             getVerSpace(FetchPixels.getPixelHeight(10)),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: getCustomFont(
-                  "Complete your account set-up in three simple steps",
+                  accountCompletion != 1
+                      ? "Complete your account set-up in three simple steps"
+                      : "Your account setup is complete. Your account is now currently in review!",
                   12.5,
                   grey700,
                   3,
@@ -199,7 +205,7 @@ class _AccountSetupScreenState extends ConsumerState<AccountSetupScreen> {
                     bvnVerified ? grey400Color : grey700,
                     1,
                     trailingImagePath:
-                        bvnVerified ? "success.svg" : "chevron_right.svg",
+                        bvnVerified ? "check_circle.svg" : "chevron_right.svg",
                     onTap: (pinSet && !bvnVerified)
                         ? () {
                             Constant.sendToNext(
