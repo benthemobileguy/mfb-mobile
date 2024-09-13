@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tampay_mobile/app/profile/domain/model/response/user_profile.dart';
 import 'package:tampay_mobile/app/profile/presentation/controller/profile_controller.dart';
 import '../../../base/constant.dart';
+import 'package:flutter/services.dart';
 import '../../../base/resizer/fetch_pixels.dart';
 import '../../../base/widget_utils.dart';
 import '../../../theme/color_data.dart';
@@ -30,32 +31,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              getVerSpace(FetchPixels.getPixelHeight(10)),
-              appBar(context, userProfile),
-              getVerSpace(FetchPixels.getPixelHeight(30)),
-              if (!accountSetupComplete || isWalletNotCreated)
-                accountCompletionStatus(context, userProfile,
-                    accountSetupComplete, !isWalletNotCreated),
-              getVerSpace(FetchPixels.getPixelHeight(20)),
-              currencyToggle(context, accountSetupComplete, userProfile),
-              getVerSpace(FetchPixels.getPixelHeight(30)),
-              balanceForUser(context),
-              getVerSpace(FetchPixels.getPixelHeight(20)),
-              addConvertMoneyRow(context, accountSetupComplete),
-              getVerSpace(FetchPixels.getPixelHeight(40)),
-              recentTransactions(context),
-              getVerSpace(FetchPixels.getPixelHeight(40)),
-              referFriends(context)
-            ],
-          ),
-        ),
-      ),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: RefreshIndicator(
+            color: primaryColor,
+            onRefresh: _refreshProfile,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  getVerSpace(FetchPixels.getPixelHeight(10)),
+                  appBar(context, userProfile),
+                  getVerSpace(FetchPixels.getPixelHeight(30)),
+                  if (!accountSetupComplete || isWalletNotCreated)
+                    accountCompletionStatus(context, userProfile,
+                        accountSetupComplete, !isWalletNotCreated),
+                  getVerSpace(FetchPixels.getPixelHeight(20)),
+                  currencyToggle(context, accountSetupComplete, userProfile),
+                  getVerSpace(FetchPixels.getPixelHeight(30)),
+                  balanceForUser(context, userProfile),
+                  getVerSpace(FetchPixels.getPixelHeight(20)),
+                  addConvertMoneyRow(context, accountSetupComplete),
+                  getVerSpace(FetchPixels.getPixelHeight(40)),
+                  recentTransactions(context),
+                  getVerSpace(FetchPixels.getPixelHeight(40)),
+                  referFriends(context)
+                ],
+              ),
+            ),
+          )),
     );
   }
 
@@ -176,7 +181,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  balanceForUser(BuildContext context) {
+  balanceForUser(BuildContext context, UserProfile? userProfile) {
     return getPaddingWidget(
       EdgeInsets.symmetric(horizontal: horspace),
       Column(
@@ -189,14 +194,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 12),
-                child: getCustomFont("₦", 20, Colors.black, 1,
-                    fontWeight: FontWeight.w500, letterSpacing: 1.5),
+                child: getSvgImage("naira_sign.svg"),
               ),
               SizedBox(
                 width: 170,
                 child: getCustomFont(
-                    _isBalanceVisible ? "0" : "----", 34, Colors.black, 1,
-                    fontWeight: FontWeight.w500, letterSpacing: 1.5),
+                  _isBalanceVisible
+                      ? userProfile?.data?.wallets![0].balance ?? "----"
+                      : "----",
+                  34,
+                  Colors.black,
+                  1,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1.5,
+                ),
               ),
               TextButton(
                   onPressed: () {
@@ -339,19 +350,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ],
               ),
               getVerSpace(25),
-              accountDetailComponent("ACCOUNT HOLDER",
-                  userProfile.data?.wallets?[0].accountName ?? "", false),
+              accountDetailComponent(
+                  "ACCOUNT HOLDER",
+                  userProfile.data?.wallets?[0].accountName ?? "",
+                  false,
+                  context),
               getVerSpace(12),
-              accountDetailComponent("ACCOUNT NUMBER",
-                  userProfile.data?.wallets?[0].accountNumber ?? "", true),
+              accountDetailComponent(
+                  "ACCOUNT NUMBER",
+                  userProfile.data?.wallets?[0].accountNumber ?? "",
+                  true,
+                  context),
               getVerSpace(12),
               if (userProfile.data?.wallets?[0].currency != "NGN")
-                accountDetailComponent("ROUTING", "232120910290101", true),
+                accountDetailComponent(
+                    "ROUTING", "232120910290101", true, context),
               getVerSpace(12),
               if (userProfile.data?.wallets?[0].currency != "NGN")
-                accountDetailComponent("ADDRESS",
-                    "383 Madison Avenue in Midtown Manhattan, USA", true),
-              if (userProfile.data?.wallets?[0].currency != "NGN") getVerSpace(30),
+                accountDetailComponent(
+                    "ADDRESS",
+                    "383 Madison Avenue in Midtown Manhattan, USA",
+                    true,
+                    context),
+              if (userProfile.data?.wallets?[0].currency != "NGN")
+                getVerSpace(30),
             ],
           ),
         );
@@ -359,7 +381,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  accountDetailComponent(String title, String result, bool showCopy) {
+  Future<void> _refreshProfile() async {
+    await ref.read(profileControllerProvider).getProfile();
+  }
+
+  accountDetailComponent(
+      String title, String result, bool showCopy, BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       width: double.infinity,
@@ -392,7 +419,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ),
           if (showCopy)
-            getSvgImage("copy.svg", height: 30, width: 30, color: h6)
+            GestureDetector(
+              onTap: () {
+                Clipboard.setData(
+                    ClipboardData(text: result)); // Copy to clipboard
+                showToast(context, "Copied to clipboard!");
+              },
+              child: getSvgImage("copy.svg", height: 30, width: 30, color: h6),
+            ),
         ],
       ),
     );
