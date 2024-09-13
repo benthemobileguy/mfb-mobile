@@ -8,6 +8,7 @@ import 'package:tampay_mobile/app/signup/data/remote/signup_repository_impl.dart
 import 'package:tampay_mobile/app/signup/domain/model/request/create_passcode_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/create_password_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/create_pin_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/create_wallet_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/reset_password_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/send_bvn_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/send_otp_request.dart';
@@ -15,7 +16,6 @@ import 'package:tampay_mobile/app/signup/domain/model/request/sign_up_request.da
 import 'package:tampay_mobile/app/signup/domain/model/request/verify-bvn-otp-request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_email_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_phone_number.dart';
-import 'package:tampay_mobile/app/signup/domain/model/response/signup_response.dart';
 import 'package:tampay_mobile/base/failure.dart';
 import 'package:tampay_mobile/base/resizer/error_handler.dart';
 import '../../../base/app_strings.dart';
@@ -319,14 +319,36 @@ class SignUpService {
     }
   }
 
-  Future<Result<Map<String, dynamic>, Failure>> verifyBVNOtp({
+  Future<Result<Map<String, dynamic>, Failure>> saveBVNOtp({
     required String otp,
   }) async {
     try {
-      final response = await ref.read(signUpRepositoryProvider).verifyBvnOTP(
-          VerifyBvnOtpRequest(
+      final response = await ref.read(signUpRepositoryProvider).saveBvnOTP(
+          SaveBvnOtpRequest(
             otp: otp,
           ),
+          "Bearer ${getIt<AuthManager>().token!}",
+          Env.accessKey,
+          Env.secretKey);
+      // Check the status code before parsing the response
+      if (response['statusCode'] == 200 || response['status'] == "Success") {
+        return Success(response);
+      } else {
+        // Handle the error case
+        final errorMessage = response['message'];
+        return Error(Failure(message: errorMessage));
+      }
+    } catch (error) {
+      final errorMessage = ErrorHandler.getErrorMessage(error);
+      return Error(Failure(message: errorMessage));
+    }
+  }
+
+  Future<Result<Map<String, dynamic>, Failure>> createWallet(
+      {required String currency}) async {
+    try {
+      final response = await ref.read(signUpRepositoryProvider).createWallet(
+          CreateWalletRequest(accountCurrency: currency),
           "Bearer ${getIt<AuthManager>().token!}",
           Env.accessKey,
           Env.secretKey);

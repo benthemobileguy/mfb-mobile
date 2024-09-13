@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tampay_mobile/app/signup/domain/model/response/signup_response.dart';
 import 'package:tampay_mobile/app/signup/presentation/controller/signup_form_controller.dart';
 import 'package:tampay_mobile/app/signup/presentation/state/verify_email_state.dart';
 import 'package:tampay_mobile/app/signup/services/signup_service.dart';
@@ -11,7 +10,6 @@ import 'package:tampay_mobile/base/widget_utils.dart';
 import '../../../../base/pref_data.dart';
 import '../../../../main.dart';
 import '../../../../manager/auth_manager.dart';
-import '../../../login/domain/model/response/login_response.dart';
 import '../../../profile/presentation/controller/profile_controller.dart';
 
 final phoneNumberProvider = StateProvider<String?>((ref) {
@@ -182,6 +180,24 @@ class SignUpController extends ChangeNotifier {
     );
   }
 
+  Future<void> createWallet({
+    required String? accountCurrency,
+    required BuildContext context,
+  }) async {
+    final result = await ref
+        .read(signUpServiceProvider)
+        .createWallet(currency: accountCurrency!);
+    result.when(
+      (success) {
+        String message = success['message'] ?? "";
+        showToast(context, message);
+      },
+      (error) {
+        showErrorToast(context, "Invalid OTP, please try again");
+      },
+    );
+  }
+
   Future<void> sendPhoneOTP({
     required String? phoneNumber,
     required BuildContext context,
@@ -200,7 +216,8 @@ class SignUpController extends ChangeNotifier {
       (success) {
         String message = success['message'] ?? "";
         showToast(context, message);
-        Navigator.pushReplacementNamed(context, Routes.verifyPhoneConfirmationRoute);
+        Navigator.pushReplacementNamed(
+            context, Routes.verifyPhoneConfirmationRoute);
       },
       (error) {
         showErrorToast(context, error.message);
@@ -268,8 +285,9 @@ class SignUpController extends ChangeNotifier {
     );
   }
 
-  Future<void> verifyBvnOTP({
+  Future<void> saveBvnOTP({
     required String? otp,
+    required String? accountCurrency,
     required BuildContext context,
   }) async {
     showDialog(
@@ -278,22 +296,20 @@ class SignUpController extends ChangeNotifier {
       builder: (_) => const CustomProgressDialog(),
     );
 
-    final result =
-        await ref.read(signUpServiceProvider).verifyBVNOtp(otp: otp!);
-    Navigator.pop(context);
+    final result = await ref.read(signUpServiceProvider).saveBVNOtp(otp: otp!);
     result.when(
       (success) async {
-        String message = success['message'] ?? "";
-        showToast(context, message);
+        await createWallet(accountCurrency: accountCurrency, context: context);
         // Fetch the updated profile and perform navigation if the widget is still mounted
         await ref.read(profileControllerProvider).getProfile();
-
-        // Check if the widget is still in the tree before navigating
         if (context.mounted) {
+          Navigator.pop(context); // close dialog
           Navigator.pop(context); // Navigate to a different screen
         }
+        // Check if the widget is still in the tree before navigating
       },
       (error) {
+        Navigator.pop(context);
         showErrorToast(context, error.message);
       },
     );

@@ -8,6 +8,7 @@ import 'package:tampay_mobile/app/signup/domain/model/request/change_pin_request
 import 'package:tampay_mobile/app/signup/domain/model/request/create_passcode_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/create_password_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/create_pin_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/create_wallet_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/reset-passcode-request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/reset_password_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/send_bvn_otp_request.dart';
@@ -290,10 +291,10 @@ class SignUpRepositoryImpl implements SignupRepository {
   }
 
   @override
-  Future verifyBvnOTP(VerifyBvnOtpRequest verifyBvnOtpRequest,
-      String authorization, String accessKey, String secretKey) async {
+  Future saveBvnOTP(SaveBvnOtpRequest verifyBvnOtpRequest, String authorization,
+      String accessKey, String secretKey) async {
     try {
-      final verifyBvnOTPResponse = await _signupClient.verifyBvnOtp(
+      final verifyBvnOTPResponse = await _signupClient.saveBvnOtp(
           verifyBvnOtpRequest, authorization, accessKey, secretKey);
       return verifyBvnOTPResponse;
     } on DioException catch (e) {
@@ -302,6 +303,22 @@ class SignUpRepositoryImpl implements SignupRepository {
     } catch (e) {
       // Handle any other exceptions
       throw Exception('verifyBvnOTP: $e');
+    }
+  }
+
+  @override
+  Future createWallet(CreateWalletRequest createWalletRequest,
+      String authorization, String accessKey, String secretKey) async {
+    try {
+      final createWalletResponse = await _signupClient.createWallet(
+          createWalletRequest, authorization, accessKey, secretKey);
+      return createWalletResponse;
+    } on DioException catch (e) {
+      debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('create wallet: $e');
     }
   }
 }

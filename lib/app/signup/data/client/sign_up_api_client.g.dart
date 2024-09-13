@@ -584,8 +584,8 @@ class _SignUpApiClient implements SignUpApiClient {
   }
 
   @override
-  Future<dynamic> verifyBvnOtp(
-    VerifyBvnOtpRequest verifyBvnOtpRequest,
+  Future<dynamic> saveBvnOtp(
+    SaveBvnOtpRequest saveBvnOtpRequest,
     String authorization,
     String accessKey,
     String secretKey,
@@ -599,7 +599,7 @@ class _SignUpApiClient implements SignUpApiClient {
     };
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    _data.addAll(verifyBvnOtpRequest.toJson());
+    _data.addAll(saveBvnOtpRequest.toJson());
     final _options = _setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,
@@ -607,7 +607,45 @@ class _SignUpApiClient implements SignUpApiClient {
     )
         .compose(
           _dio.options,
-          'api/v1/verification/bvn/verify-otp',
+          'api/v1/verification/bvn/save-otp',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
+  Future<dynamic> createWallet(
+    CreateWalletRequest createWalletRequest,
+    String authorization,
+    String accessKey,
+    String secretKey,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'Authorization': authorization,
+      r'Access-Key': accessKey,
+      r'Secret-Key': secretKey,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(createWalletRequest.toJson());
+    final _options = _setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'api/v1/wallets/create',
           queryParameters: queryParameters,
           data: _data,
         )

@@ -49,7 +49,7 @@ class _AccountSetupScreenState extends ConsumerState<AccountSetupScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: getCustomFont(
-                  accountCompletion != 1 ? "Account Setup" : "Almost there!",
+                  accountCompletion != 1 ? "Account Setup" : "Congratulations!",
                   18,
                   grey700,
                   1,
@@ -61,7 +61,7 @@ class _AccountSetupScreenState extends ConsumerState<AccountSetupScreen> {
               child: getCustomFont(
                   accountCompletion != 1
                       ? "Complete your account set-up in three simple steps"
-                      : "Your account setup is complete. Your account is now currently in review!",
+                      : "Your wallet has been created successfully. You can now start making transactions with Tampay!",
                   12.5,
                   grey700,
                   3,
@@ -82,7 +82,11 @@ class _AccountSetupScreenState extends ConsumerState<AccountSetupScreen> {
                       CircularProgressIndicator(
                         value: accountCompletion,
                         backgroundColor: yellowBg,
-                        valueColor: AlwaysStoppedAnimation<Color>(yellowColor),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          accountCompletion == 1
+                              ? successGreen
+                              : yellowColor, // Set to green when 100% complete
+                        ),
                       ),
                       getHorSpace(FetchPixels.getPixelWidth(10)),
                       getCustomFont(

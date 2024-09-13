@@ -3,6 +3,7 @@ import 'package:tampay_mobile/app/signup/domain/model/request/change_pin_request
 import 'package:tampay_mobile/app/signup/domain/model/request/create_passcode_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/create_password_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/create_pin_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/create_wallet_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/reset-passcode-request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/reset_password_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/send_bvn_otp_request.dart';
@@ -53,6 +54,8 @@ abstract class SignupRepository {
       String accessKey, String secretKey);
   Future<dynamic> changePin(
       ChangePinRequest changePinRequest, String authorization);
-  Future<dynamic> verifyBvnOTP(VerifyBvnOtpRequest verifyBvnOtpRequest,
+  Future<dynamic> saveBvnOTP(SaveBvnOtpRequest verifyBvnOtpRequest,
+      String authorization, String accessKey, String secretKey);
+  Future<dynamic> createWallet(CreateWalletRequest createWalletRequest,
       String authorization, String accessKey, String secretKey);
 }

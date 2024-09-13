@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tampay_mobile/base/resizer/fetch_pixels.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
 import 'package:tampay_mobile/theme/color_data.dart';
+import '../../../profile/domain/model/response/user_profile.dart';
+import '../../../profile/presentation/controller/profile_controller.dart';
 import '../controller/signup_controller.dart';
 import '../controller/verify_identity_form_controller.dart';
 
@@ -13,7 +15,16 @@ class VerifyIdentityScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formController = ref.watch(verifyIdentityFormProvider);
+    Future.microtask(() {
+      final profileController = ref.read(profileControllerProvider);
+      final userProfile = profileController.userProfile ?? UserProfile();
+      final formController = ref.read(verifyIdentityFormProvider);
 
+      formController.firstNameController.text =
+          userProfile.data?.firstName ?? "";
+      formController.lastNameController.text = userProfile.data?.lastName ?? "";
+      formController.bvnFocusNode.requestFocus();
+    });
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -40,7 +51,7 @@ class VerifyIdentityScreen extends ConsumerWidget {
               // First Name Field
               getDefaultTextFiledWithLabel(
                   context, "Jefferey", formController.firstNameController,
-                  isEnable: true, // Set to true so user can change if needed
+                  isEnable: false, // Set to true so user can change if needed
                   focusNode: formController.firstNameFocusNode,
                   title: "First Name",
                   height: FetchPixels.getPixelHeight(60)),
@@ -54,7 +65,7 @@ class VerifyIdentityScreen extends ConsumerWidget {
                 focusNode: formController.lastNameFocusNode,
                 formController.lastNameController,
                 height: FetchPixels.getPixelHeight(60),
-                isEnable: true, // Set to true so user can change if needed
+                isEnable: false, // Set to true so user can change if needed
               ),
               getVerSpace(FetchPixels.getPixelHeight(20)),
 

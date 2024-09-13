@@ -14,9 +14,6 @@ class VerifyBvnOtpScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Retrieve the phone number from the provider
-    final phoneNumber = ref.watch(phoneNumberProvider);
-
     final defaultPinTheme = PinTheme(
       width: FetchPixels.getPixelHeight(60),
       height: FetchPixels.getPixelHeight(60),
@@ -86,7 +83,7 @@ class VerifyBvnOtpScreen extends ConsumerWidget {
                 length: 6,
                 showCursor: true,
                 onCompleted: (otp) {
-                  verifyPhoneOtpFunction(ref, context, otp);
+                  savePhoneOtpFunction(ref, context, otp);
                 },
                 mainAxisAlignment: MainAxisAlignment.center,
               ),
@@ -115,9 +112,10 @@ class VerifyBvnOtpScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> verifyPhoneOtpFunction(
+  Future<void> savePhoneOtpFunction(
       WidgetRef ref, BuildContext context, String otp) async {
-    await ref.read(signUpControllerProvider).verifyBvnOTP(
+    await ref.read(signUpControllerProvider).saveBvnOTP(
+          accountCurrency: "NGN",
           otp: otp,
           context: context,
         );

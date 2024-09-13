@@ -5,6 +5,7 @@ import 'package:tampay_mobile/app/signup/domain/model/request/change_pin_request
 import 'package:tampay_mobile/app/signup/domain/model/request/create_passcode_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/create_password_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/create_pin_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/create_wallet_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/reset-passcode-request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/reset_password_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/send_otp_request.dart';
@@ -119,11 +120,18 @@ abstract class SignUpApiClient {
     @Header("Access-Key") String accessKey,
     @Header("Secret-Key") String secretKey,
   );
-  @POST("api/v1/verification/bvn/verify-otp")
-  Future<dynamic> verifyBvnOtp(
-      @Body() VerifyBvnOtpRequest verifyBvnOtpRequest,
-      @Header("Authorization") String authorization,
-      @Header("Access-Key") String accessKey,
-      @Header("Secret-Key") String secretKey,
-      );
+  @POST("api/v1/verification/bvn/save-otp")
+  Future<dynamic> saveBvnOtp(
+    @Body() SaveBvnOtpRequest saveBvnOtpRequest,
+    @Header("Authorization") String authorization,
+    @Header("Access-Key") String accessKey,
+    @Header("Secret-Key") String secretKey,
+  );
+  @POST("api/v1/wallets/create")
+  Future<dynamic> createWallet(
+    @Body() CreateWalletRequest createWalletRequest,
+    @Header("Authorization") String authorization,
+    @Header("Access-Key") String accessKey,
+    @Header("Secret-Key") String secretKey,
+  );
 }

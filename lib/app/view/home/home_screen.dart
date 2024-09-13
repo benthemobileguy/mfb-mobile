@@ -98,9 +98,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: accountInReview
-                ? successLightColor
-                : yellowBg.withOpacity(0.3),
+            color:
+                accountInReview ? successLightColor : yellowBg.withOpacity(0.3),
             border: Border.all(
                 color: accountInReview ? successGreen : yellowBg, width: 2)),
         child: Row(
@@ -346,11 +345,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               accountDetailComponent("ACCOUNT NUMBER",
                   userProfile.data?.wallets?[0].accountNumber ?? "", true),
               getVerSpace(12),
-              accountDetailComponent("ROUTING", "232120910290101", true),
+              if (userProfile.data?.wallets?[0].currency != "NGN")
+                accountDetailComponent("ROUTING", "232120910290101", true),
               getVerSpace(12),
-              accountDetailComponent("ADDRESS",
-                  "383 Madison Avenue in Midtown Manhattan, USA", true),
-              getVerSpace(30),
+              if (userProfile.data?.wallets?[0].currency != "NGN")
+                accountDetailComponent("ADDRESS",
+                    "383 Madison Avenue in Midtown Manhattan, USA", true),
+              if (userProfile.data?.wallets?[0].currency != "NGN") getVerSpace(30),
             ],
           ),
         );
@@ -390,7 +391,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ],
             ),
           ),
-          const Spacer(),
           if (showCopy)
             getSvgImage("copy.svg", height: 30, width: 30, color: h6)
         ],

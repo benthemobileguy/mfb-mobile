@@ -1,9 +1,9 @@
-class VerifyBvnOtpRequest {
+class SaveBvnOtpRequest {
   String? otp;
 
-  VerifyBvnOtpRequest({this.otp});
+  SaveBvnOtpRequest({this.otp});
 
-  VerifyBvnOtpRequest.fromJson(Map<String, dynamic> json) {
+  SaveBvnOtpRequest.fromJson(Map<String, dynamic> json) {
     otp = json['otp'];
   }
 
