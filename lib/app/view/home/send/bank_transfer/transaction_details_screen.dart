@@ -125,7 +125,7 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
               padding: const EdgeInsets.all(12),
               child: Row(
                 children: [
-                  getSvgImage("share.svg"),
+                  getSvgImage("share_white.svg"),
                   getHorSpace(5),
                   getCustomFont("Share", 14, grey700, 1,
                       fontWeight: FontWeight.w600)

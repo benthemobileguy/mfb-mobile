@@ -437,7 +437,8 @@ Widget customLeadingListTile(
     leading: getSvgImage(leadingImagePath, width: 35, height: 35),
     subtitle: Padding(
       padding: const EdgeInsets.only(top: 4.0),
-      child: getCustomFont(subtitle ?? "", 12.5, greyColor, 1),
+      child: getCustomFont(subtitle ?? "", 12, grey400Color, 1,
+          fontWeight: FontWeight.normal),
     ),
     trailing: getSvgImage(trailingImagePath, width: 16, height: 16),
     onTap: onTap,
@@ -743,6 +744,24 @@ Future<dynamic> showCompleteAccountSetupDialog(BuildContext context) {
           Constant.sendToNext(context, Routes.accountSetUpRoute);
         },
         okText: "Complete Account Setup",
+      );
+    },
+    context: context,
+  );
+}
+
+Future<dynamic> showComingSoonDialog(BuildContext context) {
+  return showDialog(
+    barrierDismissible: true,
+    builder: (context) {
+      return VerifyDialog(
+        title: "Coming soon",
+        imagePath: "warning.svg",
+        description: "This feature is not yet available.",
+        onOk: () {
+          Navigator.pop(context);
+        },
+        okText: "Close",
       );
     },
     context: context,
@@ -1352,7 +1371,7 @@ Widget getSearchWidget(
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(
-                color: borderColor, width: FetchPixels.getPixelHeight(1)),
+                color: greyColor300, width: FetchPixels.getPixelHeight(1)),
             borderRadius:
                 BorderRadius.circular(FetchPixels.getPixelHeight(12))),
         child: Row(
@@ -1372,7 +1391,7 @@ Widget getSearchWidget(
               child: MediaQuery(
                   data: mqDataNew,
                   child: TextField(
-                    enabled: true,
+                    enabled: false,
                     onTap: () {
                       filterClick();
                     },

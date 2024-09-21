@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:tampay_mobile/app/profile/domain/model/response/user_profile.dart';
 import 'package:tampay_mobile/app/profile/presentation/controller/profile_controller.dart';
 import '../../../base/constant.dart';
@@ -52,7 +53,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   getVerSpace(FetchPixels.getPixelHeight(30)),
                   balanceForUser(context, userProfile),
                   getVerSpace(FetchPixels.getPixelHeight(20)),
-                  addConvertMoneyRow(context, accountSetupComplete),
+                  addConvertMoneyRow(
+                      context, accountSetupComplete, userProfile),
                   getVerSpace(FetchPixels.getPixelHeight(40)),
                   recentTransactions(context),
                   getVerSpace(FetchPixels.getPixelHeight(40)),
@@ -75,7 +77,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               getCustomFont(
-                  "Good Day ${userProfile.data?.firstName}", 16, h6, 1,
+                  "Good Day ${userProfile.data?.firstName}☀️", 16, h6, 1,
                   fontWeight: FontWeight.w600),
             ],
           ),
@@ -199,8 +201,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               SizedBox(
                 width: 170,
                 child: getCustomFont(
-                  _isBalanceVisible
-                      ? userProfile?.data?.wallets![0].balance ?? "----"
+                  _isBalanceVisible &&
+                          (userProfile?.data?.wallets?.isNotEmpty ?? false)
+                      ? userProfile!.data!.wallets![0].balance ?? "----"
                       : "----",
                   34,
                   Colors.black,
@@ -240,7 +243,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  addConvertMoneyRow(BuildContext context, bool accountSetupComplete) {
+  addConvertMoneyRow(BuildContext context, bool accountSetupComplete,
+      UserProfile userProfile) {
     return getPaddingWidget(
       EdgeInsets.symmetric(horizontal: horspace),
       Row(
@@ -250,7 +254,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               if (!accountSetupComplete) {
                 showCompleteAccountSetupDialog(context);
               } else {
-                Constant.sendToNext(context, Routes.addMoneyRoute);
+                showAddMoneyBottomSheet(context, userProfile);
               }
             }, 16,
                 weight: FontWeight.w600,
@@ -308,8 +312,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       height: 173,
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(
-              'assets/images/gradient_refer_bg.png'), // Ensure the image is in your assets folder
+          image: AssetImage('assets/images/gradient_refer_bg.png'),
+          // Ensure the image is in your assets folder
           fit: BoxFit.cover,
         ),
         borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -385,6 +389,72 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     await ref.read(profileControllerProvider).getProfile();
   }
 
+  Future<dynamic> showAddMoneyBottomSheet(
+      BuildContext context, UserProfile userProfile) {
+    return showModalBottomSheet(
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(20),
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Add Money",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: grey700,
+                ),
+                softWrap: true,
+                overflow: TextOverflow.visible,
+                maxLines: null,
+              ),
+              getVerSpace(8),
+              getCustomFont(
+                  "Top up your Tampay Naira account with the\ndetails below:",
+                  12,
+                  greyColor,
+                  2),
+              getVerSpace(16),
+              accountDetailComponent(
+                  "ACCOUNT NUMBER",
+                  userProfile.data?.wallets?[0].accountNumber ?? "",
+                  true,
+                  context),
+              getVerSpace(10),
+              accountDetailComponent(
+                  "BANK",
+                  userProfile.data?.wallets?[0].accountName ?? "",
+                  false,
+                  context),
+              getVerSpace(16),
+              getButton(
+                  context, primaryColor, "Share all Details", Colors.white, () {
+                // should be able to share account details
+                _shareAccountDetails(userProfile);
+              }, 16,
+                  weight: FontWeight.w600,
+                  image: "share_white.svg",
+                  isIcon: true,
+                  borderRadius:
+                      BorderRadius.circular(FetchPixels.getPixelHeight(15)),
+                  buttonHeight: FetchPixels.getPixelHeight(60)),
+              getVerSpace(16),
+            ],
+          ),
+        );
+      },
+      context: context,
+    );
+  }
+
   accountDetailComponent(
       String title, String result, bool showCopy, BuildContext context) {
     return Container(
@@ -414,7 +484,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   maxLines: null,
                 ),
                 getVerSpace(8),
-                getCustomFont(result, 16, h6, 1)
+                getCustomFont(result, 16, grey800, 1)
               ],
             ),
           ),
@@ -430,5 +500,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
     );
+  }
+
+// Method to concatenate account details and trigger share
+  void _shareAccountDetails(UserProfile userProfile) {
+    // Create a formatted string with the account details
+    String accountDetails = """
+  Bank: ${userProfile.data?.wallets?[0].accountName ?? "N/A"}
+  Account Number: ${userProfile.data?.wallets?[0].accountNumber ?? "N/A"}
+  Currency: ${userProfile.data?.wallets?[0].currency ?? "N/A"}
+  """;
+
+    // Use the share_plus package to share the details
+    Share.share(accountDetails, subject: 'Tampay Account Details');
   }
 }
