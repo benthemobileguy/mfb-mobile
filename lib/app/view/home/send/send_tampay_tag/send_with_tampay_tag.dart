@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
 import 'package:tampay_mobile/theme/color_data.dart';
 
@@ -7,14 +8,14 @@ import '../../../../../base/constant.dart';
 import '../../../../../base/resizer/fetch_pixels.dart';
 import '../../../../routes/app_routes.dart';
 
-class SendWithTampayTag extends StatefulWidget {
+class SendWithTampayTag extends ConsumerStatefulWidget {
   const SendWithTampayTag({super.key});
 
   @override
-  State<SendWithTampayTag> createState() => _SendWithTampayTagState();
+  ConsumerState<SendWithTampayTag> createState() => _SendWithTampayTagState();
 }
 
-class _SendWithTampayTagState extends State<SendWithTampayTag> {
+class _SendWithTampayTagState extends ConsumerState<SendWithTampayTag> {
   TextEditingController recipientTagController = TextEditingController();
   TextEditingController narrationController = TextEditingController();
   @override
@@ -41,7 +42,7 @@ class _SendWithTampayTagState extends State<SendWithTampayTag> {
                   ],
                 ),
                 getVerSpace(FetchPixels.getPixelHeight(20)),
-                accountBalance(context),
+                accountBalance(context, ref),
                 getVerSpace(FetchPixels.getPixelHeight(30)),
                 amountInput(context),
                 getVerSpace(FetchPixels.getPixelHeight(30)),

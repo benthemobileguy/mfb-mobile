@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tampay_mobile/app/profile/domain/model/response/user_profile.dart';
 import 'package:tampay_mobile/app/profile/presentation/controller/profile_controller.dart';
+import 'package:tampay_mobile/app/view/home/send/recent_transactions.dart';
 import '../../../base/constant.dart';
 import 'package:flutter/services.dart';
 import '../../../base/resizer/fetch_pixels.dart';
@@ -30,40 +31,61 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         profileController.isAccountSetupComplete(userProfile);
     final bool isWalletNotCreated = userProfile.data?.wallets?.isEmpty ?? false;
 
-    return SafeArea(
-      child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: RefreshIndicator(
-            color: primaryColor,
-            onRefresh: _refreshProfile,
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  getVerSpace(FetchPixels.getPixelHeight(10)),
-                  appBar(context, userProfile),
-                  getVerSpace(FetchPixels.getPixelHeight(30)),
-                  if (!accountSetupComplete || isWalletNotCreated)
-                    accountCompletionStatus(context, userProfile,
-                        accountSetupComplete, !isWalletNotCreated),
-                  getVerSpace(FetchPixels.getPixelHeight(20)),
-                  currencyToggle(context, accountSetupComplete, userProfile),
-                  getVerSpace(FetchPixels.getPixelHeight(30)),
-                  balanceForUser(context, userProfile),
-                  getVerSpace(FetchPixels.getPixelHeight(20)),
-                  addConvertMoneyRow(
-                      context, accountSetupComplete, userProfile),
-                  getVerSpace(FetchPixels.getPixelHeight(40)),
-                  recentTransactions(context),
-                  getVerSpace(FetchPixels.getPixelHeight(40)),
-                  referFriends(context)
-                ],
-              ),
-            ),
-          )),
-    );
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: colorBg,
+        body: SafeArea(
+            child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: RefreshIndicator(
+                  color: primaryColor,
+                  onRefresh: _refreshProfile,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        getVerSpace(FetchPixels.getPixelHeight(10)),
+                        appBar(context, userProfile),
+                        getVerSpace(FetchPixels.getPixelHeight(30)),
+                        if (!accountSetupComplete || isWalletNotCreated)
+                          accountCompletionStatus(context, userProfile,
+                              accountSetupComplete, !isWalletNotCreated),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            children: [
+                              getVerSpace(FetchPixels.getPixelHeight(20)),
+                              currencyToggle(
+                                  context, accountSetupComplete, userProfile),
+                              getVerSpace(FetchPixels.getPixelHeight(30)),
+                              balanceForUser(context, userProfile),
+                              getVerSpace(FetchPixels.getPixelHeight(30)),
+                              addConvertMoneyRow(
+                                  context, accountSetupComplete, userProfile),
+                              getVerSpace(FetchPixels.getPixelHeight(30)),
+                            ],
+                          ),
+                        ),
+                        getVerSpace(FetchPixels.getPixelHeight(10)),
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: const RecentTransactions(),
+                        ),
+                        getVerSpace(FetchPixels.getPixelHeight(10)),
+                        referFriends(context)
+                      ],
+                    ),
+                  ),
+                ))));
   }
 
   Widget appBar(BuildContext context, UserProfile userProfile) {
@@ -277,29 +299,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 weight: FontWeight.w600,
                 borderRadius: BorderRadius.circular(30),
                 buttonHeight: 53),
-          ),
-        ],
-      ),
-    );
-  }
-
-  recentTransactions(BuildContext context) {
-    return getPaddingWidget(
-      EdgeInsets.symmetric(horizontal: horspace),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          getCustomFont("Recent Transactions", 16, grey650, 1,
-              fontWeight: FontWeight.w600),
-          getVerSpace(20),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              getSvgImage("clock.svg", width: 16, height: 16),
-              getHorSpace(10),
-              getCustomFont("No Transactions yet", 15, grey400Color, 1,
-                  fontWeight: FontWeight.normal),
-            ],
           ),
         ],
       ),

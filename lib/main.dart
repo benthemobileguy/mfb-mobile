@@ -73,6 +73,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       if (token != null && token.isNotEmpty) {
         // Token exists, fetch the user profile
         ref.read(profileControllerProvider).getProfile();
+
       }
     });
   }

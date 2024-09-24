@@ -10,6 +10,7 @@ import 'package:tampay_mobile/base/widget_utils.dart';
 
 import '../../../profile/presentation/controller/profile_controller.dart';
 import '../../../signup/presentation/state/verify_email_state.dart';
+import '../../../view/transactions/presentation/controller/transactions_controller.dart';
 
 final loginControllerProvider = ChangeNotifierProvider<LoginController>((ref) {
   return LoginController(ref);
@@ -38,9 +39,6 @@ class LoginController extends ChangeNotifier {
             password: password!,
           );
 
-      // Dismiss the dialog before handling the result
-      Navigator.of(context, rootNavigator: true).pop();
-
       result.when(
         (success) async {
           await ref
@@ -49,10 +47,16 @@ class LoginController extends ChangeNotifier {
               .then((value) async {
             PrefData.setLogIn(true);
             await ref.read(profileControllerProvider).getProfile();
+            await ref
+                .read(transactionsControllerProvider)
+                .getRecentTransactions();
+            await ref.read(transactionsControllerProvider).getBanks();
             Constant.sendToNext(context, Routes.homeScreenRoute);
           });
         },
         (error) {
+          // Dismiss the dialog
+          Navigator.of(context, rootNavigator: true).pop();
           // Show error as a toast notification
           if (error.message.toString().contains("Email not verified")) {
             // This means the email is not verified

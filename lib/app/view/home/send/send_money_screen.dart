@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tampay_mobile/app/view/home/send/recent_transations.dart';
+import 'package:tampay_mobile/app/view/home/send/recent_transactions.dart';
 import '../../../../base/constant.dart';
 import '../../../../base/resizer/fetch_pixels.dart';
 import '../../../../base/widget_utils.dart';
@@ -31,7 +31,8 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
               getCustomFont("Send", 18, grey700, 1,
                   fontWeight: FontWeight.w600),
               getVerSpace(FetchPixels.getPixelHeight(20)),
-              getSearchWidget(context, searchController, () {}, (value) {}),
+              getSearchWidget(context, searchController, "Search Anything",
+                  false, () {}, (value) {}),
               getVerSpace(FetchPixels.getPixelHeight(20)),
               customLeadingListTile("Bank Transfer", 15, h6, 1,
                   trailingImagePath: "chevron_right.svg",
@@ -80,8 +81,6 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                   fontWeight: FontWeight.w500, onTap: () {
                 showComingSoonDialog(context);
               }),
-              getVerSpace(FetchPixels.getPixelHeight(30)),
-              const RecentTransactions(),
             ],
           ),
         ),

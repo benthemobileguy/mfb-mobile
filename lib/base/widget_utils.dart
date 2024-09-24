@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tampay_mobile/base/custom_progess_dialog.dart';
 import 'package:tampay_mobile/base/resizer/fetch_pixels.dart';
+import '../app/profile/domain/model/response/user_profile.dart';
+import '../app/profile/presentation/controller/profile_controller.dart';
 import '../app/routes/app_routes.dart';
 import '../app/view/dialog/verify_dialog.dart';
 import '../theme/color_data.dart';
@@ -768,6 +771,25 @@ Future<dynamic> showComingSoonDialog(BuildContext context) {
   );
 }
 
+Future<dynamic> customMessageDialog(
+    BuildContext context, String title, String description) {
+  return showDialog(
+    barrierDismissible: true,
+    builder: (context) {
+      return VerifyDialog(
+        title: title,
+        imagePath: "warning.svg",
+        description: description,
+        onOk: () {
+          Navigator.pop(context);
+        },
+        okText: "Close",
+      );
+    },
+    context: context,
+  );
+}
+
 Widget getDefaultTextFiledWithLabel(
     BuildContext context, String s, TextEditingController textEditingController,
     {bool withPrefix = false,
@@ -929,7 +951,9 @@ Widget dragIndicator(BuildContext context) {
   );
 }
 
-Widget accountBalance(BuildContext context) {
+Widget accountBalance(BuildContext context, WidgetRef ref) {
+  final profileController = ref.watch(profileControllerProvider);
+  final userProfile = profileController.userProfile ?? UserProfile();
   return Center(
     child: Container(
       padding: const EdgeInsets.all(11),
@@ -945,7 +969,10 @@ Widget accountBalance(BuildContext context) {
           getSvgImage("ngn_logo.svg", height: 18, width: 18),
           getHorSpace(FetchPixels.getPixelHeight(5)),
           getCustomFont(
-              "Nigerian Naira • Balance :₦1,198,385", 14.5, grey650, 1,
+              "${userProfile.data?.wallets?[0].currency} • Balance: ${userProfile.data?.wallets?[0].balance}",
+              14.5,
+              grey650,
+              1,
               fontWeight: FontWeight.w500),
         ],
       ),
@@ -974,7 +1001,7 @@ Widget balance(BuildContext context) {
       color: grey600,
       borderRadius: BorderRadius.circular(20),
     ),
-    child: getCustomFont("Balance :₦1,198,385", 14, grey650, 1,
+    child: getCustomFont("Balance: ₦1,198,385", 14, grey650, 1,
         fontWeight: FontWeight.w500),
   );
 }
@@ -984,7 +1011,7 @@ Widget amountInput(BuildContext context,
   return Column(
     children: [
       Center(
-        child: getCustomFont("AMOUNT", 12.5, grey650, 1,
+        child: getCustomFont("ENTER AMOUNT", 12.5, grey650, 1,
             fontWeight: FontWeight.w600, letterSpacing: 1.7),
       ),
       getVerSpace(FetchPixels.getPixelHeight(5)),
@@ -996,7 +1023,7 @@ Widget amountInput(BuildContext context,
               fontWeight: FontWeight.w500, letterSpacing: 1.5),
           getCustomFont(
             "0.00",
-            34,
+            40,
             Colors.black,
             1,
             fontWeight: FontWeight.w500,
@@ -1354,6 +1381,8 @@ Widget getCountryTextField(BuildContext context, String s,
 Widget getSearchWidget(
     BuildContext context,
     TextEditingController searchController,
+    String hint,
+    bool enabled,
     Function filterClick,
     ValueChanged<String> onChanged,
     {bool withPrefix = true}) {
@@ -1391,17 +1420,18 @@ Widget getSearchWidget(
               child: MediaQuery(
                   data: mqDataNew,
                   child: TextField(
-                    enabled: false,
+                    enabled: enabled,
                     onTap: () {
                       filterClick();
                     },
+                    cursorColor: grey700,
                     autofocus: false,
                     onChanged: onChanged,
                     textDirection: TextDirection.ltr,
                     textInputAction: TextInputAction.search,
                     controller: searchController,
                     decoration: InputDecoration(
-                        hintText: "Search Anything",
+                        hintText: hint,
                         border: InputBorder.none,
                         hintStyle: TextStyle(
                             color: grey400Color,

@@ -16,6 +16,7 @@ import 'package:tampay_mobile/app/signup/domain/model/request/sign_up_request.da
 import 'package:tampay_mobile/app/signup/domain/model/request/verify-bvn-otp-request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_email_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_phone_number.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/verify_pin_request.dart';
 import 'package:tampay_mobile/base/failure.dart';
 import 'package:tampay_mobile/base/resizer/error_handler.dart';
 import '../../../base/app_strings.dart';
@@ -349,6 +350,28 @@ class SignUpService {
     try {
       final response = await ref.read(signUpRepositoryProvider).createWallet(
           CreateWalletRequest(accountCurrency: currency),
+          "Bearer ${getIt<AuthManager>().token!}",
+          Env.accessKey,
+          Env.secretKey);
+      // Check the status code before parsing the response
+      if (response['statusCode'] == 200 || response['status'] == "Success") {
+        return Success(response);
+      } else {
+        // Handle the error case
+        final errorMessage = response['message'];
+        return Error(Failure(message: errorMessage));
+      }
+    } catch (error) {
+      final errorMessage = ErrorHandler.getErrorMessage(error);
+      return Error(Failure(message: errorMessage));
+    }
+  }
+
+  Future<Result<Map<String, dynamic>, Failure>> verifyPIN(
+      {required String pin}) async {
+    try {
+      final response = await ref.read(signUpRepositoryProvider).verifyPIN(
+          VerifyPinRequest(pin: pin),
           "Bearer ${getIt<AuthManager>().token!}",
           Env.accessKey,
           Env.secretKey);

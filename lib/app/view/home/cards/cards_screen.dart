@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:tampay_mobile/app/view/home/cards/bank_card.dart';
-import 'package:tampay_mobile/app/view/home/send/recent_transations.dart';
+import 'package:tampay_mobile/app/view/home/send/recent_transactions.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
 import 'package:tampay_mobile/theme/color_data.dart';
 import '../../../../base/resizer/fetch_pixels.dart';

@@ -72,10 +72,12 @@ abstract class SignUpApiClient {
     @Header("Access-Key") String accessKey,
     @Header("Secret-Key") String secretKey,
   );
-  @POST("api/v1/profiles/me/pin/verification")
+  @PATCH("api/v1/profiles/me/pin/verification")
   Future<dynamic> verifyPin(
     @Body() VerifyPinRequest createAccountRequest,
     @Header("Authorization") String authorization,
+    @Header("Access-Key") String accessKey,
+    @Header("Secret-Key") String secretKey,
   );
   @POST("api/v1/profiles/me/pin/update")
   Future<dynamic> changePin(

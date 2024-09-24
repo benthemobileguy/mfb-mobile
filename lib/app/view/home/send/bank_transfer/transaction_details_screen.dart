@@ -1,21 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tampay_mobile/base/resizer/fetch_pixels.dart';
 
 import '../../../../../base/widget_utils.dart';
 import '../../../../../theme/color_data.dart';
+import '../../../transactions/presentation/controller/transactions_controller.dart';
 
-class TransactionDetailsScreen extends StatefulWidget {
+class TransactionDetailsScreen extends ConsumerStatefulWidget {
   const TransactionDetailsScreen({super.key});
 
   @override
-  State<TransactionDetailsScreen> createState() =>
+  ConsumerState<TransactionDetailsScreen> createState() =>
       _TransactionDetailsScreenState();
 }
 
-class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
+class _TransactionDetailsScreenState
+    extends ConsumerState<TransactionDetailsScreen> {
   @override
   Widget build(BuildContext context) {
+    final transactionsController = ref.read(transactionsControllerProvider);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -125,7 +129,7 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
               padding: const EdgeInsets.all(12),
               child: Row(
                 children: [
-                  getSvgImage("share_white.svg"),
+                  getSvgImage("share.svg"),
                   getHorSpace(5),
                   getCustomFont("Share", 14, grey700, 1,
                       fontWeight: FontWeight.w600)

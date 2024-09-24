@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tampay_mobile/app/view/transactions/presentation/controller/transactions_controller.dart';
 import '../../base/constant.dart';
 import '../../base/pref_data.dart';
 import '../../base/resizer/fetch_pixels.dart';
@@ -33,7 +34,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     Timer(const Duration(seconds: 5), () async {
       if (isOnBoardingCompleted) {
         if (isLogin) {
-          await ref.read(profileControllerProvider).getProfile().then((value) {
+          await ref
+              .read(profileControllerProvider)
+              .getProfile()
+              .then((value) async {
+            await ref
+                .read(transactionsControllerProvider)
+                .getRecentTransactions();
+            await ref.read(transactionsControllerProvider).getBanks();
             Constant.sendToNext(context, Routes.homeScreenRoute);
           });
         } else {

@@ -315,6 +315,33 @@ class SignUpController extends ChangeNotifier {
     );
   }
 
+  Future<void> verifyPIN({
+    required String? pin,
+    required BuildContext context,
+  }) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const CustomProgressDialog(),
+    );
+
+    final result = await ref.read(signUpServiceProvider).verifyPIN(pin: pin!);
+    result.when(
+      (success) async {
+        await ref.read(profileControllerProvider).getProfile();
+        if (context.mounted) {
+          Navigator.pop(context); // close dialog
+          Constant.sendToNext(
+              context, Routes.transactionSuccessfulRoute);
+        }
+      },
+      (error) {
+        Navigator.pop(context);
+        showErrorToast(context, error.message);
+      },
+    );
+  }
+
   Future<void> createPasscode({
     required String? newPasscode,
     required String? confirmPasscode,

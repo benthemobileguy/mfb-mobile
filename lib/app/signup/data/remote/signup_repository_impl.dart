@@ -212,11 +212,11 @@ class SignUpRepositoryImpl implements SignupRepository {
   }
 
   @override
-  Future verifyPIN(
-      VerifyPinRequest createAccountRequest, String authorization) async {
+  Future verifyPIN(VerifyPinRequest verifyPinRequest, String authorization,
+      String accessKey, String secretKey) async {
     try {
-      final verifyPinResponse =
-          await _signupClient.verifyPin(createAccountRequest, authorization);
+      final verifyPinResponse = await _signupClient.verifyPin(
+          verifyPinRequest, authorization, accessKey, secretKey);
       return verifyPinResponse;
     } on DioException catch (e) {
       debugPrint(e.message);

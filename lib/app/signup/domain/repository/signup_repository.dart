@@ -45,7 +45,10 @@ abstract class SignupRepository {
   Future<dynamic> verifyOTP(VerifyOtpRequest createAccountRequest,
       String accessKey, String secretKey);
   Future<dynamic> verifyPIN(
-      VerifyPinRequest createAccountRequest, String authorization);
+      VerifyPinRequest verifyPinRequest,
+      String authorization,
+      String accessKey,
+      String secretKey);
   Future<dynamic> sendOTP(SendOtpRequest createAccountRequest,
       String authorization, String accessKey, String secretKey);
   Future<dynamic> sendBvnOTPRequest(SendBvnOtpRequest sendBvnOtpRequest,
