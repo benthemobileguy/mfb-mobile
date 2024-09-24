@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tampay_mobile/base/resizer/fetch_pixels.dart';
 
@@ -53,7 +54,11 @@ class _TransactionDetailsScreenState
                       getCustomFont("OUTWARD TRANSFER", 12, greyColor, 1,
                           letterSpacing: 1.4),
                       getVerSpace(6),
-                      getCustomFont("-₦30,490", 34, redColor2, 1,
+                      getCustomFont(
+                          "-${transactionsController.transferResponse?.data?.currency}${transactionsController.transferResponse?.data?.amount}",
+                          34,
+                          redColor2,
+                          1,
                           fontWeight: FontWeight.w500),
                       getVerSpace(6),
                       getCustomFont(
@@ -65,12 +70,21 @@ class _TransactionDetailsScreenState
                 getCustomFont("BENEFICIARY", 12, greyColor, 1,
                     letterSpacing: 1.4),
                 getVerSpace(6),
-                getCustomFont("Tunde Ayomide", 16.5, h6, 1, letterSpacing: 1.4),
+                getCustomFont(
+                    "${transactionsController.transferResponse?.data?.beneficiaryName}",
+                    16.5,
+                    h6,
+                    2,
+                    letterSpacing: 1.4),
                 getVerSpace(20),
                 getCustomFont("NARRATION", 12, greyColor, 1,
                     letterSpacing: 1.4),
                 getVerSpace(6),
-                getCustomFont("Weekend Steeze 💪🏿 ", 16.5, h6, 1,
+                getCustomFont(
+                    "${transactionsController.transferResponse?.data?.narration}",
+                    16.5,
+                    h6,
+                    2,
                     letterSpacing: 1.4),
                 getVerSpace(20),
                 getCustomFont("BANK", 12, greyColor, 1, letterSpacing: 1.4),
@@ -79,7 +93,12 @@ class _TransactionDetailsScreenState
                   children: [
                     getPngImage("kuda.png", height: 30, width: 30),
                     getHorSpace(10),
-                    getCustomFont("Kuda Bank", 16.5, h6, 1, letterSpacing: 1.4),
+                    getCustomFont(
+                        "${transactionsController.transferResponse?.data?.beneficiaryBank}",
+                        16.5,
+                        h6,
+                        1,
+                        letterSpacing: 1.4),
                   ],
                 ),
                 getVerSpace(20),
@@ -99,11 +118,26 @@ class _TransactionDetailsScreenState
                 getVerSpace(6),
                 Row(
                   children: [
-                    getCustomFont(
-                        "874tkmfknvnbcajnuahaf9wfhifjnskj", 16.5, h6, 1,
-                        letterSpacing: 1.4),
+                    Flexible(
+                      child: getCustomFont(
+                        "${transactionsController.transferResponse?.data?.referenceId}",
+                        16.5,
+                        h6,
+                        3,
+                        letterSpacing: 1.4,
+                      ),
+                    ),
                     getHorSpace(10),
-                    getSvgImage("copy.svg", height: 24, width: 24),
+                    GestureDetector(
+                      child: getSvgImage("copy.svg", height: 24, width: 24),
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(
+                          text:
+                              "${transactionsController.transferResponse?.data?.referenceId}",
+                        ));
+                        showToast(context, "Copied to clipboard");
+                      },
+                    ),
                   ],
                 ),
               ],
@@ -121,7 +155,9 @@ class _TransactionDetailsScreenState
             fontWeight: FontWeight.w600),
         const Spacer(),
         TextButton(
-            onPressed: () {},
+            onPressed: () {
+              showComingSoonDialog(context);
+            },
             child: Container(
               decoration: BoxDecoration(
                   color: grey100,
