@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tampay_mobile/app/view/home/cards/cards_screen.dart';
+import 'package:tampay_mobile/app/view/home/cards/presentation/view/cards_screen.dart';
 import 'package:tampay_mobile/app/view/home/home_screen.dart';
 import 'package:tampay_mobile/app/view/home/profile/profile_screen.dart';
 import 'package:tampay_mobile/app/view/home/send/send_money_screen.dart';

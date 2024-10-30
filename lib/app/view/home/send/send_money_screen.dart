@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tampay_mobile/app/view/home/send/recent_transactions.dart';
 import '../../../../base/constant.dart';
 import '../../../../base/resizer/fetch_pixels.dart';
 import '../../../../base/widget_utils.dart';

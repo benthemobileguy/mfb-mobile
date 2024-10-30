@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tampay_mobile/app/view/home/cards/domain/model/request/create_card_request.dart';
+import 'package:tampay_mobile/app/view/transactions/domain/model/request/fund_card_request.dart';
 import 'package:tampay_mobile/app/view/transactions/domain/model/request/initiate_transfer_request.dart';
 import 'package:tampay_mobile/app/view/transactions/domain/model/request/transfer_request.dart';
 import 'package:tampay_mobile/app/view/transactions/domain/model/response/account_info_response.dart';
@@ -22,4 +24,9 @@ abstract class TransactionsRepository {
       InitiateTransferRequest? initiateTransferRequest);
   Future<Map<String, dynamic>?> transfer(TransferRequest? transferRequest);
   Future<AccountInfoResponse> getAccountInfo(String bankCode, String accountNo);
+  Future<Map<String, dynamic>?> createCard(
+      CreateCardRequest? createCardRequest);
+  Future<Map<String, dynamic>?> fundCard(
+      FundCardRequest? createCardRequest); 
+          
 }

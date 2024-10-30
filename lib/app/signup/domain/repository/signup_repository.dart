@@ -9,6 +9,7 @@ import 'package:tampay_mobile/app/signup/domain/model/request/reset_password_req
 import 'package:tampay_mobile/app/signup/domain/model/request/send_bvn_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/send_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/sign_up_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/tier2_upgrade_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_bvn_request.dart.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_email_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_otp_request.dart';
@@ -60,5 +61,7 @@ abstract class SignupRepository {
   Future<dynamic> saveBvnOTP(SaveBvnOtpRequest verifyBvnOtpRequest,
       String authorization, String accessKey, String secretKey);
   Future<dynamic> createWallet(CreateWalletRequest createWalletRequest,
+      String authorization, String accessKey, String secretKey);
+      Future<dynamic> tier2Upgrade(Tier2UpgradeRequest ctier2UpgradeRequest,
       String authorization, String accessKey, String secretKey);
 }

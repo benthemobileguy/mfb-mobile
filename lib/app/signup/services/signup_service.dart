@@ -13,6 +13,7 @@ import 'package:tampay_mobile/app/signup/domain/model/request/reset_password_req
 import 'package:tampay_mobile/app/signup/domain/model/request/send_bvn_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/send_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/sign_up_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/tier2_upgrade_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify-bvn-otp-request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_email_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_phone_number.dart';
@@ -380,6 +381,63 @@ class SignUpService {
         return Success(response);
       } else {
         // Handle the error case
+        final errorMessage = response['message'];
+        return Error(Failure(message: errorMessage));
+      }
+    } catch (error) {
+      final errorMessage = ErrorHandler.getErrorMessage(error);
+      return Error(Failure(message: errorMessage));
+    }
+  }
+
+  Future<Result<Map<String, dynamic>, Failure>> tier2Upgrade({
+    required String utilityBillUrl,
+    required String bankStatementUrl,
+    required String street,
+    required String city,
+    required String country,
+    required String postalCode,
+    required String houseNo,
+    required String lga,
+    required String state,
+    required String occupation,
+    required String employmentStatus,
+    required String incomeSource,
+    required String incomeRange,
+    required String accountDesignation,
+  }) async {
+    try {
+      final response = await ref.read(signUpRepositoryProvider).tier2Upgrade(
+            Tier2UpgradeRequest(
+              financialStatements: FinancialStatements(
+                utilityBillUrl: utilityBillUrl,
+                bankStatementUrl: bankStatementUrl,
+              ),
+              address: Address(
+                street: street,
+                city: city,
+                country: country,
+                postalCode: postalCode,
+                houseNo: houseNo,
+                lga: lga,
+                state: state,
+              ),
+              employment: Employment(
+                occupation: occupation,
+                employmentStatus: employmentStatus.toLowerCase(),
+                incomeSource: incomeSource,
+                incomeRange: incomeRange,
+                accountDesignation: accountDesignation,
+              ),
+            ),
+            "Bearer ${getIt<AuthManager>().token!}",
+            Env.accessKey,
+            Env.secretKey,
+          );
+
+      if (response['statusCode'] == 200 || response['status'] == "Success") {
+        return Success(response);
+      } else {
         final errorMessage = response['message'];
         return Error(Failure(message: errorMessage));
       }

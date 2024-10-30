@@ -665,6 +665,44 @@ class _SignUpApiClient implements SignUpApiClient {
     return _value;
   }
 
+  @override
+  Future<dynamic> tier2Upgrade(
+    Tier2UpgradeRequest tier2UpgradeRequest,
+    String authorization,
+    String accessKey,
+    String secretKey,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'Authorization': authorization,
+      r'Access-Key': accessKey,
+      r'Secret-Key': secretKey,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(tier2UpgradeRequest.toJson());
+    final _options = _setStreamType<dynamic>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'api/v1/profiles/me/tier2-upgrade',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

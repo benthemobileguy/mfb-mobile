@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tampay_mobile/app/view/home/cards/domain/model/request/create_card_request.dart';
+import 'package:tampay_mobile/app/view/home/cards/domain/model/response/create_card_response.dart';
 import 'package:tampay_mobile/app/view/transactions/domain/model/request/initiate_transfer_request.dart';
 import 'package:tampay_mobile/app/view/transactions/domain/model/request/transfer_request.dart';
 import 'package:tampay_mobile/app/view/transactions/domain/model/response/account_info_response.dart';
@@ -24,6 +25,7 @@ class TransactionsController extends ChangeNotifier {
   final Ref ref;
   RecentTransactionsResponse? recentTransactionsList;
   InitiateTransferResponse? initiateTransferResponse;
+  CreateCardResponse? createCardResponse;
   TransferResponse? transferResponse;
   BanksResponse? banksList;
   AccountInfoResponse? accountInfoResponse;
@@ -144,6 +146,44 @@ class TransactionsController extends ChangeNotifier {
               showErrorToast(context, error.message);
             },
           );
+        },
+        (error) {
+          // Handle initiation error
+          Navigator.of(context, rootNavigator: true).pop();
+          showErrorToast(context, error.message);
+        },
+      );
+    } catch (e) {
+      print(e.toString());
+      // Handle the unexpected error
+      showErrorToast(
+          context, 'An unexpected error occurred. Please try again.');
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
+
+  Future<void> createCard(BuildContext context, String cardCurrency) async {
+    try {
+      // Show the progress dialog before making the request
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const CustomProgressDialog(),
+      );
+
+      // Initiate transfer request and handle the response correctly
+      final response = await ref.read(transactionsServiceProvider).createCard(
+          CreateCardRequest(
+              cardCurrency: cardCurrency,
+              cardScheme: "MASTER",
+              cardType: "VIRTUAL",
+              openingDepositAmt: "2"));
+
+      response.when(
+        (success) async {
+          // Correctly handle the success case
+          createCardResponse = CreateCardResponse.fromJson(success);
+          notifyListeners();
         },
         (error) {
           // Handle initiation error

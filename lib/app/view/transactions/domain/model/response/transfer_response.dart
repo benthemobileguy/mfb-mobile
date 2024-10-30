@@ -19,22 +19,22 @@ class TransferResponse {
     status = json['status'];
     time = json['time'];
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
     request =
-        json['request'] != null ? new Request.fromJson(json['request']) : null;
+        json['request'] != null ? Request.fromJson(json['request']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['statusCode'] = this.statusCode;
-    data['status'] = this.status;
-    data['time'] = this.time;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['statusCode'] = statusCode;
+    data['status'] = status;
+    data['time'] = time;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
-    if (this.request != null) {
-      data['request'] = this.request!.toJson();
+    if (request != null) {
+      data['request'] = request!.toJson();
     }
     return data;
   }
@@ -96,7 +96,7 @@ class Data {
     beneficiaryName = json['beneficiaryName'];
     beneficiaryBank = json['beneficiaryBank'];
     wallet =
-        json['wallet'] != null ? new Wallet.fromJson(json['wallet']) : null;
+        json['wallet'] != null ? Wallet.fromJson(json['wallet']) : null;
     failureReason = json['failureReason'];
     id = json['id'];
     createdAt = json['createdAt'];
@@ -106,28 +106,28 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['currency'] = this.currency;
-    data['transactionType'] = this.transactionType;
-    data['paymentMethod'] = this.paymentMethod;
-    data['amount'] = this.amount;
-    data['referenceId'] = this.referenceId;
-    data['providerReferenceId'] = this.providerReferenceId;
-    data['narration'] = this.narration;
-    data['description'] = this.description;
-    data['status'] = this.status;
-    data['balanceBefore'] = this.balanceBefore;
-    data['beneficiaryName'] = this.beneficiaryName;
-    data['beneficiaryBank'] = this.beneficiaryBank;
-    if (this.wallet != null) {
-      data['wallet'] = this.wallet!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['currency'] = currency;
+    data['transactionType'] = transactionType;
+    data['paymentMethod'] = paymentMethod;
+    data['amount'] = amount;
+    data['referenceId'] = referenceId;
+    data['providerReferenceId'] = providerReferenceId;
+    data['narration'] = narration;
+    data['description'] = description;
+    data['status'] = status;
+    data['balanceBefore'] = balanceBefore;
+    data['beneficiaryName'] = beneficiaryName;
+    data['beneficiaryBank'] = beneficiaryBank;
+    if (wallet != null) {
+      data['wallet'] = wallet!.toJson();
     }
-    data['failureReason'] = this.failureReason;
-    data['id'] = this.id;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['deletedAt'] = this.deletedAt;
-    data['version'] = this.version;
+    data['failureReason'] = failureReason;
+    data['id'] = id;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['deletedAt'] = deletedAt;
+    data['version'] = version;
     return data;
   }
 }
@@ -188,23 +188,23 @@ class Wallet {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['deletedAt'] = this.deletedAt;
-    data['version'] = this.version;
-    data['balance'] = this.balance;
-    data['currency'] = this.currency;
-    data['isActive'] = this.isActive;
-    data['isDefault'] = this.isDefault;
-    data['status'] = this.status;
-    data['dailyDepositLimit'] = this.dailyDepositLimit;
-    data['dailyWithdrawalLimit'] = this.dailyWithdrawalLimit;
-    data['totalDepositsToday'] = this.totalDepositsToday;
-    data['totalWithdrawalsToday'] = this.totalWithdrawalsToday;
-    data['canTransfer'] = this.canTransfer;
-    data['accountId'] = this.accountId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['deletedAt'] = deletedAt;
+    data['version'] = version;
+    data['balance'] = balance;
+    data['currency'] = currency;
+    data['isActive'] = isActive;
+    data['isDefault'] = isDefault;
+    data['status'] = status;
+    data['dailyDepositLimit'] = dailyDepositLimit;
+    data['dailyWithdrawalLimit'] = dailyWithdrawalLimit;
+    data['totalDepositsToday'] = totalDepositsToday;
+    data['totalWithdrawalsToday'] = totalWithdrawalsToday;
+    data['canTransfer'] = canTransfer;
+    data['accountId'] = accountId;
     return data;
   }
 }
@@ -221,9 +221,9 @@ class Request {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['method'] = this.method;
-    data['path'] = this.path;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['method'] = method;
+    data['path'] = path;
     return data;
   }
 }

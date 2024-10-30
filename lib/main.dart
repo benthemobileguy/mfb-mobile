@@ -52,7 +52,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   }
 
   Future<void> registerDependencyInjection() async {
-    await getIt.registerSingleton<AuthManager>(AuthManager());
+    getIt.registerSingleton<AuthManager>(AuthManager());
   }
 
   Future<String?> generateDeviceId() async {

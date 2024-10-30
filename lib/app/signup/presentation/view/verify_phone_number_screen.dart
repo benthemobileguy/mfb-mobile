@@ -4,9 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tampay_mobile/base/resizer/fetch_pixels.dart';
 import 'package:tampay_mobile/base/widget_utils.dart';
 import 'package:tampay_mobile/theme/color_data.dart';
-import '../../../../base/constant.dart';
 import '../../../profile/presentation/controller/profile_controller.dart';
-import '../../../routes/app_routes.dart';
 import '../controller/signup_controller.dart';
 
 class VerifyPhoneNumberScreen extends ConsumerStatefulWidget {

@@ -10,6 +10,7 @@ import 'package:tampay_mobile/app/signup/domain/model/request/reset-passcode-req
 import 'package:tampay_mobile/app/signup/domain/model/request/reset_password_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/send_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/sign_up_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/tier2_upgrade_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify-bvn-otp-request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_bvn_request.dart.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_email_request.dart';
@@ -132,6 +133,13 @@ abstract class SignUpApiClient {
   @POST("api/v1/wallets/create")
   Future<dynamic> createWallet(
     @Body() CreateWalletRequest createWalletRequest,
+    @Header("Authorization") String authorization,
+    @Header("Access-Key") String accessKey,
+    @Header("Secret-Key") String secretKey,
+  );
+  @PATCH("api/v1/profiles/me/tier2-upgrade")
+  Future<dynamic> tier2Upgrade(
+    @Body() Tier2UpgradeRequest tier2UpgradeRequest,
     @Header("Authorization") String authorization,
     @Header("Access-Key") String accessKey,
     @Header("Secret-Key") String secretKey,

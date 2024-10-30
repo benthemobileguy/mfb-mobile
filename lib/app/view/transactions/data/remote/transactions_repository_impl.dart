@@ -2,12 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tampay_mobile/app/env/env.dart';
+import 'package:tampay_mobile/app/view/home/cards/domain/model/request/create_card_request.dart';
+import 'package:tampay_mobile/app/view/transactions/domain/model/request/fund_card_request.dart';
 import 'package:tampay_mobile/app/view/transactions/domain/model/request/initiate_transfer_request.dart';
 import 'package:tampay_mobile/app/view/transactions/domain/model/request/transfer_request.dart';
 import 'package:tampay_mobile/app/view/transactions/domain/model/response/account_info_response.dart';
 import 'package:tampay_mobile/app/view/transactions/domain/model/response/banks_response.dart';
-import 'package:tampay_mobile/app/view/transactions/domain/model/response/initiate_transfer_response.dart';
-import 'package:tampay_mobile/app/view/transactions/domain/model/response/transfer_response.dart';
 import 'package:tampay_mobile/app/view/transactions/domain/repository/transactions_repository.dart';
 import 'package:tampay_mobile/base/dio_provider.dart';
 import '../../../../../main.dart';
@@ -115,6 +115,46 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
           Env.accessKey,
           Env.secretKey,
           transferRequest!);
+      return transferResponse;
+    } on DioException catch (e) {
+      debugPrint('DioException caught: $e');
+      // Rethrow the exception so it can be caught by the AuthService
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('Transfer failed: $e');
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>?> createCard(
+      CreateCardRequest? createCardRequest) async {
+    try {
+      final transferResponse = await _transactionsClient.createCard(
+          "Bearer ${getIt<AuthManager>().token!}",
+          Env.accessKey,
+          Env.secretKey,
+          createCardRequest!);
+      return transferResponse;
+    } on DioException catch (e) {
+      debugPrint('DioException caught: $e');
+      // Rethrow the exception so it can be caught by the AuthService
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('Transfer failed: $e');
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>?> fundCard(
+      FundCardRequest? fundCardRequest, ) async {
+    try {
+      final transferResponse = await _transactionsClient.fundCard(
+          "Bearer ${getIt<AuthManager>().token!}",
+          Env.accessKey,
+          Env.secretKey,
+          fundCardRequest!, "");
       return transferResponse;
     } on DioException catch (e) {
       debugPrint('DioException caught: $e');

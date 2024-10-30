@@ -69,9 +69,9 @@ class _CreateNewPasswordScreenState
 
   @override
   Widget build(BuildContext context) {
-    final sign_up_form_state = ref.watch(signUpFormControllerProvider);
-    bool isFormValid = sign_up_form_state.isPasswordValid &&
-        sign_up_form_state.isConfirmPasswordValid;
+    final signUpFormState = ref.watch(signUpFormControllerProvider);
+    bool isFormValid = signUpFormState.isPasswordValid &&
+        signUpFormState.isConfirmPasswordValid;
 
     return WillPopScope(
       onWillPop: () async {
@@ -137,22 +137,22 @@ class _CreateNewPasswordScreenState
                       getVerSpace(FetchPixels.getPixelHeight(14)),
                       PassCondition(
                         title: "8 characters",
-                        isMet: sign_up_form_state.hasMinLength,
+                        isMet: signUpFormState.hasMinLength,
                       ),
                       getVerSpace(FetchPixels.getPixelHeight(5)),
                       PassCondition(
                         title: "One uppercase letter",
-                        isMet: sign_up_form_state.hasUppercase,
+                        isMet: signUpFormState.hasUppercase,
                       ),
                       getVerSpace(FetchPixels.getPixelHeight(5)),
                       PassCondition(
                         title: "One number",
-                        isMet: sign_up_form_state.hasDigits,
+                        isMet: signUpFormState.hasDigits,
                       ),
                       getVerSpace(FetchPixels.getPixelHeight(5)),
                       PassCondition(
                         title: "One Special Character e.g !^@*#(",
-                        isMet: sign_up_form_state.hasSpecialCharacters,
+                        isMet: signUpFormState.hasSpecialCharacters,
                       ),
                     ],
                   ),
@@ -174,7 +174,7 @@ class _CreateNewPasswordScreenState
                           isFormValid
                               ? () async {
                                   await _performCreateAccount(
-                                      context, ref, sign_up_form_state);
+                                      context, ref, signUpFormState);
                                 }
                               : null,
                           16,

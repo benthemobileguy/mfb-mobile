@@ -8,17 +8,21 @@ import 'package:tampay_mobile/app/profile/presentation/statements_reports_screen
 import 'package:tampay_mobile/app/profile/presentation/support_screen.dart';
 import 'package:tampay_mobile/app/signup/presentation/view/account_setup_screen.dart';
 import 'package:tampay_mobile/app/signup/presentation/view/create_pass_screen.dart';
+import 'package:tampay_mobile/app/signup/presentation/view/create_wallet_screen.dart';
 import 'package:tampay_mobile/app/signup/presentation/view/forgot_password.dart';
 import 'package:tampay_mobile/app/signup/presentation/view/set_passcode_screen.dart';
 import 'package:tampay_mobile/app/signup/presentation/view/set_transaction_pin_screen.dart';
+import 'package:tampay_mobile/app/signup/presentation/view/tier_two_upgrade_screen.dart';
 import 'package:tampay_mobile/app/signup/presentation/view/verify_bvn_otp_screen.dart';
 import 'package:tampay_mobile/app/signup/presentation/view/verify_identity_screen.dart';
 import 'package:tampay_mobile/app/signup/presentation/view/verify_phone_confirmation_screen.dart';
 import 'package:tampay_mobile/app/signup/presentation/view/verify_phone_number_screen.dart';
+import 'package:tampay_mobile/app/signup/presentation/view/wallet_creation_confirmation_screen.dart';
 import 'package:tampay_mobile/app/signup/presentation/view/welcome_screen.dart';
 import 'package:tampay_mobile/app/view/home/add_money/add_money_screen.dart';
 import 'package:tampay_mobile/app/view/home/add_money/funding_success_screen.dart';
 import 'package:tampay_mobile/app/view/home/base.dart';
+import 'package:tampay_mobile/app/view/home/cards/presentation/view/create_card_screen.dart';
 import 'package:tampay_mobile/app/view/home/convert/conversion_success_screen.dart';
 import 'package:tampay_mobile/app/view/home/convert/convert_screen.dart';
 import 'package:tampay_mobile/app/view/home/profile/profile_screen.dart';
@@ -37,7 +41,7 @@ import 'package:tampay_mobile/app/view/home/send/send_tampay_tag/send_with_tampa
 import 'package:tampay_mobile/app/view/splash_screen.dart';
 import '../signup/presentation/view/signup_screen.dart.dart';
 import '../signup/presentation/view/verify_email.dart';
-import '../view/home/cards/cards_screen.dart';
+import '../view/home/cards/presentation/view/cards_screen.dart';
 import '../view/home/send/bank_transfer/send_money_confirmation_screen.dart';
 import '../view/home/send/bank_transfer/transaction_successful_screen.dart';
 import '../view/intro/intro_screen.dart';
@@ -93,5 +97,10 @@ class AppPages {
     Routes.referralsRoute: (context) => const ReferralsScreen(),
     Routes.setPasscodeRoute: (context) => const SetPasscodeScreen(),
     Routes.verifyBvnOTPRoute: (context) => const VerifyBvnOtpScreen(),
+    Routes.createCardRoute: (context) => const CreateCardScreen(),
+    Routes.createWalletRoute: (context) => const CreateWalletScreen(),
+    Routes.createWalletConfirmationRoute: (context) =>
+        const WalletCreationConfirmationScreen(),
+    Routes.tierTwoUpgradeRoute: (context) => const TierTwoUpgradeScreen()
   };
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:multiple_result/multiple_result.dart';
+import 'package:tampay_mobile/app/view/home/cards/domain/model/request/create_card_request.dart';
 import 'package:tampay_mobile/app/view/transactions/domain/model/request/initiate_transfer_request.dart';
 import 'package:tampay_mobile/app/view/transactions/domain/model/response/account_info_response.dart';
 import 'package:tampay_mobile/app/view/transactions/domain/model/response/banks_response.dart';
@@ -22,6 +23,7 @@ final transactionsServiceProvider = Provider<TransactionsService>((ref) {
 abstract class TransactionsService {
   Future<RecentTransactionsResponse> getRecentTransactions();
   Future<BanksResponse> getBanks();
+  Future createCard(CreateCardRequest createCardRequest);
   Future initiateTransferRequest(
       InitiateTransferRequest initiateTransferRequest);
   Future transferRequest(TransferRequest transferRequest);
@@ -103,6 +105,20 @@ class TransactionsServiceImpl implements TransactionsService {
       final response = await ref
           .read(transactionsRepositoryProvider)
           .transfer(transferRequest);
+      return Success(response ?? {});
+    } catch (error) {
+      // Use the ErrorHandler to process the error
+      final errorMessage = ErrorHandler.getErrorMessage(error);
+      return Error(Failure(message: errorMessage));
+    }
+  }
+
+  @override
+  Future createCard(CreateCardRequest createCardRequest) async {
+    try {
+      final response = await ref
+          .read(transactionsRepositoryProvider)
+          .createCard(createCardRequest);
       return Success(response ?? {});
     } catch (error) {
       // Use the ErrorHandler to process the error

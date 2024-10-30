@@ -331,8 +331,7 @@ class SignUpController extends ChangeNotifier {
         await ref.read(profileControllerProvider).getProfile();
         if (context.mounted) {
           Navigator.pop(context); // close dialog
-          Constant.sendToNext(
-              context, Routes.transactionSuccessfulRoute);
+          Constant.sendToNext(context, Routes.transactionSuccessfulRoute);
         }
       },
       (error) {
@@ -421,6 +420,76 @@ class SignUpController extends ChangeNotifier {
         // Check if the widget is still in the tree before navigating
         if (context.mounted) {
           Navigator.pop(context); // Navigate to a different screen if needed
+        }
+      },
+      (error) {
+        if (context.mounted) {
+          showErrorToast(context, error.message); // Show error message
+        }
+      },
+    );
+  }
+
+  Future<void> tier2Upgrade({
+    required BuildContext context,
+    required String utilityBillUrl,
+    required String bankStatementUrl,
+    required String street,
+    required String city,
+    required String country,
+    required String postalCode,
+    required String houseNo,
+    required String lga,
+    required String state,
+    required String occupation,
+    required String employmentStatus,
+    required String incomeSource,
+    required String incomeRange,
+    required String accountDesignation,
+  }) async {
+    // Show the loading dialog before the async operation
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const CustomProgressDialog(),
+    );
+
+    // Perform the async operation to create the pin
+    final result = await ref.read(signUpServiceProvider).tier2Upgrade(
+          utilityBillUrl: utilityBillUrl,
+          bankStatementUrl: bankStatementUrl,
+          street: street,
+          city: city,
+          country: country,
+          postalCode: postalCode,
+          houseNo: houseNo,
+          lga: lga,
+          state: state,
+          occupation: occupation,
+          employmentStatus: employmentStatus,
+          incomeSource: incomeSource,
+          incomeRange: incomeRange,
+          accountDesignation: accountDesignation,
+        );
+
+    // Remove the loading dialog
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context); // Dismiss the loading dialog
+    }
+
+    // Handle the result after async operation
+    result.when(
+      (success) async {
+        String message = success['message'] ?? "Upgrade successful";
+        showToast(context, message); // Show success message
+
+        // Fetch the updated profile after the upgrade
+        await ref.read(profileControllerProvider).getProfile();
+
+        // Check if the widget is still in the tree before navigating
+        if (context.mounted) {
+          Navigator.pop(
+              context); // Optionally navigate to a different screen if needed
         }
       },
       (error) {

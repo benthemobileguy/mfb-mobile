@@ -19,13 +19,13 @@ class CreateCardResponse {
     status = json['status'];
     time = json['time'];
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
     request =
-        json['request'] != null ? new Request.fromJson(json['request']) : null;
+        json['request'] != null ? Request.fromJson(json['request']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['statusCode'] = statusCode;
     data['status'] = status;
     data['time'] = time;
@@ -58,7 +58,7 @@ class Data {
   String? id;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  Null deletedAt;
   int? version;
   bool? frozen;
 
@@ -108,7 +108,7 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['cardNumber'] = cardNumber;
     data['cardHolderName'] = cardHolderName;
     data['expiryMonth'] = expiryMonth;
@@ -145,7 +145,7 @@ class Request {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['method'] = method;
     data['path'] = path;
     return data;

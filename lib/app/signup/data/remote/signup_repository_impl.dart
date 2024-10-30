@@ -14,6 +14,7 @@ import 'package:tampay_mobile/app/signup/domain/model/request/reset_password_req
 import 'package:tampay_mobile/app/signup/domain/model/request/send_bvn_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/send_otp_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/sign_up_request.dart';
+import 'package:tampay_mobile/app/signup/domain/model/request/tier2_upgrade_request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify-bvn-otp-request.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_bvn_request.dart.dart';
 import 'package:tampay_mobile/app/signup/domain/model/request/verify_email_request.dart';
@@ -319,6 +320,22 @@ class SignUpRepositoryImpl implements SignupRepository {
     } catch (e) {
       // Handle any other exceptions
       throw Exception('create wallet: $e');
+    }
+  }
+
+  @override
+  Future tier2Upgrade(Tier2UpgradeRequest tier2UpgradeRequest,
+      String authorization, String accessKey, String secretKey) async {
+    try {
+      final tier2UpgradeResponse = await _signupClient.tier2Upgrade(
+          tier2UpgradeRequest, authorization, accessKey, secretKey);
+      return tier2UpgradeResponse;
+    } on DioException catch (e) {
+      debugPrint(e.message);
+      rethrow;
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('tier 2upgrade: $e');
     }
   }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -128,7 +127,6 @@ Widget getRichText(
     {TextAlign textAlign = TextAlign.center,
     double? txtHeight}) {
   return RichText(
-    textScaleFactor: FetchPixels.getTextScale(),
     textAlign: textAlign,
     text: TextSpan(
         text: firstText,
@@ -158,6 +156,7 @@ Widget getRichText(
                 height: txtHeight,
               ))
         ]),
+    textScaler: TextScaler.linear(FetchPixels.getTextScale()),
   );
 }
 
@@ -787,6 +786,150 @@ Future<dynamic> customMessageDialog(
       );
     },
     context: context,
+  );
+}
+
+Widget getDefaultTextFieldWithDropdown({
+  required BuildContext context,
+  required String hintText,
+  required TextEditingController textEditingController,
+  required List<String> options,
+  required Function(String) onOptionSelected,
+  String? title = "",
+  double suffixImageHeight = 24,
+  double suffixImageWidth = 24,
+  bool isEnable = true,
+  String? suffixImage,
+  EdgeInsetsGeometry? contentPadding = EdgeInsets.zero,
+  double? height,
+}) {
+  Color color = greyColor300;
+
+  return StatefulBuilder(
+    builder: (context, setState) {
+      final mqData = MediaQuery.of(context);
+      final mqDataNew = mqData.copyWith(
+          textScaler: TextScaler.linear(FetchPixels.getTextScale()));
+
+      return AbsorbPointer(
+        absorbing: !isEnable,
+        child: Focus(
+          onFocusChange: (hasFocus) {
+            if (hasFocus) {
+              setState(() {
+                color = textFieldActiveColor;
+              });
+            }
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (title != null && title.isNotEmpty)
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: grey900Color,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: Constant.fontsFamily,
+                  ),
+                ),
+              if (title != null && title.isNotEmpty) getVerSpace(6),
+              Container(
+                height: height,
+                alignment: Alignment.centerLeft,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: color, width: 1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: MediaQuery(
+                  data: mqDataNew,
+                  child: InkWell(
+                    onTap: () => _showDropdownModal(
+                      context,
+                      options,
+                      onOptionSelected,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: textEditingController,
+                              enabled: false, // Disable direct text editing
+                              decoration: InputDecoration(
+                                contentPadding: contentPadding,
+                                border: InputBorder.none,
+                                hintText: hintText,
+                                hintStyle: TextStyle(
+                                  color: textColor,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15,
+                                  fontFamily: Constant.fontsFamily,
+                                ),
+                              ),
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                fontFamily: Constant.fontsFamily,
+                              ),
+                            ),
+                          ),
+                          if (suffixImage != null)
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: FetchPixels.getPixelHeight(12)),
+                              child: getSvgImage(
+                                suffixImage,
+                                height: FetchPixels.getPixelHeight(
+                                    suffixImageHeight),
+                                width: FetchPixels.getPixelHeight(
+                                    suffixImageWidth),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+void _showDropdownModal(
+  BuildContext context,
+  List<String> options,
+  Function(String) onOptionSelected,
+) {
+  showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (BuildContext context) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: options
+            .map(
+              (option) => ListTile(
+                title: getCustomFont(option, 14.5, grey700, 1),
+                onTap: () {
+                  onOptionSelected(option);
+                  Navigator.pop(context);
+                },
+              ),
+            )
+            .toList(),
+      );
+    },
   );
 }
 
@@ -1548,5 +1691,35 @@ Widget getDivider(Color color, double height, double thickness) {
     color: color,
     height: height,
     thickness: thickness,
+  );
+}
+
+void showDropdownModal(
+  BuildContext context,
+  List<String> options,
+  Function(String) onOptionSelected,
+) {
+  showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (BuildContext context) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: options
+            .map(
+              (option) => ListTile(
+                title: getCustomFont(option, 14.5, grey700, 1,
+                    fontWeight: FontWeight.normal),
+                onTap: () {
+                  onOptionSelected(option);
+                  Navigator.pop(context);
+                },
+              ),
+            )
+            .toList(),
+      );
+    },
   );
 }

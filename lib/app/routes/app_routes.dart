@@ -43,6 +43,11 @@ abstract class Routes {
   static const referralsRoute = Paths.referralsPath;
   static const setPasscodeRoute = Paths.setPasscodePath;
   static const verifyBvnOTPRoute = Paths.verifyBvnOtpPath;
+  static const createCardRoute = Paths.createCardPath;
+  static const createWalletRoute = Paths.createWalletPath;
+  static const createWalletConfirmationRoute =
+      Paths.createWalletConfirmationPath;
+  static const tierTwoUpgradeRoute = Paths.tierTwoUpgradePath;
 }
 
 abstract class Paths {
@@ -89,6 +94,10 @@ abstract class Paths {
   static const statementReportsPath = "/StatementsReportsScreen";
   static const supportPath = "/SupportScreen";
   static const referralsPath = "/ReferralsScreen";
-  static const setPasscodePath = "SetPasscodeScreen";
-  static const verifyBvnOtpPath = "VerifyBVNOtpPath";
+  static const setPasscodePath = "/SetPasscodeScreen";
+  static const verifyBvnOtpPath = "/VerifyBVNOtpPath";
+  static const createCardPath = "/CreateCardPath";
+  static const createWalletPath = "/CreateWalletPath";
+  static const createWalletConfirmationPath = "/CreateWalletConfirmationPath";
+  static const tierTwoUpgradePath = "/TierTwoUpgradePath";
 }

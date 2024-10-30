@@ -42,6 +42,7 @@ Color greyColor = "#667185".toColor();
 Color success2Color = "#099137".toColor();
 Color greenSuccessColor = "#015B20".toColor();
 Color orangeColor = "#F56D40".toColor();
+Color mildGrey = "#3B3B3B".toColor();
 Color primaryColor = "#0EB622".toColor();
 Color buttonColor = '#F0F5FF'.toColor();
 Color paymentBg = "#F2F3F8".toColor();

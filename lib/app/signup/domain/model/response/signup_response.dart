@@ -33,8 +33,8 @@ class SignUpResponse {
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
-    if (this.request != null) {
-      data['request'] = this.request!.toJson();
+    if (request != null) {
+      data['request'] = request!.toJson();
     }
     return data;
   }

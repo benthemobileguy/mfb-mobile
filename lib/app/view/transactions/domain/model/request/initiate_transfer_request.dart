@@ -30,15 +30,15 @@ class InitiateTransferRequest {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['wallet'] = this.wallet;
-    data['beneficiaryAccountNumber'] = this.beneficiaryAccountNumber;
-    data['beneficiaryAccountName'] = this.beneficiaryAccountName;
-    data['beneficiaryBankCode'] = this.beneficiaryBankCode;
-    data['enquiryId'] = this.enquiryId;
-    data['amount'] = this.amount;
-    data['narration'] = this.narration;
-    data['saveBeneficiary'] = this.saveBeneficiary;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['wallet'] = wallet;
+    data['beneficiaryAccountNumber'] = beneficiaryAccountNumber;
+    data['beneficiaryAccountName'] = beneficiaryAccountName;
+    data['beneficiaryBankCode'] = beneficiaryBankCode;
+    data['enquiryId'] = enquiryId;
+    data['amount'] = amount;
+    data['narration'] = narration;
+    data['saveBeneficiary'] = saveBeneficiary;
     return data;
   }
 }

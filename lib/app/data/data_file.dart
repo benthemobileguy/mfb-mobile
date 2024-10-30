@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../theme/color_data.dart';
 import '../models/intro_model.dart';
-import '../models/model_country.dart';
 import '../models/model_currency.dart';
 import '../models/model_item.dart';
 import '../models/model_portfolio.dart';

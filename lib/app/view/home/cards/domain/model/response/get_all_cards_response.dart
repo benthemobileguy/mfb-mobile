@@ -1,4 +1,4 @@
-class FetchCardsResponse {
+class GetAllCardsResponse {
   int? statusCode;
   String? status;
   String? time;
@@ -7,7 +7,7 @@ class FetchCardsResponse {
   Pagination? pagination;
   Request? request;
 
-  FetchCardsResponse(
+  GetAllCardsResponse(
       {this.statusCode,
       this.status,
       this.time,
@@ -16,7 +16,7 @@ class FetchCardsResponse {
       this.pagination,
       this.request});
 
-  FetchCardsResponse.fromJson(Map<String, dynamic> json) {
+  GetAllCardsResponse.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     status = json['status'];
     time = json['time'];
@@ -24,14 +24,14 @@ class FetchCardsResponse {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(Data.fromJson(v));
+        data!.add(new Data.fromJson(v));
       });
     }
     pagination = json['pagination'] != null
-        ? Pagination.fromJson(json['pagination'])
+        ? new Pagination.fromJson(json['pagination'])
         : null;
     request =
-        json['request'] != null ? Request.fromJson(json['request']) : null;
+        json['request'] != null ? new Request.fromJson(json['request']) : null;
   }
 
   Map<String, dynamic> toJson() {

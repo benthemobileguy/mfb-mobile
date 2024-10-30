@@ -392,7 +392,7 @@ class _BankTransferScreenState extends ConsumerState<BankTransferScreen>
 
   void _showBanksInModal(BuildContext context) async {
     final banks =
-        await ref.read(transactionsControllerProvider).banksList?.data;
+        ref.read(transactionsControllerProvider).banksList?.data;
 
     if (banks == null) {
       // Handle the case where banks are null
