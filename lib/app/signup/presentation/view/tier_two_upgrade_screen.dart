@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tampay_mobile/app/profile/presentation/controller/profile_controller.dart';
 import 'package:tampay_mobile/app/signup/presentation/controller/signup_controller.dart';
 import 'package:tampay_mobile/base/custom_progess_dialog.dart';
 import 'package:tampay_mobile/base/resizer/fetch_pixels.dart';
