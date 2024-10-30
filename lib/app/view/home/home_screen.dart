@@ -291,7 +291,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               if (!accountSetupComplete) {
                 showCompleteAccountSetupDialog(context);
               } else {
-                Constant.sendToNext(context, Routes.addMoneyRoute);
+                Constant.sendToNext(context, Routes.convertRoute);
               }
             }, 16,
                 image: "convert_money_icon.svg",

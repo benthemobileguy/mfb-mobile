@@ -38,6 +38,7 @@ Color lightBlue = "#D9E7FF".toColor();
 Color subtextColor = "#6E768A".toColor();
 Color redColor = "#DD3333".toColor();
 Color grayColor = "#E4E7EC".toColor();
+Color containerGray = "#F9FAFB".toColor();
 Color greyColor = "#667185".toColor();
 Color success2Color = "#099137".toColor();
 Color greenSuccessColor = "#015B20".toColor();

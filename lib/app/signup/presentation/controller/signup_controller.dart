@@ -193,7 +193,7 @@ class SignUpController extends ChangeNotifier {
         showToast(context, message);
       },
       (error) {
-        showErrorToast(context, "Invalid OTP, please try again");
+        showErrorToast(context, "An error occurred while creating wallet");
       },
     );
   }
@@ -482,15 +482,10 @@ class SignUpController extends ChangeNotifier {
       (success) async {
         String message = success['message'] ?? "Upgrade successful";
         showToast(context, message); // Show success message
-
+        await createWallet(accountCurrency: "USD", context: context);
         // Fetch the updated profile after the upgrade
         await ref.read(profileControllerProvider).getProfile();
-
-        // Check if the widget is still in the tree before navigating
-        if (context.mounted) {
-          Navigator.pop(
-              context); // Optionally navigate to a different screen if needed
-        }
+        Constant.sendToNext(context, Routes.convertRoute);
       },
       (error) {
         if (context.mounted) {

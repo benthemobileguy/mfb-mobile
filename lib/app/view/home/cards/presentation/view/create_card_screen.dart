@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tampay_mobile/app/profile/domain/model/response/user_profile.dart';
+import 'package:tampay_mobile/app/profile/presentation/controller/profile_controller.dart';
 import 'package:tampay_mobile/app/routes/app_routes.dart';
 import 'package:tampay_mobile/app/view/dialog/custom_dialog.dart';
 import 'package:tampay_mobile/app/view/dialog/verify_dialog.dart';
@@ -102,7 +104,6 @@ class _CreateCardScreenState extends ConsumerState<CreateCardScreen> {
     );
   }
 
-  // Reusable dialog method
   void _showFeeDialog() {
     showDialog(
       barrierDismissible: true,
@@ -144,7 +145,6 @@ class _CreateCardScreenState extends ConsumerState<CreateCardScreen> {
     );
   }
 
-  // Helper function to build rows with fees
   Widget _buildFeeRow(String text, String amount, {bool isBold = false}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -163,21 +163,56 @@ class _CreateCardScreenState extends ConsumerState<CreateCardScreen> {
 
   Future<void> _handleCreateCard(BuildContext context) async {
     if (selectedCurrency == "USD") {
-      showDialog(
-        context: context,
-        builder: (context) => VerifyDialog(
-          title: "Create Dollar Account",
-          imagePath: "warning.svg",
-          description:
-              "Please create a dollar wallet before creating a card, as you currently do not have a dollar account.",
-          onOk: () {
-            Navigator.pop(context);
-            Constant.sendToNext(context, Routes.createWalletRoute);
-          },
-          okText: "Create Wallet",
-        ),
+      // Fetch user profile and check for USD wallet and balance
+      final profileController = ref.read(profileControllerProvider);
+      final userProfile = profileController.userProfile ?? UserProfile();
+
+      final usdWallet = userProfile.data?.wallets?.firstWhere(
+        (wallet) => wallet.currency == "USD" && wallet.isActive == true,
+        orElse: () => Wallet(),
       );
+
+      if (usdWallet == null) {
+        // Show dialog to create a USD wallet
+        showDialog(
+          context: context,
+          builder: (context) => VerifyDialog(
+            title: "Create Dollar Account",
+            imagePath: "warning.svg",
+            description:
+                "Please create a dollar wallet before creating a card, as you currently do not have a dollar account.",
+            onOk: () {
+              Navigator.pop(context);
+              Constant.sendToNext(context, Routes.createWalletRoute);
+            },
+            okText: "Create Wallet",
+          ),
+        );
+      } else if (double.parse(usdWallet.balance ?? "0") < 3) {
+        // Redirect to fund account page if balance is less than $3
+        // Show dialog to create a USD wallet
+        showDialog(
+          context: context,
+          builder: (context) => VerifyDialog(
+            title: "Fund Dollar Account",
+            imagePath: "warning.svg",
+            description:
+                "Your amount is not sufficient. Please fund up to 3 dollars to be able to create a card.",
+            onOk: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, Routes.convertRoute);
+            },
+            okText: "Create Wallet",
+          ),
+        );
+      } else {
+        // If balance is sufficient, create the card
+        await ref
+            .read(transactionsControllerProvider)
+            .createCard(context, selectedCurrency!);
+      }
     } else {
+      // Handle NGN card creation
       await ref
           .read(transactionsControllerProvider)
           .createCard(context, selectedCurrency!);

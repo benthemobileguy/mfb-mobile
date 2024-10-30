@@ -372,10 +372,6 @@ class _TierTwoUpgradeScreenState extends ConsumerState<TierTwoUpgradeScreen> {
           accountDesignation: accountDesignation,
           context: context,
         );
-
-    if (Navigator.canPop(context)) {
-      Navigator.pop(context);
-    }
   }
 
   Future<void> _showImagePickerModal(Function(File) onImageSelected) async {
