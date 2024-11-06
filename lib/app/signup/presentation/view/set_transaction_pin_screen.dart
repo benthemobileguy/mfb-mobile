@@ -210,6 +210,5 @@ class _SetTransactionPinScreenState
     await ref.read(signUpControllerProvider).createTransactionPin(
         newPin: transactionPin, confirmPin: confirmPin, context: context);
     _forceErrorState = false;
-    finishView();
   }
 }

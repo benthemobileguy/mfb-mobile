@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tampay_mobile/app/profile/domain/model/response/user_profile.dart';
 import 'package:tampay_mobile/app/profile/presentation/controller/profile_controller.dart';
+import 'package:tampay_mobile/app/view/dialog/verify_dialog.dart';
 import 'package:tampay_mobile/app/view/home/send/recent_transactions.dart';
 import '../../../base/constant.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +22,30 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   var horspace = FetchPixels.getPixelHeight(20);
   bool _isBalanceVisible = true;
+  String selectedCurrency = "NGN";
+
+  // Currency logo and symbol mapping
+  final Map<String, String> currencyLogos = {
+    "EUR": "euro_flag.svg",
+    "NGN": "ngn_logo.svg",
+    "USD": "usd_logo.svg",
+    "GBP": "britain_logo.svg",
+  };
+
+  final Map<String, String> currencySymbols = {
+    "EUR": "€",
+    "NGN": "NGN",
+    "USD": "\$",
+    "GBP": "£",
+  };
+
+  // Currency sign mapping for balance display
+  final Map<String, String> currencySigns = {
+    "EUR": "euro_sign.svg",
+    "NGN": "naira_sign.svg",
+    "USD": "dollar_sign.svg",
+    "GBP": "pounds_sign.svg",
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -30,67 +55,69 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     bool accountSetupComplete =
         profileController.isAccountSetupComplete(userProfile);
     final bool isWalletNotCreated = userProfile.data?.wallets?.isEmpty ?? false;
-
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: colorBg,
-        body: SafeArea(
-            child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: RefreshIndicator(
-                  color: primaryColor,
-                  onRefresh: _refreshProfile,
-                  child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: colorBg,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: RefreshIndicator(
+            color: primaryColor,
+            onRefresh: _refreshProfile,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  getVerSpace(FetchPixels.getPixelHeight(30)),
+                  appBar(context, userProfile),
+                  getVerSpace(FetchPixels.getPixelHeight(14)),
+                  if (!accountSetupComplete || isWalletNotCreated)
+                    accountCompletionStatus(context, userProfile,
+                        accountSetupComplete, !isWalletNotCreated),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        getVerSpace(FetchPixels.getPixelHeight(10)),
-                        appBar(context, userProfile),
+                        getVerSpace(FetchPixels.getPixelHeight(20)),
+                        currencyToggle(context, accountSetupComplete,
+                            userProfile, selectedCurrency),
                         getVerSpace(FetchPixels.getPixelHeight(30)),
-                        if (!accountSetupComplete || isWalletNotCreated)
-                          accountCompletionStatus(context, userProfile,
-                              accountSetupComplete, !isWalletNotCreated),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Column(
-                            children: [
-                              getVerSpace(FetchPixels.getPixelHeight(20)),
-                              currencyToggle(
-                                  context, accountSetupComplete, userProfile),
-                              getVerSpace(FetchPixels.getPixelHeight(30)),
-                              balanceForUser(context, userProfile),
-                              getVerSpace(FetchPixels.getPixelHeight(30)),
-                              addConvertMoneyRow(
-                                  context, accountSetupComplete, userProfile),
-                              getVerSpace(FetchPixels.getPixelHeight(30)),
-                            ],
-                          ),
-                        ),
-                        getVerSpace(FetchPixels.getPixelHeight(10)),
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const RecentTransactions(),
-                        ),
-                        getVerSpace(FetchPixels.getPixelHeight(10)),
-                        referFriends(context)
+                        balanceForUser(context, userProfile),
+                        getVerSpace(FetchPixels.getPixelHeight(30)),
+                        addConvertMoneyRow(
+                            context, accountSetupComplete, userProfile),
+                        getVerSpace(FetchPixels.getPixelHeight(30)),
                       ],
                     ),
                   ),
-                ))));
+                  getVerSpace(FetchPixels.getPixelHeight(10)),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const RecentTransactions(),
+                  ),
+                  getVerSpace(FetchPixels.getPixelHeight(10)),
+                  referFriends(context),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget appBar(BuildContext context, UserProfile userProfile) {
     return getPaddingWidget(
-      const EdgeInsets.symmetric(horizontal: 0),
+      const EdgeInsets.symmetric(horizontal: 10),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -108,15 +135,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               Constant.sendToNext(context, Routes.profileRoute);
             },
             child: getSvgImage("profile_circle.svg",
-                width: FetchPixels.getPixelHeight(32),
-                height: FetchPixels.getPixelHeight(32)),
+                width: FetchPixels.getPixelHeight(40),
+                height: FetchPixels.getPixelHeight(40)),
           )
         ],
       ),
     );
   }
 
-  accountCompletionStatus(BuildContext context, UserProfile userProfile,
+  Widget accountCompletionStatus(BuildContext context, UserProfile userProfile,
       bool isAccountSetUpComplete, bool isWalletCreated) {
     bool accountInReview = isAccountSetUpComplete && !isWalletCreated;
     return InkWell(
@@ -173,39 +200,116 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  currencyToggle(BuildContext context, bool accountSetupComplete,
-      UserProfile userProfile) {
-    return getPaddingWidget(
-      EdgeInsets.symmetric(horizontal: horspace),
-      Row(
-        children: [
-          getSvgImage("ngn_logo.svg", width: 24, height: 24),
-          getHorSpace(10),
-          getCustomFont("Nigerian Naira", 16, grey650, 1,
-              fontWeight: FontWeight.w600),
-          getHorSpace(10),
-          getSvgImage("chevron_down.svg", width: 16, height: 16),
-          const Spacer(),
-          TextButton(
-              onPressed: () {
-                if (!accountSetupComplete) {
-                  showCompleteAccountSetupDialog(context);
-                } else {
-                  _showAccountDetails(context, userProfile);
-                }
-              },
-              style: ButtonStyle(
-                minimumSize: WidgetStateProperty.all(const Size(0, 0)),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  Widget currencyToggle(BuildContext context, bool accountSetupComplete,
+      UserProfile userProfile, String selectedCurrency) {
+    return Container(
+      child: getPaddingWidget(
+        EdgeInsets.symmetric(horizontal: horspace),
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                  color: grayColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(25))),
+              child: Row(
+                children: [
+                  getSvgImage(currencyLogos[selectedCurrency] ?? "ngn_logo.svg",
+                      width: 24, height: 24),
+                  getHorSpace(10),
+                  GestureDetector(
+                    onTap: () => _showCurrencySelectionSheet(context),
+                    child: Row(
+                      children: [
+                        getCustomFont(
+                            _getCurrencyName(selectedCurrency), 16, grey650, 1,
+                            fontWeight: FontWeight.w600),
+                        getHorSpace(10),
+                        getSvgImage("chevron_down.svg", width: 16, height: 16),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              child:
-                  getSvgImage("context_menu_icon.svg", width: 28, height: 28)),
-        ],
+            ),
+            const Spacer(),
+            TextButton(
+                onPressed: () {
+                  if (!accountSetupComplete) {
+                    showCompleteAccountSetupDialog(context);
+                  } else {
+                    _showAccountDetails(context, userProfile, selectedCurrency);
+                  }
+                },
+                style: ButtonStyle(
+                  minimumSize: WidgetStateProperty.all(const Size(0, 0)),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: getSvgImage("context_menu_icon.svg",
+                    width: 28, height: 28)),
+          ],
+        ),
       ),
     );
   }
 
-  balanceForUser(BuildContext context, UserProfile? userProfile) {
+  String _getCurrencyName(String currencyCode) {
+    switch (currencyCode) {
+      case "EUR":
+        return "Euro";
+      case "NGN":
+        return "Nigerian Naira";
+      case "USD":
+        return "US Dollar";
+      case "GBP":
+        return "British Pound";
+      default:
+        return "Currency";
+    }
+  }
+
+  void _showCurrencySelectionSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            getCustomFont("Select Currency", 16.5, grey700, 1,
+                fontWeight: FontWeight.bold),
+            ...currencyLogos.keys.map((currency) {
+              return ListTile(
+                leading: getSvgImage(currencyLogos[currency] ?? "usd_logo.svg",
+                    width: 30, height: 30),
+                title: getCustomFont(_getCurrencyName(currency), 16, grey700, 1,
+                    fontWeight: FontWeight.bold),
+                onTap: () {
+                  setState(() {
+                    selectedCurrency = currency;
+                  });
+                  Navigator.pop(context);
+                },
+              );
+            }).toList(),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget balanceForUser(BuildContext context, UserProfile? userProfile) {
     return getPaddingWidget(
       EdgeInsets.symmetric(horizontal: horspace),
       Column(
@@ -237,12 +341,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               TextButton(
                   onPressed: () {
                     setState(() {
-                      _isBalanceVisible =
-                          !_isBalanceVisible; // Toggle visibility
+                      _isBalanceVisible = !_isBalanceVisible;
                     });
                   },
                   style: ButtonStyle(
-                    minimumSize: WidgetStateProperty.all(const Size(0, 0)),
+                    minimumSize: MaterialStateProperty.all(const Size(0, 0)),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: Container(
@@ -257,7 +360,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         Icons.visibility_off,
                         color: grey400Color,
                         size: 16,
-                      )))
+                      ))),
             ],
           ),
         ],
@@ -265,8 +368,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  addConvertMoneyRow(BuildContext context, bool accountSetupComplete,
+  Widget addConvertMoneyRow(BuildContext context, bool accountSetupComplete,
       UserProfile userProfile) {
+    final bool isTier2Account = userProfile.data?.kycLevel == "Tier 2";
     return getPaddingWidget(
       EdgeInsets.symmetric(horizontal: horspace),
       Row(
@@ -275,6 +379,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: getButton(context, blue, "Add Money", Colors.white, () {
               if (!accountSetupComplete) {
                 showCompleteAccountSetupDialog(context);
+              } else if (!isTier2Account && selectedCurrency != "NGN") {
+                // Navigate to Tier 2 screen only if user is not a Tier 2 account and currency is not NGN
+                Constant.sendToNext(context, Routes.tierTwoUpgradeRoute);
               } else {
                 showAddMoneyBottomSheet(context, userProfile);
               }
@@ -290,6 +397,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: getButton(context, lightBlue, "Convert", blue, () {
               if (!accountSetupComplete) {
                 showCompleteAccountSetupDialog(context);
+              } else if (!isTier2Account && selectedCurrency != "NGN") {
+                // Navigate to Tier 2 screen only if user is not a Tier 2 account and currency is not NGN
+                Constant.sendToNext(context, Routes.tierTwoUpgradeRoute);
               } else {
                 Constant.sendToNext(context, Routes.convertRoute);
               }
@@ -305,82 +415,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  referFriends(BuildContext context) {
+  Widget referFriends(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 173,
+      height: 109,
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/gradient_refer_bg.png'),
-          // Ensure the image is in your assets folder
           fit: BoxFit.cover,
         ),
         borderRadius: BorderRadius.all(Radius.circular(30)),
       ),
-
-      /// TODO: Use real values here
-    );
-  }
-
-  void _showAccountDetails(BuildContext context, UserProfile userProfile) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      child: Center(
+        child:
+            getCustomFont("", 18, Colors.white, 1, fontWeight: FontWeight.w600),
       ),
-      isScrollControlled: true,
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              dragIndicator(context),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Text(
-                    "Account Details",
-                    style: TextStyle(
-                      fontSize: 21,
-                      fontWeight: FontWeight.bold,
-                      color: grey700,
-                    ),
-                  ),
-                  const Spacer(),
-                ],
-              ),
-              getVerSpace(25),
-              accountDetailComponent(
-                  "ACCOUNT HOLDER",
-                  userProfile.data?.wallets?[0].accountName ?? "",
-                  false,
-                  context),
-              getVerSpace(12),
-              accountDetailComponent(
-                  "ACCOUNT NUMBER",
-                  userProfile.data?.wallets?[0].accountNumber ?? "",
-                  true,
-                  context),
-              getVerSpace(12),
-              if (userProfile.data?.wallets?[0].currency != "NGN")
-                accountDetailComponent(
-                    "ROUTING", "232120910290101", true, context),
-              getVerSpace(12),
-              if (userProfile.data?.wallets?[0].currency != "NGN")
-                accountDetailComponent(
-                    "ADDRESS",
-                    "383 Madison Avenue in Midtown Manhattan, USA",
-                    true,
-                    context),
-              if (userProfile.data?.wallets?[0].currency != "NGN")
-                getVerSpace(30),
-            ],
-          ),
-        );
-      },
     );
   }
 
@@ -429,14 +478,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   context),
               getVerSpace(10),
               accountDetailComponent(
-                  "BANK",
+                  "ACCOUNT NAME",
                   userProfile.data?.wallets?[0].accountName ?? "",
                   false,
                   context),
+              getVerSpace(10),
+              accountDetailComponent("BANK NAME",
+                  userProfile.data?.wallets?[0].bankName ?? "", false, context),
               getVerSpace(16),
               getButton(
                   context, primaryColor, "Share all Details", Colors.white, () {
-                // should be able to share account details
                 _shareAccountDetails(userProfile);
               }, 16,
                   weight: FontWeight.w600,
@@ -454,7 +505,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  accountDetailComponent(
+  Widget accountDetailComponent(
       String title, String result, bool showCopy, BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -501,16 +552,109 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-// Method to concatenate account details and trigger share
   void _shareAccountDetails(UserProfile userProfile) {
-    // Create a formatted string with the account details
     String accountDetails = """
-  Bank: ${userProfile.data?.wallets?[0].accountName ?? "N/A"}
-  Account Number: ${userProfile.data?.wallets?[0].accountNumber ?? "N/A"}
-  Currency: ${userProfile.data?.wallets?[0].currency ?? "N/A"}
-  """;
+    Bank: ${userProfile.data?.wallets?[0].accountName ?? "N/A"}
+    Account Number: ${userProfile.data?.wallets?[0].accountNumber ?? "N/A"}
+    Currency: ${userProfile.data?.wallets?[0].currency ?? "N/A"}
+    """;
 
-    // Use the share_plus package to share the details
     Share.share(accountDetails, subject: 'Tampay Account Details');
+  }
+
+  Future<dynamic> showCompleteAccountSetupDialog(BuildContext context) {
+    return showDialog(
+      barrierDismissible: true,
+      builder: (context) {
+        return VerifyDialog(
+          title: "Complete Account Setup",
+          imagePath: "warning.svg",
+          description:
+              "To access this feature, please complete your account setup.",
+          onOk: () {
+            Navigator.pop(context);
+            Constant.sendToNext(context, Routes.accountSetUpRoute);
+          },
+          okText: "Complete Account Setup",
+        );
+      },
+      context: context,
+    );
+  }
+
+  void _showAccountDetails(
+      BuildContext context, UserProfile userProfile, String selectedCurrency) {
+    final bool isTier2Account = userProfile.data?.kycLevel == "Tier 2";
+
+    // Check if the user is not Tier 2 and the selected currency is not NGN
+    if (!isTier2Account && selectedCurrency != "NGN") {
+      // Navigate to the Tier 2 upgrade screen
+      Constant.sendToNext(context, Routes.tierTwoUpgradeRoute);
+      return; // Exit the method early to avoid showing the bottom sheet
+    }
+
+    // Show account details if conditions are met
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      isScrollControlled: true,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              dragIndicator(context),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Text(
+                    "Account Details",
+                    style: TextStyle(
+                      fontSize: 21,
+                      fontWeight: FontWeight.bold,
+                      color: grey700,
+                    ),
+                  ),
+                  const Spacer(),
+                ],
+              ),
+              getVerSpace(25),
+              accountDetailComponent(
+                  "ACCOUNT NUMBER",
+                  userProfile.data?.wallets?[0].accountNumber ?? "",
+                  true,
+                  context),
+              getVerSpace(10),
+              accountDetailComponent(
+                  "ACCOUNT NAME",
+                  userProfile.data?.wallets?[0].accountName ?? "",
+                  false,
+                  context),
+              getVerSpace(10),
+              accountDetailComponent("BANK NAME",
+                  userProfile.data?.wallets?[0].bankName ?? "", false, context),
+              getVerSpace(12),
+              if (userProfile.data?.wallets?[0].currency != "NGN")
+                accountDetailComponent(
+                    "ROUTING", "232120910290101", true, context),
+              getVerSpace(12),
+              if (userProfile.data?.wallets?[0].currency != "NGN")
+                accountDetailComponent(
+                    "ADDRESS",
+                    "383 Madison Avenue in Midtown Manhattan, USA",
+                    true,
+                    context),
+              if (userProfile.data?.wallets?[0].currency != "NGN")
+                getVerSpace(30),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

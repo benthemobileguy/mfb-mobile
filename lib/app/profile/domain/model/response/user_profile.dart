@@ -49,6 +49,7 @@ class Data {
   String? verificationExpiresAt;
   bool? emailVerified;
   String? pin;
+  String? kycLevel;
   String? tag;
   String? bvn;
   String? bvnPhoto;
@@ -74,6 +75,7 @@ class Data {
     this.firstName,
     this.lastName,
     this.email,
+    this.kycLevel,
     this.phone,
     this.password,
     this.otp,
@@ -104,6 +106,7 @@ class Data {
     deletedAt = json['deletedAt'];
     version = json['version'];
     firstName = json['firstName'];
+    kycLevel = json["kycLevel"];
     lastName = json['lastName'];
     email = json['email'];
     phone = json['phone'];
@@ -145,6 +148,7 @@ class Data {
     data['lastName'] = lastName;
     data['email'] = email;
     data['phone'] = phone;
+    data['kycLevel'] = kycLevel;
     data['password'] = password;
     data['otp'] = otp;
     data['verificationExpiresAt'] = verificationExpiresAt;
@@ -187,6 +191,7 @@ class Wallet {
   String? accountId;
   String? accountName;
   String? accountNumber;
+  String? bankName;
 
   Wallet({
     this.id,
@@ -199,6 +204,7 @@ class Wallet {
     this.isActive,
     this.isDefault,
     this.status,
+    this.bankName,
     this.accountId,
     this.accountName,
     this.accountNumber,
@@ -218,6 +224,7 @@ class Wallet {
     accountId = json['accountId'];
     accountName = json['accountName'];
     accountNumber = json['accountNumber'];
+    bankName = json['bankName'];
   }
 
   Map<String, dynamic> toJson() {
@@ -235,6 +242,7 @@ class Wallet {
     data['accountId'] = accountId;
     data['accountName'] = accountName;
     data['accountNumber'] = accountNumber;
+    data['bankName'] = bankName;
     return data;
   }
 }

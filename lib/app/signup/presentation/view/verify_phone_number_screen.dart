@@ -38,7 +38,8 @@ class _VerifyPhoneNumberScreenState
   void _checkPhoneNumberLength() {
     final input = phoneNumberController.text;
     setState(() {
-      isButtonEnabled = input.length >= 11;
+      // Enable the button only if the phone number has 11 digits and starts with "0"
+      isButtonEnabled = input.length == 11 && input.startsWith("0");
     });
   }
 
@@ -46,7 +47,12 @@ class _VerifyPhoneNumberScreenState
   Widget build(BuildContext context) {
     final profileController = ref.watch(profileControllerProvider);
     final userProfile = profileController.userProfile;
-    phoneNumberController.text = userProfile?.data?.phone ?? "";
+
+    // Set the initial value of the controller if it's empty
+    if (phoneNumberController.text.isEmpty &&
+        userProfile?.data?.phone != null) {
+      phoneNumberController.text = userProfile!.data!.phone!;
+    }
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -70,30 +76,31 @@ class _VerifyPhoneNumberScreenState
                     fontWeight: FontWeight.normal),
                 getVerSpace(FetchPixels.getPixelHeight(10)),
                 getDefaultTextFiledWithLabel(
-                    context, "e.g 08034568944", phoneNumberController,
-                    isEnable: false, // Enable the field
-                    showCursor: false,
-                    focusNode: phoneNumberNode,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    title: "",
-                    height: FetchPixels.getPixelHeight(60)),
+                  context,
+                  "e.g 08034568944",
+                  phoneNumberController,
+                  focusNode: phoneNumberNode,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  title: "",
+                  height: FetchPixels.getPixelHeight(60),
+                ),
                 const Spacer(),
                 getButton(
                     context,
-                    isButtonEnabled
-                        ? primaryColor
-                        : grey400Color, // Color depends on state
+                    isButtonEnabled ? primaryColor : grey400Color,
                     "Verify Phone Number",
                     Colors.white, () {
                   if (isButtonEnabled) {
-                    // Save the phone number in the provider before navigating
+                    // Format the phone number with "+234" prefix before sending
+                    final formattedPhoneNumber =
+                        "+234${phoneNumberController.text.substring(1)}";
                     ref.read(phoneNumberProvider.notifier).state =
-                        phoneNumberController.text;
+                        formattedPhoneNumber;
+
                     ref.read(signUpControllerProvider.notifier).sendPhoneOTP(
-                        phoneNumber: phoneNumberController.text,
-                        context: context);
+                        phoneNumber: formattedPhoneNumber, context: context);
                   }
                 }, 16,
                     weight: FontWeight.w600,

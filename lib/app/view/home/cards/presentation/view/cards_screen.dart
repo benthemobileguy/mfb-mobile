@@ -115,7 +115,7 @@ class _CardsScreenState extends State<CardsScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          getSvgImage("credit_card_add.svg", width: 30, height: 30),
+          getSvgImage("credit_card.svg", width: 180, height: 127),
           getVerSpace(FetchPixels.getPixelHeight(10)),
           getCustomFont("Create a Tampay Card", 18.5, Colors.black, 1,
               fontWeight: FontWeight.w500),

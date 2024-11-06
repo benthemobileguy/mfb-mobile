@@ -402,7 +402,6 @@ Widget profileImageWidget() {
       height: FetchPixels.getPixelHeight(48),
       width: FetchPixels.getPixelHeight(48));
 }
-
 Widget customLeadingListTile(
     String text, double fontSize, Color fontColor, int maxLine,
     {String fontFamily = Constant.fontsFamily,
@@ -413,28 +412,49 @@ Widget customLeadingListTile(
     String? subtitle,
     TextAlign textAlign = TextAlign.start,
     double? txtHeight,
-    required String trailingImagePath,
+    String? trailingImagePath, // optional trailing image path
     required String leadingImagePath,
-    required VoidCallback onTap}) {
+    required VoidCallback onTap,
+    bool comingSoon = false // optional 'Coming Soon' flag
+    }) {
+  
   return ListTile(
     contentPadding: EdgeInsets.zero,
-    title: Text(
-      text,
-      overflow: overflow,
-      style: TextStyle(
-        decoration: decoration,
-        fontSize: fontSize,
-        fontStyle: FontStyle.normal,
-        color: fontColor,
-        letterSpacing: letterSpacing,
-        fontFamily: fontFamily,
-        height: txtHeight,
-        fontWeight: fontWeight,
-      ),
-      maxLines: maxLine,
-      softWrap: true,
-      textAlign: textAlign,
-      textScaleFactor: FetchPixels.getTextScale(),
+    title: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          text,
+          overflow: overflow,
+          style: TextStyle(
+            decoration: decoration,
+            fontSize: fontSize,
+            fontStyle: FontStyle.normal,
+            color: fontColor,
+            letterSpacing: letterSpacing,
+            fontFamily: fontFamily,
+            height: txtHeight,
+            fontWeight: fontWeight,
+          ),
+          maxLines: maxLine,
+          softWrap: true,
+          textAlign: textAlign,
+          textScaleFactor: FetchPixels.getTextScale(),
+        ),
+        if (comingSoon) // Display "Coming Soon" banner if flag is true
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: yellowColorBg,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: yellowColor),
+              ),
+              child: getCustomFont("Coming Soon", 14, yellowColor, 1),
+            ),
+          ),
+      ],
     ),
     leading: getSvgImage(leadingImagePath, width: 35, height: 35),
     subtitle: Padding(
@@ -442,10 +462,14 @@ Widget customLeadingListTile(
       child: getCustomFont(subtitle ?? "", 12, grey400Color, 1,
           fontWeight: FontWeight.normal),
     ),
-    trailing: getSvgImage(trailingImagePath, width: 16, height: 16),
+    trailing: trailingImagePath != null
+        ? getSvgImage(trailingImagePath, width: 16, height: 16)
+        : null, // Set to null if no trailing image path
     onTap: onTap,
   );
 }
+
+
 
 Widget customListTile(
     String text, double fontSize, Color fontColor, int maxLine,

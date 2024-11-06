@@ -180,22 +180,30 @@ class SignUpController extends ChangeNotifier {
     );
   }
 
-  Future<void> createWallet({
+  Future<bool> createWallet({
     required String? accountCurrency,
     required BuildContext context,
   }) async {
     final result = await ref
         .read(signUpServiceProvider)
         .createWallet(currency: accountCurrency!);
+
+    bool isSuccess = false;
+
     result.when(
       (success) {
         String message = success['message'] ?? "";
         showToast(context, message);
+        isSuccess =
+            true; // Set success flag to true if wallet creation succeeds
       },
       (error) {
         showErrorToast(context, "An error occurred while creating wallet");
+        isSuccess = false; // Set success flag to false if wallet creation fails
       },
     );
+
+    return isSuccess; // Return success status
   }
 
   Future<void> sendPhoneOTP({
@@ -272,15 +280,31 @@ class SignUpController extends ChangeNotifier {
     final result = await ref
         .read(signUpServiceProvider)
         .sendBvnOTP(firstName: firstName!, lastName: lastName!, bvn: bvn!);
-    Navigator.pop(context);
+
     result.when(
       (success) async {
         String message = success['message'] ?? "";
-        showToast(context, message);
-        Constant.sendToReplacementNext(context, Routes.verifyBvnOTPRoute);
+
+        // Attempt to create the wallet and proceed only if successful
+        bool walletCreated =
+            await createWallet(accountCurrency: "NGN", context: context);
+        if (walletCreated) {
+          await ref.read(profileControllerProvider).getProfile();
+          Constant.sendToReplacementNext(context, Routes.homeScreenRoute);
+          showToast(context, message);
+        } else {
+           if (context.mounted) {
+          Navigator.pop(context); // close dialog
+        }
+          showErrorToast(context, "Failed to create wallet. Please try again.");
+        }
       },
-      (error) {
-        showErrorToast(context, error.message);
+      (error) async {
+        if (error.message == "BVN already verified") {
+          Constant.sendToNext(context, Routes.tierTwoUpgradeRoute);
+        } else {
+          showErrorToast(context, error.message);
+        }
       },
     );
   }
@@ -463,8 +487,8 @@ class SignUpController extends ChangeNotifier {
           country: country,
           postalCode: postalCode,
           houseNo: houseNo,
-          lga: lga,
-          state: state,
+          lga: "Calabar Municipality",
+          state: "Cross River",
           occupation: occupation,
           employmentStatus: employmentStatus,
           incomeSource: incomeSource,
@@ -485,7 +509,11 @@ class SignUpController extends ChangeNotifier {
         await createWallet(accountCurrency: "USD", context: context);
         // Fetch the updated profile after the upgrade
         await ref.read(profileControllerProvider).getProfile();
-        Constant.sendToNext(context, Routes.convertRoute);
+        if (Navigator.canPop(context)) {
+          Navigator.pop(context); // Dismiss the loading dialog
+        }
+
+        Constant.sendToReplacementNext(context, Routes.convertRoute);
       },
       (error) {
         if (context.mounted) {

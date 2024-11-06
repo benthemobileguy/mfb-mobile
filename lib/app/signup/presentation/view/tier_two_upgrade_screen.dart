@@ -49,7 +49,7 @@ class _TierTwoUpgradeScreenState extends ConsumerState<TierTwoUpgradeScreen> {
     '3000000'
   ];
   final List<String> employmentStatusOptions = ['Employed', 'Unemployed'];
-  final List<String> stateOptions = ['State 1', 'State 2', 'State 3'];
+  final List<String> stateOptions = ['Delta', 'Edo', 'Lagos'];
   final List<String> lgaOptions = ['LGA 1', 'LGA 2', 'LGA 3'];
 
   @override

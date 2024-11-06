@@ -202,7 +202,7 @@ class _CreateCardScreenState extends ConsumerState<CreateCardScreen> {
               Navigator.pop(context);
               Navigator.pushNamed(context, Routes.convertRoute);
             },
-            okText: "Create Wallet",
+            okText: "Fund Wallet",
           ),
         );
       } else {
